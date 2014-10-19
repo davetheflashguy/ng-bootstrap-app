@@ -1,0 +1,14 @@
+{
+  "name": "blackhawk-build",
+  "version": "0.0.0",
+  "homepage": "https://github.com/davetheflashguy/build-demo",
+  "authors": [
+    "Dave Collier <davetheflashguy@gmail.com>"
+  ],
+  "description": "Demo bootstrap build packager",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "private": true
+}
