@@ -1,5 +1,4 @@
 {
-  "qualified-headings": true,
-  "unique-headings": true,
-  "known-properties": false
+  "errors", true,
+  "known-properties": true
 }

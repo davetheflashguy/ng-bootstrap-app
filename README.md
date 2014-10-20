@@ -1,4 +1,4 @@
 build-demo
 ==========
 
-Demo build tool
+Demo build tool using grunt and node.
