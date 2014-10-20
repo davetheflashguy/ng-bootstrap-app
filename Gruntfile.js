@@ -8,14 +8,51 @@ module.exports = function(grunt) {
         banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
       },
       build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+        src: 'src/js/<%= pkg.name %>.js',
+        dest: 'build/js/<%= pkg.name %>.min.js'
+      }
+    }
+    ,
+    /* CSS Min */
+    cssmin: {
+      add_banner: {
+        options: {
+          banner: '/* My minified css file */'
+        },
+        files: {
+          'build/css/<%= pkg.name %>.css': ['src/css/**/*.css']
+        }
+      }
+    }
+    , 
+    /* CSS Lint */
+    csslint: {
+      options: {
+        csslintrc: '.csslintrc'
+      },
+      strict: {
+        options: {
+          import: 2
+        },
+        src: ['src/css/**/*.css']
+      },
+      lax: {
+        options: {
+          import: false
+        },
+        src: ['src/css/**/*.css']
       }
     }
   });
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
+
+  // load the css minifier
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+
+  // load the css linter 
+  grunt.loadNpmTasks('grunt-contrib-csslint');
 
   // Default task(s).
   grunt.registerTask('default', ['uglify']);

@@ -6,6 +6,9 @@
     "Dave Collier <davetheflashguy@gmail.com>"
   ],
   "description": "Demo bootstrap build packager",
+  "dependencies": {
+    "angular-ui-bootstrap": "latest",
+  },
   "moduleType": [
     "node"
   ],
