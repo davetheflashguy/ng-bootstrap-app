@@ -7,7 +7,10 @@
   ],
   "description": "Demo bootstrap build packager",
   "dependencies": {
-    "angular-ui-bootstrap": "latest"
+    "angular": "latest",
+    "angular-ui-bootstrap": "latest",
+    "angular-touch":"latest",
+    "fastclick": "latest"
   },
   "moduleType": [
     "node"
