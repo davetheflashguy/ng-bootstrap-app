@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/pagination/test/pager.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/pagination/test/pager.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">77.38</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">202</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">17.51</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.93</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;pager directive&#039;, function () {
+  var $compile, $rootScope, element;
+  beforeEach(module(&#039;ui.bootstrap.pagination&#039;));
+  beforeEach(module(&#039;template/pagination/pager.html&#039;));
+  beforeEach(inject(function(_$compile_, _$rootScope_) {
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    $rootScope.total = 47; // 5 pages
+    $rootScope.currentPage = 3;
+    element = $compile(&#039;&lt;pager total-items=&quot;total&quot; ng-model=&quot;currentPage&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+  }));
+
+  function getPaginationBarSize() {
+    return element.find(&#039;li&#039;).length;
+  }
+
+  function getPaginationEl(index) {
+    return element.find(&#039;li&#039;).eq(index);
+  }
+
+  function clickPaginationEl(index) {
+    getPaginationEl(index).find(&#039;a&#039;).click();
+  }
+
+  function updateCurrentPage(value) {
+    $rootScope.currentPage = value;
+    $rootScope.$digest();
+  }
+
+  it(&#039;has a &quot;pager&quot; css class&#039;, function() {
+    expect(element.hasClass(&#039;pager&#039;)).toBe(true);
+  });
+
+  it(&#039;contains 2 li elements&#039;, function() {
+    expect(getPaginationBarSize()).toBe(2);
+    expect(getPaginationEl(0).text()).toBe(&#039;« Previous&#039;);
+    expect(getPaginationEl(-1).text()).toBe(&#039;Next »&#039;);
+  });
+
+  it(&#039;aligns previous &amp; next page&#039;, function() {
+    expect(getPaginationEl(0)).toHaveClass(&#039;previous&#039;);
+    expect(getPaginationEl(0)).not.toHaveClass(&#039;next&#039;);
+
+    expect(getPaginationEl(-1)).not.toHaveClass(&#039;previous&#039;);
+    expect(getPaginationEl(-1)).toHaveClass(&#039;next&#039;);
+  });
+
+  it(&#039;disables the &quot;previous&quot; link if current page is 1&#039;, function() {
+    updateCurrentPage(1);
+    expect(getPaginationEl(0)).toHaveClass(&#039;disabled&#039;);
+  });
+
+  it(&#039;disables the &quot;next&quot; link if current page is num-pages&#039;, function() {
+    updateCurrentPage(5);
+    expect(getPaginationEl(-1)).toHaveClass(&#039;disabled&#039;);
+  });
+
+  it(&#039;changes currentPage if the &quot;previous&quot; link is clicked&#039;, function() {
+    clickPaginationEl(0);
+    expect($rootScope.currentPage).toBe(2);
+  });
+
+  it(&#039;changes currentPage if the &quot;next&quot; link is clicked&#039;, function() {
+    clickPaginationEl(-1);
+    expect($rootScope.currentPage).toBe(4);
+  });
+
+  it(&#039;does not change the current page on &quot;previous&quot; click if already at first page&#039;, function() {
+    updateCurrentPage(1);
+    clickPaginationEl(0);
+    expect($rootScope.currentPage).toBe(1);
+  });
+
+  it(&#039;does not change the current page on &quot;next&quot; click if already at last page&#039;, function() {
+    updateCurrentPage(5);
+    clickPaginationEl(-1);
+    expect($rootScope.currentPage).toBe(5);
+  });
+
+  it(&#039;executes the `ng-change` expression when an element is clicked&#039;, function() {
+    $rootScope.selectPageHandler = jasmine.createSpy(&#039;selectPageHandler&#039;);
+    element = $compile(&#039;&lt;pager total-items=&quot;total&quot; ng-model=&quot;currentPage&quot; ng-change=&quot;selectPageHandler()&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+
+    clickPaginationEl(-1);
+    expect($rootScope.selectPageHandler).toHaveBeenCalled();
+  });
+
+  it(&#039;does not changes the number of pages when `total-items` changes&#039;, function() {
+    $rootScope.total = 73; // 8 pages
+    $rootScope.$digest();
+
+    expect(getPaginationBarSize()).toBe(2);
+    expect(getPaginationEl(0).text()).toBe(&#039;« Previous&#039;);
+    expect(getPaginationEl(-1).text()).toBe(&#039;Next »&#039;);
+  });
+
+  describe(&#039;`items-per-page`&#039;, function () {
+    beforeEach(function() {
+      $rootScope.perpage = 5;
+      element = $compile(&#039;&lt;pager total-items=&quot;total&quot; items-per-page=&quot;perpage&quot; ng-model=&quot;currentPage&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;does not change the number of pages&#039;, function() {
+      expect(getPaginationBarSize()).toBe(2);
+      expect(getPaginationEl(0).text()).toBe(&#039;« Previous&#039;);
+      expect(getPaginationEl(-1).text()).toBe(&#039;Next »&#039;);
+    });
+
+    it(&#039;selects the last page when it is too big&#039;, function() {
+      $rootScope.perpage = 30;
+      $rootScope.$digest();
+
+      expect($rootScope.currentPage).toBe(2);
+      expect(getPaginationBarSize()).toBe(2);
+      expect(getPaginationEl(0)).not.toHaveClass(&#039;disabled&#039;);
+      expect(getPaginationEl(-1)).toHaveClass(&#039;disabled&#039;);
+    });
+  });
+
+  describe(&#039;when `page` is not a number&#039;, function () {
+    it(&#039;handles string&#039;, function() {
+      updateCurrentPage(&#039;1&#039;);
+      expect(getPaginationEl(0)).toHaveClass(&#039;disabled&#039;);
+
+      updateCurrentPage(&#039;05&#039;);
+      expect(getPaginationEl(-1)).toHaveClass(&#039;disabled&#039;);
+    });
+  });
+
+  describe(&#039;`num-pages`&#039;, function () {
+    beforeEach(function() {
+      $rootScope.numpg = null;
+      element = $compile(&#039;&lt;pager total-items=&quot;total&quot; ng-model=&quot;currentPage&quot; num-pages=&quot;numpg&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;equals to total number of pages&#039;, function() {
+      expect($rootScope.numpg).toBe(5);
+    });
+  });
+
+  describe(&#039;setting `pagerConfig`&#039;, function() {
+    var originalConfig = {};
+    beforeEach(inject(function(pagerConfig) {
+      angular.extend(originalConfig, pagerConfig);
+      pagerConfig.previousText = &#039;PR&#039;;
+      pagerConfig.nextText = &#039;NE&#039;;
+      pagerConfig.align = false;
+      element = $compile(&#039;&lt;pager total-items=&quot;total&quot; ng-model=&quot;currentPage&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+    afterEach(inject(function(pagerConfig) {
+      // return it to the original state
+      angular.extend(pagerConfig, originalConfig);
+    }));
+
+    it(&#039;should change paging text&#039;, function () {
+      expect(getPaginationEl(0).text()).toBe(&#039;PR&#039;);
+      expect(getPaginationEl(-1).text()).toBe(&#039;NE&#039;);
+    });
+
+    it(&#039;should not align previous &amp; next page link&#039;, function () {
+      expect(getPaginationEl(0)).not.toHaveClass(&#039;previous&#039;);
+      expect(getPaginationEl(-1)).not.toHaveClass(&#039;next&#039;);
+    });
+  });
+
+  describe(&#039;override configuration from attributes&#039;, function () {
+    beforeEach(function() {
+      element = $compile(&#039;&lt;pager align=&quot;false&quot; previous-text=&quot;&lt;&quot; next-text=&quot;&gt;&quot; total-items=&quot;total&quot; ng-model=&quot;currentPage&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;contains 2 li elements&#039;, function() {
+      expect(getPaginationBarSize()).toBe(2);
+    });
+
+    it(&#039;should change paging text from attributes&#039;, function () {
+      expect(getPaginationEl(0).text()).toBe(&#039;&lt;&#039;);
+      expect(getPaginationEl(-1).text()).toBe(&#039;&gt;&#039;);
+    });
+
+    it(&#039;should not align previous &amp; next page link&#039;, function () {
+      expect(getPaginationEl(0)).not.toHaveClass(&#039;previous&#039;);
+      expect(getPaginationEl(-1)).not.toHaveClass(&#039;next&#039;);
+    });
+
+    it(&#039;changes &quot;previous&quot; &amp; &quot;next&quot; text from interpolated attributes&#039;, function() {
+      $rootScope.previousText = &#039;&lt;&lt;&#039;;
+      $rootScope.nextText = &#039;&gt;&gt;&#039;;
+      element = $compile(&#039;&lt;pager align=&quot;false&quot; previous-text=&quot;{{previousText}}&quot; next-text=&quot;{{nextText}}&quot; total-items=&quot;total&quot; ng-model=&quot;currentPage&quot;&gt;&lt;/pager&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+
+      expect(getPaginationEl(0).text()).toBe(&#039;&lt;&lt;&#039;);
+      expect(getPaginationEl(-1).text()).toBe(&#039;&gt;&gt;&#039;);
+    });
+  });
+
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

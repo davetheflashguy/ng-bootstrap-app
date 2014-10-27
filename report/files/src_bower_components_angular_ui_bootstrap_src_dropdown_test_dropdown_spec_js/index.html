@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/dropdown/test/dropdown.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/dropdown/test/dropdown.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">73.87</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">288</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">23.69</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">2.91</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;dropdownToggle&#039;, function() {
+  var $compile, $rootScope, $document, element;
+
+  beforeEach(module(&#039;ui.bootstrap.dropdown&#039;));
+
+  beforeEach(inject(function(_$compile_, _$rootScope_, _$document_) {
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    $document = _$document_;
+  }));
+
+  var clickDropdownToggle = function(elm) {
+    elm = elm || element;
+    elm.find(&#039;a[dropdown-toggle]&#039;).click();
+  };
+
+  var triggerKeyDown = function (element, keyCode) {
+    var e = $.Event(&#039;keydown&#039;);
+    e.which = keyCode;
+    element.trigger(e);
+  };
+
+  var isFocused = function(elm) {
+    return elm[0] === document.activeElement;
+  };
+
+  describe(&#039;basic&#039;, function() {
+    function dropdown() {
+      return $compile(&#039;&lt;li class=&quot;dropdown&quot;&gt;&lt;a href dropdown-toggle&gt;&lt;/a&gt;&lt;ul&gt;&lt;li&gt;&lt;a href&gt;Hello&lt;/a&gt;&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+    }
+
+    beforeEach(function() {
+      element = dropdown();
+    });
+
+    it(&#039;should toggle on `a` click&#039;, function() {
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+      clickDropdownToggle();
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+      clickDropdownToggle();
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    it(&#039;should toggle when an option is clicked&#039;, function() {
+      $document.find(&#039;body&#039;).append(element);
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+      clickDropdownToggle();
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+
+      var optionEl = element.find(&#039;ul &gt; li&#039;).eq(0).find(&#039;a&#039;).eq(0);
+      optionEl.click();
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+      element.remove();
+    });
+
+    it(&#039;should close on document click&#039;, function() {
+      clickDropdownToggle();
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+      $document.click();
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    it(&#039;should close on escape key &amp; focus toggle element&#039;, function() {
+      $document.find(&#039;body&#039;).append(element);
+      clickDropdownToggle();
+      triggerKeyDown($document, 27);
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+      expect(isFocused(element.find(&#039;a&#039;))).toBe(true);
+      element.remove();
+    });
+
+    it(&#039;should not close on backspace key&#039;, function() {
+      clickDropdownToggle();
+      triggerKeyDown($document, 8);
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+    });
+
+    it(&#039;should close on $location change&#039;, function() {
+      clickDropdownToggle();
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+      $rootScope.$broadcast(&#039;$locationChangeSuccess&#039;);
+      $rootScope.$apply();
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    it(&#039;should only allow one dropdown to be open at once&#039;, function() {
+      var elm1 = dropdown();
+      var elm2 = dropdown();
+      expect(elm1.hasClass(&#039;open&#039;)).toBe(false);
+      expect(elm2.hasClass(&#039;open&#039;)).toBe(false);
+
+      clickDropdownToggle( elm1 );
+      expect(elm1.hasClass(&#039;open&#039;)).toBe(true);
+      expect(elm2.hasClass(&#039;open&#039;)).toBe(false);
+
+      clickDropdownToggle( elm2 );
+      expect(elm1.hasClass(&#039;open&#039;)).toBe(false);
+      expect(elm2.hasClass(&#039;open&#039;)).toBe(true);
+    });
+
+    it(&#039;should not toggle if the element has `disabled` class&#039;, function() {
+      var elm = $compile(&#039;&lt;li class=&quot;dropdown&quot;&gt;&lt;a class=&quot;disabled&quot; dropdown-toggle&gt;&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      clickDropdownToggle( elm );
+      expect(elm.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    it(&#039;should not toggle if the element is disabled&#039;, function() {
+      var elm = $compile(&#039;&lt;li class=&quot;dropdown&quot;&gt;&lt;button disabled=&quot;disabled&quot; dropdown-toggle&gt;&lt;/button&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      elm.find(&#039;button&#039;).click();
+      expect(elm.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    it(&#039;should not toggle if the element has `ng-disabled` as true&#039;, function() {
+      $rootScope.isdisabled = true;
+      var elm = $compile(&#039;&lt;li class=&quot;dropdown&quot;&gt;&lt;div ng-disabled=&quot;isdisabled&quot; dropdown-toggle&gt;&lt;/div&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+      elm.find(&#039;div&#039;).click();
+      expect(elm.hasClass(&#039;open&#039;)).toBe(false);
+
+      $rootScope.isdisabled = false;
+      $rootScope.$digest();
+      elm.find(&#039;div&#039;).click();
+      expect(elm.hasClass(&#039;open&#039;)).toBe(true);
+    });
+
+    it(&#039;should unbind events on scope destroy&#039;, function() {
+      var $scope = $rootScope.$new();
+      var elm = $compile(&#039;&lt;li class=&quot;dropdown&quot;&gt;&lt;button ng-disabled=&quot;isdisabled&quot; dropdown-toggle&gt;&lt;/button&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($scope);
+      $scope.$digest();
+
+      var buttonEl = elm.find(&#039;button&#039;);
+      buttonEl.click();
+      expect(elm.hasClass(&#039;open&#039;)).toBe(true);
+      buttonEl.click();
+      expect(elm.hasClass(&#039;open&#039;)).toBe(false);
+
+      $scope.$destroy();
+      buttonEl.click();
+      expect(elm.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    // issue 270
+    it(&#039;executes other document click events normally&#039;, function() {
+      var checkboxEl = $compile(&#039;&lt;input type=&quot;checkbox&quot; ng-click=&quot;clicked = true&quot; /&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+      expect($rootScope.clicked).toBeFalsy();
+
+      clickDropdownToggle();
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+      expect($rootScope.clicked).toBeFalsy();
+
+      checkboxEl.click();
+      expect($rootScope.clicked).toBeTruthy();
+    });
+
+    // WAI-ARIA
+    it(&#039;should aria markup to the `dropdown-toggle`&#039;, function() {
+      var toggleEl = element.find(&#039;a&#039;);
+      expect(toggleEl.attr(&#039;aria-haspopup&#039;)).toBe(&#039;true&#039;);
+      expect(toggleEl.attr(&#039;aria-expanded&#039;)).toBe(&#039;false&#039;);
+
+      clickDropdownToggle();
+      expect(toggleEl.attr(&#039;aria-expanded&#039;)).toBe(&#039;true&#039;);
+      clickDropdownToggle();
+      expect(toggleEl.attr(&#039;aria-expanded&#039;)).toBe(&#039;false&#039;);
+    });
+  });
+
+  describe(&#039;without trigger&#039;, function() {
+    beforeEach(function() {
+      $rootScope.isopen = true;
+      element = $compile(&#039;&lt;li class=&quot;dropdown&quot; is-open=&quot;isopen&quot;&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;should be open initially&#039;, function() {
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+    });
+
+    it(&#039;should toggle when `is-open` changes&#039;, function() {
+      $rootScope.isopen = false;
+      $rootScope.$digest();
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+    });
+  });
+
+  describe(&#039;`is-open`&#039;, function() {
+    beforeEach(function() {
+      $rootScope.isopen = true;
+      element = $compile(&#039;&lt;li class=&quot;dropdown&quot; is-open=&quot;isopen&quot;&gt;&lt;a href dropdown-toggle&gt;&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;should be open initially&#039;, function() {
+      expect(element.hasClass(&#039;open&#039;)).toBe(true);
+    });
+
+    it(&#039;should change `is-open` binding when toggles&#039;, function() {
+      clickDropdownToggle();
+      expect($rootScope.isopen).toBe(false);
+    });
+
+    it(&#039;should toggle when `is-open` changes&#039;, function() {
+      $rootScope.isopen = false;
+      $rootScope.$digest();
+      expect(element.hasClass(&#039;open&#039;)).toBe(false);
+    });
+
+    it(&#039;focus toggle element when opening&#039;, function() {
+      $document.find(&#039;body&#039;).append(element);
+      clickDropdownToggle();
+      $rootScope.isopen = false;
+      $rootScope.$digest();
+      expect(isFocused(element.find(&#039;a&#039;))).toBe(false);
+      $rootScope.isopen = true;
+      $rootScope.$digest();
+      expect(isFocused(element.find(&#039;a&#039;))).toBe(true);
+      element.remove();
+    });
+  });
+
+  describe(&#039;`on-toggle`&#039;, function() {
+    beforeEach(function() {
+      $rootScope.toggleHandler = jasmine.createSpy(&#039;toggleHandler&#039;);
+      $rootScope.isopen = false;
+      element = $compile(&#039;&lt;li class=&quot;dropdown&quot; on-toggle=&quot;toggleHandler(open)&quot;  is-open=&quot;isopen&quot;&gt;&lt;a dropdown-toggle&gt;&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;should not have been called initially&#039;, function() {
+      expect($rootScope.toggleHandler).not.toHaveBeenCalled();
+    });
+
+    it(&#039;should call it correctly when toggles&#039;, function() {
+      $rootScope.isopen = true;
+      $rootScope.$digest();
+      expect($rootScope.toggleHandler).toHaveBeenCalledWith(true);
+
+      clickDropdownToggle();
+      expect($rootScope.toggleHandler).toHaveBeenCalledWith(false);
+    });
+  });
+
+  describe(&#039;`on-toggle` with initially open&#039;, function() {
+    beforeEach(function() {
+      $rootScope.toggleHandler = jasmine.createSpy(&#039;toggleHandler&#039;);
+      $rootScope.isopen = true;
+      element = $compile(&#039;&lt;li class=&quot;dropdown&quot; on-toggle=&quot;toggleHandler(open)&quot; is-open=&quot;isopen&quot;&gt;&lt;a dropdown-toggle&gt;&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;should not have been called initially&#039;, function() {
+      expect($rootScope.toggleHandler).not.toHaveBeenCalled();
+    });
+
+    it(&#039;should call it correctly when toggles&#039;, function() {
+      $rootScope.isopen = false;
+      $rootScope.$digest();
+      expect($rootScope.toggleHandler).toHaveBeenCalledWith(false);
+
+      $rootScope.isopen = true;
+      $rootScope.$digest();
+      expect($rootScope.toggleHandler).toHaveBeenCalledWith(true);
+    });
+  });
+
+  describe(&#039;`on-toggle` without is-open&#039;, function() {
+    beforeEach(function() {
+      $rootScope.toggleHandler = jasmine.createSpy(&#039;toggleHandler&#039;);
+      element = $compile(&#039;&lt;li class=&quot;dropdown&quot; on-toggle=&quot;toggleHandler(open)&quot;&gt;&lt;a dropdown-toggle&gt;&lt;/a&gt;&lt;ul&gt;&lt;li&gt;Hello&lt;/li&gt;&lt;/ul&gt;&lt;/li&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;should not have been called initially&#039;, function() {
+      expect($rootScope.toggleHandler).not.toHaveBeenCalled();
+    });
+
+    it(&#039;should call it when clicked&#039;, function() {
+      clickDropdownToggle();
+      expect($rootScope.toggleHandler).toHaveBeenCalledWith(true);
+
+      clickDropdownToggle();
+      expect($rootScope.toggleHandler).toHaveBeenCalledWith(false);
+    });
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

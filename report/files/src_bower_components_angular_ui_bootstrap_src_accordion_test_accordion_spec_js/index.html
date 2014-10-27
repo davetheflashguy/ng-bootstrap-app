@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/accordion/test/accordion.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/accordion/test/accordion.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">73.59</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">414</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">38.28</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">4.82</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;accordion&#039;, function () {
+  var $scope;
+
+  beforeEach(module(&#039;ui.bootstrap.accordion&#039;));
+  beforeEach(module(&#039;template/accordion/accordion.html&#039;));
+  beforeEach(module(&#039;template/accordion/accordion-group.html&#039;));
+
+  beforeEach(inject(function ($rootScope) {
+    $scope = $rootScope;
+  }));
+
+  describe(&#039;controller&#039;, function () {
+
+    var ctrl, $element, $attrs;
+    beforeEach(inject(function($controller) {
+      $attrs = {}; $element = {};
+      ctrl = $controller(&#039;AccordionController&#039;, { $scope: $scope, $element: $element, $attrs: $attrs });
+    }));
+
+    describe(&#039;addGroup&#039;, function() {
+      it(&#039;adds a the specified panel to the collection&#039;, function() {
+        var group1, group2;
+        ctrl.addGroup(group1 = $scope.$new());
+        ctrl.addGroup(group2 = $scope.$new());
+        expect(ctrl.groups.length).toBe(2);
+        expect(ctrl.groups[0]).toBe(group1);
+        expect(ctrl.groups[1]).toBe(group2);
+      });
+    });
+
+    describe(&#039;closeOthers&#039;, function() {
+      var group1, group2, group3;
+      beforeEach(function() {
+        ctrl.addGroup(group1 = { isOpen: true, $on : angular.noop });
+        ctrl.addGroup(group2 = { isOpen: true, $on : angular.noop });
+        ctrl.addGroup(group3 = { isOpen: true, $on : angular.noop });
+      });
+      it(&#039;should close other panels if close-others attribute is not defined&#039;, function() {
+        delete $attrs.closeOthers;
+        ctrl.closeOthers(group2);
+        expect(group1.isOpen).toBe(false);
+        expect(group2.isOpen).toBe(true);
+        expect(group3.isOpen).toBe(false);
+      });
+
+      it(&#039;should close other panels if close-others attribute is true&#039;, function() {
+        $attrs.closeOthers = &#039;true&#039;;
+        ctrl.closeOthers(group3);
+        expect(group1.isOpen).toBe(false);
+        expect(group2.isOpen).toBe(false);
+        expect(group3.isOpen).toBe(true);
+      });
+
+      it(&#039;should not close other panels if close-others attribute is false&#039;, function() {
+        $attrs.closeOthers = &#039;false&#039;;
+        ctrl.closeOthers(group2);
+        expect(group1.isOpen).toBe(true);
+        expect(group2.isOpen).toBe(true);
+        expect(group3.isOpen).toBe(true);
+      });
+
+      describe(&#039;setting accordionConfig&#039;, function() {
+        var originalCloseOthers;
+        beforeEach(inject(function(accordionConfig) {
+          originalCloseOthers = accordionConfig.closeOthers;
+          accordionConfig.closeOthers = false;
+        }));
+        afterEach(inject(function(accordionConfig) {
+          // return it to the original value
+          accordionConfig.closeOthers = originalCloseOthers;
+        }));
+
+        it(&#039;should not close other panels if accordionConfig.closeOthers is false&#039;, function() {
+          ctrl.closeOthers(group2);
+          expect(group1.isOpen).toBe(true);
+          expect(group2.isOpen).toBe(true);
+          expect(group3.isOpen).toBe(true);
+        });
+      });
+    });
+
+    describe(&#039;removeGroup&#039;, function() {
+      it(&#039;should remove the specified panel&#039;, function () {
+        var group1, group2, group3;
+        ctrl.addGroup(group1 = $scope.$new());
+        ctrl.addGroup(group2 = $scope.$new());
+        ctrl.addGroup(group3 = $scope.$new());
+        ctrl.removeGroup(group2);
+        expect(ctrl.groups.length).toBe(2);
+        expect(ctrl.groups[0]).toBe(group1);
+        expect(ctrl.groups[1]).toBe(group3);
+      });
+      it(&#039;should ignore remove of non-existing panel&#039;, function () {
+        var group1, group2;
+        ctrl.addGroup(group1 = $scope.$new());
+        ctrl.addGroup(group2 = $scope.$new());
+        expect(ctrl.groups.length).toBe(2);
+        ctrl.removeGroup({});
+        expect(ctrl.groups.length).toBe(2);
+      });
+    });
+  });
+
+  describe(&#039;accordion-group&#039;, function () {
+
+    var scope, $compile;
+    var element, groups;
+    var findGroupLink = function (index) {
+      return groups.eq(index).find(&#039;a&#039;).eq(0);
+    };
+    var findGroupBody = function (index) {
+      return groups.eq(index).find(&#039;.panel-collapse&#039;).eq(0);
+    };
+
+
+    beforeEach(inject(function(_$rootScope_, _$compile_) {
+      scope = _$rootScope_;
+      $compile = _$compile_;
+    }));
+
+    afterEach(function () {
+      element = groups = scope = $compile = undefined;
+    });
+
+    describe(&#039;with static panels&#039;, function () {
+      beforeEach(function () {
+        var tpl =
+          &#039;&lt;accordion&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 1&quot;&gt;Content 1&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 2&quot;&gt;Content 2&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;/accordion&gt;&#039;;
+        element = angular.element(tpl);
+        $compile(element)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+      });
+      afterEach(function() {
+        element.remove();
+      });
+
+      it(&#039;should create accordion panels with content&#039;, function () {
+        expect(groups.length).toEqual(2);
+        expect(findGroupLink(0).text()).toEqual(&#039;title 1&#039;);
+        expect(findGroupBody(0).text().trim()).toEqual(&#039;Content 1&#039;);
+        expect(findGroupLink(1).text()).toEqual(&#039;title 2&#039;);
+        expect(findGroupBody(1).text().trim()).toEqual(&#039;Content 2&#039;);
+      });
+
+      it(&#039;should change selected element on click&#039;, function () {
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(findGroupBody(0).scope().isOpen).toBe(true);
+
+        findGroupLink(1).click();
+        scope.$digest();
+        expect(findGroupBody(0).scope().isOpen).toBe(false);
+        expect(findGroupBody(1).scope().isOpen).toBe(true);
+      });
+
+      it(&#039;should toggle element on click&#039;, function() {
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(findGroupBody(0).scope().isOpen).toBe(true);
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(findGroupBody(0).scope().isOpen).toBe(false);
+      });
+    });
+
+    describe(&#039;with dynamic panels&#039;, function () {
+      var model;
+      beforeEach(function () {
+        var tpl =
+          &#039;&lt;accordion&gt;&#039; +
+            &#039;&lt;accordion-group ng-repeat=&quot;group in groups&quot; heading=&quot;{{group.name}}&quot;&gt;{{group.content}}&lt;/accordion-group&gt;&#039; +
+          &#039;&lt;/accordion&gt;&#039;;
+        element = angular.element(tpl);
+        model = [
+          {name: &#039;title 1&#039;, content: &#039;Content 1&#039;},
+          {name: &#039;title 2&#039;, content: &#039;Content 2&#039;}
+        ];
+
+        $compile(element)(scope);
+        scope.$digest();
+      });
+
+      it(&#039;should have no panels initially&#039;, function () {
+        groups = element.find(&#039;.panel&#039;);
+        expect(groups.length).toEqual(0);
+      });
+
+      it(&#039;should have a panel for each model item&#039;, function() {
+        scope.groups = model;
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+        expect(groups.length).toEqual(2);
+        expect(findGroupLink(0).text()).toEqual(&#039;title 1&#039;);
+        expect(findGroupBody(0).text().trim()).toEqual(&#039;Content 1&#039;);
+        expect(findGroupLink(1).text()).toEqual(&#039;title 2&#039;);
+        expect(findGroupBody(1).text().trim()).toEqual(&#039;Content 2&#039;);
+      });
+
+      it(&#039;should react properly on removing items from the model&#039;, function () {
+        scope.groups = model;
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+        expect(groups.length).toEqual(2);
+
+        scope.groups.splice(0,1);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+        expect(groups.length).toEqual(1);
+      });
+    });
+
+    describe(&#039;is-open attribute&#039;, function() {
+      beforeEach(function () {
+        var tpl =
+          &#039;&lt;accordion&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 1&quot; is-open=&quot;open.first&quot;&gt;Content 1&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 2&quot; is-open=&quot;open.second&quot;&gt;Content 2&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;/accordion&gt;&#039;;
+        element = angular.element(tpl);
+        scope.open = { first: false, second: true };
+        $compile(element)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+      });
+
+      it(&#039;should open the panel with isOpen set to true&#039;, function () {
+        expect(findGroupBody(0).scope().isOpen).toBe(false);
+        expect(findGroupBody(1).scope().isOpen).toBe(true);
+      });
+
+      it(&#039;should toggle variable on element click&#039;, function() {
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(scope.open.first).toBe(true);
+
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(scope.open.second).toBe(false);
+      });
+    });
+
+    describe(&#039;is-open attribute with dynamic content&#039;, function() {
+      beforeEach(function () {
+        var tpl =
+          &#039;&lt;accordion&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 1&quot; is-open=&quot;open1&quot;&gt;&lt;div ng-repeat=&quot;item in items&quot;&gt;{{item}}&lt;/div&gt;&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 2&quot; is-open=&quot;open2&quot;&gt;Static content&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;/accordion&gt;&#039;;
+        element = angular.element(tpl);
+        scope.items = [&#039;Item 1&#039;, &#039;Item 2&#039;, &#039;Item 3&#039;];
+        scope.open1 = true;
+        scope.open2 = false;
+        angular.element(document.body).append(element);
+        $compile(element)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+      });
+
+      afterEach(function() {
+        element.remove();
+      });
+
+      it(&#039;should have visible panel body when the group with isOpen set to true&#039;, function () {
+        expect(findGroupBody(0)[0].clientHeight).not.toBe(0);
+        expect(findGroupBody(1)[0].clientHeight).toBe(0);
+      });
+    });
+
+    describe(&#039;is-open attribute with dynamic groups&#039;, function () {
+      beforeEach(function () {
+        var tpl =
+          &#039;&lt;accordion&gt;&#039; +
+            &#039;&lt;accordion-group ng-repeat=&quot;group in groups&quot; heading=&quot;{{group.name}}&quot; is-open=&quot;group.open&quot;&gt;{{group.content}}&lt;/accordion-group&gt;&#039; +
+          &#039;&lt;/accordion&gt;&#039;;
+        element = angular.element(tpl);
+        scope.groups = [
+          {name: &#039;title 1&#039;, content: &#039;Content 1&#039;, open: false},
+          {name: &#039;title 2&#039;, content: &#039;Content 2&#039;, open: true}
+        ];
+        $compile(element)(scope);
+        scope.$digest();
+
+        groups = element.find(&#039;.panel&#039;);
+      });
+
+      it(&#039;should have visible group body when the group with isOpen set to true&#039;, function () {
+        expect(findGroupBody(0).scope().isOpen).toBe(false);
+        expect(findGroupBody(1).scope().isOpen).toBe(true);
+      });
+
+      it(&#039;should toggle element on click&#039;, function() {
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(findGroupBody(0).scope().isOpen).toBe(true);
+        expect(scope.groups[0].open).toBe(true);
+
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(findGroupBody(0).scope().isOpen).toBe(false);
+        expect(scope.groups[0].open).toBe(false);
+      });
+    });
+
+    describe(&#039;`is-disabled` attribute&#039;, function() {
+      var groupBody;
+      beforeEach(function () {
+        var tpl =
+          &#039;&lt;accordion&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;title 1&quot; is-disabled=&quot;disabled&quot;&gt;Content 1&lt;/accordion-group&gt;&#039; +
+            &#039;&lt;/accordion&gt;&#039;;
+        element = angular.element(tpl);
+        scope.disabled = true;
+        $compile(element)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+        groupBody = findGroupBody(0);
+      });
+
+      it(&#039;should open the panel with isOpen set to true&#039;, function () {
+        expect(groupBody.scope().isOpen).toBeFalsy();
+      });
+
+      it(&#039;should not toggle if disabled&#039;, function() {
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(groupBody.scope().isOpen).toBeFalsy();
+      });
+
+      it(&#039;should toggle after enabling&#039;, function() {
+        scope.disabled = false;
+        scope.$digest();
+        expect(groupBody.scope().isOpen).toBeFalsy();
+
+        findGroupLink(0).click();
+        scope.$digest();
+        expect(groupBody.scope().isOpen).toBeTruthy();
+      });
+    });
+
+    describe(&#039;accordion-heading element&#039;, function() {
+      beforeEach(function() {
+        var tpl =
+          &#039;&lt;accordion ng-init=&quot;a = [1,2,3]&quot;&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;I get overridden&quot;&gt;&#039; +
+              &#039;&lt;accordion-heading&gt;Heading Element &lt;span ng-repeat=&quot;x in a&quot;&gt;{{x}}&lt;/span&gt; &lt;/accordion-heading&gt;&#039; +
+              &#039;Body&#039; +
+            &#039;&lt;/accordion-group&gt;&#039; +
+          &#039;&lt;/accordion&gt;&#039;;
+        element = $compile(tpl)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+      });
+      it(&#039;transcludes the &lt;accordion-heading&gt; content into the heading link&#039;, function() {
+        expect(findGroupLink(0).text()).toBe(&#039;Heading Element 123 &#039;);
+      });
+      it(&#039;attaches the same scope to the transcluded heading and body&#039;, function() {
+        expect(findGroupLink(0).find(&#039;span&#039;).scope().$id).toBe(findGroupBody(0).find(&#039;span&#039;).scope().$id);
+      });
+
+    });
+
+    describe(&#039;accordion-heading attribute&#039;, function() {
+      beforeEach(function() {
+        var tpl =
+          &#039;&lt;accordion ng-init=&quot;a = [1,2,3]&quot;&gt;&#039; +
+            &#039;&lt;accordion-group heading=&quot;I get overridden&quot;&gt;&#039; +
+              &#039;&lt;div accordion-heading&gt;Heading Element &lt;span ng-repeat=&quot;x in a&quot;&gt;{{x}}&lt;/span&gt; &lt;/div&gt;&#039; +
+              &#039;Body&#039; +
+            &#039;&lt;/accordion-group&gt;&#039; +
+          &#039;&lt;/accordion&gt;&#039;;
+        element = $compile(tpl)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+      });
+      it(&#039;transcludes the &lt;accordion-heading&gt; content into the heading link&#039;, function() {
+        expect(findGroupLink(0).text()).toBe(&#039;Heading Element 123 &#039;);
+      });
+      it(&#039;attaches the same scope to the transcluded heading and body&#039;, function() {
+        expect(findGroupLink(0).find(&#039;span&#039;).scope().$id).toBe(findGroupBody(0).find(&#039;span&#039;).scope().$id);
+      });
+
+    });
+
+    describe(&#039;accordion-heading, with repeating accordion-groups&#039;, function() {
+      it(&#039;should clone the accordion-heading for each group&#039;, function() {
+        element = $compile(&#039;&lt;accordion&gt;&lt;accordion-group ng-repeat=&quot;x in [1,2,3]&quot;&gt;&lt;accordion-heading&gt;{{x}}&lt;/accordion-heading&gt;&lt;/accordion-group&gt;&lt;/accordion&gt;&#039;)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+        expect(groups.length).toBe(3);
+        expect(findGroupLink(0).text()).toBe(&#039;1&#039;);
+        expect(findGroupLink(1).text()).toBe(&#039;2&#039;);
+        expect(findGroupLink(2).text()).toBe(&#039;3&#039;);
+      });
+    });
+
+
+    describe(&#039;accordion-heading attribute, with repeating accordion-groups&#039;, function() {
+      it(&#039;should clone the accordion-heading for each group&#039;, function() {
+        element = $compile(&#039;&lt;accordion&gt;&lt;accordion-group ng-repeat=&quot;x in [1,2,3]&quot;&gt;&lt;div accordion-heading&gt;{{x}}&lt;/div&gt;&lt;/accordion-group&gt;&lt;/accordion&gt;&#039;)(scope);
+        scope.$digest();
+        groups = element.find(&#039;.panel&#039;);
+        expect(groups.length).toBe(3);
+        expect(findGroupLink(0).text()).toBe(&#039;1&#039;);
+        expect(findGroupLink(1).text()).toBe(&#039;2&#039;);
+        expect(findGroupLink(2).text()).toBe(&#039;3&#039;);
+      });
+    });
+
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

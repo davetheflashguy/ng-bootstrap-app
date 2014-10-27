@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/modal/test/modal.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/modal/test/modal.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">74.21</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">610</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">38.36</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">5.81</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;$modal&#039;, function () {
+  var $controllerProvider, $rootScope, $document, $compile, $templateCache, $timeout, $q;
+  var $modal, $modalProvider;
+
+  var triggerKeyDown = function (element, keyCode) {
+    var e = $.Event(&#039;keydown&#039;);
+    e.which = keyCode;
+    element.trigger(e);
+  };
+
+  var waitForBackdropAnimation = function () {
+    inject(function ($transition) {
+      if ($transition.transitionEndEventName) {
+        $timeout.flush();
+      }
+    });
+  };
+
+  beforeEach(module(&#039;ui.bootstrap.modal&#039;));
+  beforeEach(module(&#039;template/modal/backdrop.html&#039;));
+  beforeEach(module(&#039;template/modal/window.html&#039;));
+  beforeEach(module(function(_$controllerProvider_, _$modalProvider_){
+    $controllerProvider = _$controllerProvider_;
+    $modalProvider = _$modalProvider_;
+  }));
+
+  beforeEach(inject(function (_$rootScope_, _$document_, _$compile_, _$templateCache_, _$timeout_, _$q_, _$modal_) {
+    $rootScope = _$rootScope_;
+    $document = _$document_;
+    $compile = _$compile_;
+    $templateCache = _$templateCache_;
+    $timeout = _$timeout_;
+    $q = _$q_;
+    $modal = _$modal_;
+  }));
+
+  beforeEach(function () {
+    this.addMatchers({
+
+      toBeResolvedWith: function(value) {
+        var resolved;
+        this.message = function() {
+          return &#039;Expected &quot;&#039; + angular.mock.dump(this.actual) + &#039;&quot; to be resolved with &quot;&#039; + value + &#039;&quot;.&#039;;
+        };
+        this.actual.then(function(result){
+          resolved = result;
+        });
+        $rootScope.$digest();
+
+        return resolved === value;
+      },
+
+      toBeRejectedWith: function(value) {
+        var rejected;
+        this.message = function() {
+          return &#039;Expected &quot;&#039; + angular.mock.dump(this.actual) + &#039;&quot; to be rejected with &quot;&#039; + value + &#039;&quot;.&#039;;
+        };
+        this.actual.then(angular.noop, function(reason){
+          rejected = reason;
+        });
+        $rootScope.$digest();
+
+        return rejected === value;
+      },
+
+      toHaveModalOpenWithContent: function(content, selector) {
+
+        var contentToCompare, modalDomEls = this.actual.find(&#039;body &gt; div.modal &gt; div.modal-dialog &gt; div.modal-content&#039;);
+
+        this.message = function() {
+          return &#039;&quot;Expected &quot;&#039; + angular.mock.dump(modalDomEls) + &#039;&quot; to be open with &quot;&#039; + content + &#039;&quot;.&#039;;
+        };
+
+        contentToCompare = selector ? modalDomEls.find(selector) : modalDomEls;
+        return modalDomEls.css(&#039;display&#039;) === &#039;block&#039; &amp;&amp;  contentToCompare.html() == content;
+      },
+
+      toHaveModalsOpen: function(noOfModals) {
+
+        var modalDomEls = this.actual.find(&#039;body &gt; div.modal&#039;);
+        return modalDomEls.length === noOfModals;
+      },
+
+      toHaveBackdrop: function() {
+
+        var backdropDomEls = this.actual.find(&#039;body &gt; div.modal-backdrop&#039;);
+        this.message = function() {
+          return &#039;Expected &quot;&#039; + angular.mock.dump(backdropDomEls) + &#039;&quot; to be a backdrop element&quot;.&#039;;
+        };
+
+        return backdropDomEls.length === 1;
+      }
+    });
+  });
+
+  afterEach(function () {
+    var body = $document.find(&#039;body&#039;);
+    body.find(&#039;div.modal&#039;).remove();
+    body.find(&#039;div.modal-backdrop&#039;).remove();
+    body.removeClass(&#039;modal-open&#039;);
+  });
+
+  function open(modalOptions) {
+    var modal = $modal.open(modalOptions);
+    $rootScope.$digest();
+    return modal;
+  }
+
+  function close(modal, result) {
+    modal.close(result);
+    $timeout.flush();
+    $rootScope.$digest();
+  }
+
+  function dismiss(modal, reason) {
+    modal.dismiss(reason);
+    $timeout.flush();
+    $rootScope.$digest();
+  }
+
+  describe(&#039;basic scenarios with default options&#039;, function () {
+
+    it(&#039;should open and dismiss a modal with a minimal set of options&#039;, function () {
+
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+
+      expect($document).toHaveModalsOpen(1);
+      expect($document).toHaveModalOpenWithContent(&#039;Content&#039;, &#039;div&#039;);
+      expect($document).toHaveBackdrop();
+
+      dismiss(modal, &#039;closing in test&#039;);
+
+      expect($document).toHaveModalsOpen(0);
+
+      waitForBackdropAnimation();
+      expect($document).not.toHaveBackdrop();
+    });
+
+    it(&#039;should not throw an exception on a second dismiss&#039;, function () {
+
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+
+      expect($document).toHaveModalsOpen(1);
+      expect($document).toHaveModalOpenWithContent(&#039;Content&#039;, &#039;div&#039;);
+      expect($document).toHaveBackdrop();
+
+      dismiss(modal, &#039;closing in test&#039;);
+
+      expect($document).toHaveModalsOpen(0);
+
+      dismiss(modal, &#039;closing in test&#039;);
+    });
+
+    it(&#039;should not throw an exception on a second close&#039;, function () {
+
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+
+      expect($document).toHaveModalsOpen(1);
+      expect($document).toHaveModalOpenWithContent(&#039;Content&#039;, &#039;div&#039;);
+      expect($document).toHaveBackdrop();
+
+      close(modal, &#039;closing in test&#039;);
+
+      expect($document).toHaveModalsOpen(0);
+
+      close(modal, &#039;closing in test&#039;);
+    });
+
+    it(&#039;should open a modal from templateUrl&#039;, function () {
+
+      $templateCache.put(&#039;content.html&#039;, &#039;&lt;div&gt;URL Content&lt;/div&gt;&#039;);
+      var modal = open({templateUrl: &#039;content.html&#039;});
+
+      expect($document).toHaveModalsOpen(1);
+      expect($document).toHaveModalOpenWithContent(&#039;URL Content&#039;, &#039;div&#039;);
+      expect($document).toHaveBackdrop();
+
+      dismiss(modal, &#039;closing in test&#039;);
+
+      expect($document).toHaveModalsOpen(0);
+
+      waitForBackdropAnimation();
+      expect($document).not.toHaveBackdrop();
+    });
+
+    it(&#039;should support closing on ESC&#039;, function () {
+
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+      expect($document).toHaveModalsOpen(1);
+
+      triggerKeyDown($document, 27);
+      $timeout.flush();
+      $rootScope.$digest();
+
+      expect($document).toHaveModalsOpen(0);
+    });
+
+    it(&#039;should support closing on backdrop click&#039;, function () {
+
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+      expect($document).toHaveModalsOpen(1);
+
+      $document.find(&#039;body &gt; div.modal&#039;).click();
+      $timeout.flush();
+      $rootScope.$digest();
+
+      expect($document).toHaveModalsOpen(0);
+    });
+
+    it(&#039;should resolve returned promise on close&#039;, function () {
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+      close(modal, &#039;closed ok&#039;);
+
+      expect(modal.result).toBeResolvedWith(&#039;closed ok&#039;);
+    });
+
+    it(&#039;should reject returned promise on dismiss&#039;, function () {
+
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+      dismiss(modal, &#039;esc&#039;);
+
+      expect(modal.result).toBeRejectedWith(&#039;esc&#039;);
+    });
+
+    it(&#039;should expose a promise linked to the templateUrl / resolve promises&#039;, function () {
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;, resolve: {
+          ok: function() {return $q.when(&#039;ok&#039;);}
+        }}
+      );
+      expect(modal.opened).toBeResolvedWith(true);
+    });
+
+    it(&#039;should expose a promise linked to the templateUrl / resolve promises and reject it if needed&#039;, function () {
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;, resolve: {
+          ok: function() {return $q.reject(&#039;ko&#039;);}
+        }}
+      );
+      expect(modal.opened).toBeRejectedWith(false);
+    });
+
+  });
+
+  describe(&#039;default options can be changed in a provider&#039;, function () {
+
+    it(&#039;should allow overriding default options in a provider&#039;, function () {
+
+      $modalProvider.options.backdrop = false;
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+
+      expect($document).toHaveModalOpenWithContent(&#039;Content&#039;, &#039;div&#039;);
+      expect($document).not.toHaveBackdrop();
+    });
+
+    it(&#039;should accept new objects with default options in a provider&#039;, function () {
+
+      $modalProvider.options = {
+        backdrop: false
+      };
+      var modal = open({template: &#039;&lt;div&gt;Content&lt;/div&gt;&#039;});
+
+      expect($document).toHaveModalOpenWithContent(&#039;Content&#039;, &#039;div&#039;);
+      expect($document).not.toHaveBackdrop();
+    });
+  });
+
+  describe(&#039;option by option&#039;, function () {
+
+    describe(&#039;template and templateUrl&#039;, function () {
+
+      it(&#039;should throw an error if none of template and templateUrl are provided&#039;, function () {
+        expect(function(){
+          var modal = open({});
+        }).toThrow(new Error(&#039;One of template or templateUrl options is required.&#039;));
+      });
+
+      it(&#039;should not fail if a templateUrl contains leading / trailing white spaces&#039;, function () {
+
+        $templateCache.put(&#039;whitespace.html&#039;, &#039;  &lt;div&gt;Whitespaces&lt;/div&gt;  &#039;);
+        open({templateUrl: &#039;whitespace.html&#039;});
+        expect($document).toHaveModalOpenWithContent(&#039;Whitespaces&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should accept template as a function&#039;, function () {
+        open({template: function() {
+          return &#039;&lt;div&gt;From a function&lt;/div&gt;&#039;;
+        }});
+
+        expect($document).toHaveModalOpenWithContent(&#039;From a function&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should not fail if a templateUrl as a function&#039;, function () {
+
+        $templateCache.put(&#039;whitespace.html&#039;, &#039;  &lt;div&gt;Whitespaces&lt;/div&gt;  &#039;);
+        open({templateUrl: function(){
+          return &#039;whitespace.html&#039;;
+        }});
+        expect($document).toHaveModalOpenWithContent(&#039;Whitespaces&#039;, &#039;div&#039;);
+      });
+
+    });
+
+    describe(&#039;controller&#039;, function () {
+
+      it(&#039;should accept controllers and inject modal instances&#039;, function () {
+        var TestCtrl = function($scope, $modalInstance) {
+          $scope.fromCtrl = &#039;Content from ctrl&#039;;
+          $scope.isModalInstance = angular.isObject($modalInstance) &amp;&amp; angular.isFunction($modalInstance.close);
+        };
+
+        open({template: &#039;&lt;div&gt;{{fromCtrl}} {{isModalInstance}}&lt;/div&gt;&#039;, controller: TestCtrl});
+        expect($document).toHaveModalOpenWithContent(&#039;Content from ctrl true&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should accept controllerAs alias&#039;, function () {
+        $controllerProvider.register(&#039;TestCtrl&#039;, function($modalInstance) {
+          this.fromCtrl = &#039;Content from ctrl&#039;;
+          this.isModalInstance = angular.isObject($modalInstance) &amp;&amp; angular.isFunction($modalInstance.close);
+        });
+
+        open({template: &#039;&lt;div&gt;{{test.fromCtrl}} {{test.isModalInstance}}&lt;/div&gt;&#039;, controller: &#039;TestCtrl as test&#039;});
+        expect($document).toHaveModalOpenWithContent(&#039;Content from ctrl true&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should respect the controllerAs property as an alternative for the controller-as syntax&#039;, function () {
+        $controllerProvider.register(&#039;TestCtrl&#039;, function($modalInstance) {
+          this.fromCtrl = &#039;Content from ctrl&#039;;
+          this.isModalInstance = angular.isObject($modalInstance) &amp;&amp; angular.isFunction($modalInstance.close);
+        });
+
+        open({template: &#039;&lt;div&gt;{{test.fromCtrl}} {{test.isModalInstance}}&lt;/div&gt;&#039;, controller: &#039;TestCtrl&#039;, controllerAs: &#039;test&#039;});
+        expect($document).toHaveModalOpenWithContent(&#039;Content from ctrl true&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should allow defining in-place controller-as controllers&#039;, function () {
+        open({template: &#039;&lt;div&gt;{{test.fromCtrl}} {{test.isModalInstance}}&lt;/div&gt;&#039;, controller: function($modalInstance) {
+          this.fromCtrl = &#039;Content from ctrl&#039;;
+          this.isModalInstance = angular.isObject($modalInstance) &amp;&amp; angular.isFunction($modalInstance.close);
+        }, controllerAs: &#039;test&#039;});
+        expect($document).toHaveModalOpenWithContent(&#039;Content from ctrl true&#039;, &#039;div&#039;);
+      });
+    });
+
+    describe(&#039;resolve&#039;, function () {
+
+      var ExposeCtrl = function($scope, value) {
+        $scope.value = value;
+      };
+
+      function modalDefinition(template, resolve) {
+        return {
+          template: template,
+          controller: ExposeCtrl,
+          resolve: resolve
+        };
+      }
+
+      it(&#039;should resolve simple values&#039;, function () {
+        open(modalDefinition(&#039;&lt;div&gt;{{value}}&lt;/div&gt;&#039;, {
+          value: function () {
+            return &#039;Content from resolve&#039;;
+          }
+        }));
+
+        expect($document).toHaveModalOpenWithContent(&#039;Content from resolve&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should delay showing modal if one of the resolves is a promise&#039;, function () {
+
+        open(modalDefinition(&#039;&lt;div&gt;{{value}}&lt;/div&gt;&#039;, {
+          value: function () {
+            return $timeout(function(){ return &#039;Promise&#039;; }, 100);
+          }
+        }));
+        expect($document).toHaveModalsOpen(0);
+
+        $timeout.flush();
+        expect($document).toHaveModalOpenWithContent(&#039;Promise&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should not open dialog (and reject returned promise) if one of resolve fails&#039;, function () {
+
+        var deferred = $q.defer();
+
+        var modal = open(modalDefinition(&#039;&lt;div&gt;{{value}}&lt;/div&gt;&#039;, {
+          value: function () {
+            return deferred.promise;
+          }
+        }));
+        expect($document).toHaveModalsOpen(0);
+
+        deferred.reject(&#039;error in test&#039;);
+        $rootScope.$digest();
+
+        expect($document).toHaveModalsOpen(0);
+        expect(modal.result).toBeRejectedWith(&#039;error in test&#039;);
+      });
+
+      it(&#039;should support injection with minification-safe syntax in resolve functions&#039;, function () {
+
+        open(modalDefinition(&#039;&lt;div&gt;{{value.id}}&lt;/div&gt;&#039;, {
+          value: [&#039;$locale&#039;, function (e) {
+            return e;
+          }]
+        }));
+
+        expect($document).toHaveModalOpenWithContent(&#039;en-us&#039;, &#039;div&#039;);
+      });
+
+      //TODO: resolves with dependency injection - do we want to support them?
+    });
+
+    describe(&#039;scope&#039;, function () {
+
+      it(&#039;should use custom scope if provided&#039;, function () {
+        var $scope = $rootScope.$new();
+        $scope.fromScope = &#039;Content from custom scope&#039;;
+        open({
+          template: &#039;&lt;div&gt;{{fromScope}}&lt;/div&gt;&#039;,
+          scope: $scope
+        });
+        expect($document).toHaveModalOpenWithContent(&#039;Content from custom scope&#039;, &#039;div&#039;);
+      });
+
+      it(&#039;should create and use child of $rootScope if custom scope not provided&#039;, function () {
+
+        var scopeTailBefore = $rootScope.$$childTail;
+
+        $rootScope.fromScope = &#039;Content from root scope&#039;;
+        open({
+          template: &#039;&lt;div&gt;{{fromScope}}&lt;/div&gt;&#039;
+        });
+        expect($document).toHaveModalOpenWithContent(&#039;Content from root scope&#039;, &#039;div&#039;);
+      });
+    });
+
+    describe(&#039;keyboard&#039;, function () {
+
+      it(&#039;should not close modals if keyboard option is set to false&#039;, function () {
+        open({
+          template: &#039;&lt;div&gt;No keyboard&lt;/div&gt;&#039;,
+          keyboard: false
+        });
+
+        expect($document).toHaveModalsOpen(1);
+
+        triggerKeyDown($document, 27);
+        $rootScope.$digest();
+
+        expect($document).toHaveModalsOpen(1);
+      });
+    });
+
+    describe(&#039;backdrop&#039;, function () {
+
+      it(&#039;should not have any backdrop element if backdrop set to false&#039;, function () {
+        var modal =open({
+          template: &#039;&lt;div&gt;No backdrop&lt;/div&gt;&#039;,
+          backdrop: false
+        });
+        expect($document).toHaveModalOpenWithContent(&#039;No backdrop&#039;, &#039;div&#039;);
+        expect($document).not.toHaveBackdrop();
+
+        dismiss(modal);
+        expect($document).toHaveModalsOpen(0);
+      });
+
+      it(&#039;should not close modal on backdrop click if backdrop is specified as &quot;static&quot;&#039;, function () {
+        open({
+          template: &#039;&lt;div&gt;Static backdrop&lt;/div&gt;&#039;,
+          backdrop: &#039;static&#039;
+        });
+
+        $document.find(&#039;body &gt; div.modal-backdrop&#039;).click();
+        $rootScope.$digest();
+
+        expect($document).toHaveModalOpenWithContent(&#039;Static backdrop&#039;, &#039;div&#039;);
+        expect($document).toHaveBackdrop();
+      });
+
+      it(&#039;should animate backdrop on each modal opening&#039;, function () {
+
+        var modal = open({ template: &#039;&lt;div&gt;With backdrop&lt;/div&gt;&#039; });
+        var backdropEl = $document.find(&#039;body &gt; div.modal-backdrop&#039;);
+        expect(backdropEl).not.toHaveClass(&#039;in&#039;);
+
+        $timeout.flush();
+        expect(backdropEl).toHaveClass(&#039;in&#039;);
+
+        dismiss(modal);
+        waitForBackdropAnimation();
+
+        modal = open({ template: &#039;&lt;div&gt;With backdrop&lt;/div&gt;&#039; });
+        backdropEl = $document.find(&#039;body &gt; div.modal-backdrop&#039;);
+        expect(backdropEl).not.toHaveClass(&#039;in&#039;);
+
+      });
+
+      describe(&#039;custom backdrop classes&#039;, function () {
+
+        it(&#039;should support additional backdrop class as string&#039;, function () {
+          open({
+            template: &#039;&lt;div&gt;With custom backdrop class&lt;/div&gt;&#039;,
+            backdropClass: &#039;additional&#039;
+          });
+
+          expect($document.find(&#039;div.modal-backdrop&#039;)).toHaveClass(&#039;additional&#039;);
+        });
+      });
+    });
+
+    describe(&#039;custom window classes&#039;, function () {
+
+      it(&#039;should support additional window class as string&#039;, function () {
+        open({
+          template: &#039;&lt;div&gt;With custom window class&lt;/div&gt;&#039;,
+          windowClass: &#039;additional&#039;
+        });
+
+        expect($document.find(&#039;div.modal&#039;)).toHaveClass(&#039;additional&#039;);
+      });
+    });
+
+    describe(&#039;size&#039;, function () {
+
+      it(&#039;should support creating small modal dialogs&#039;, function () {
+        open({
+          template: &#039;&lt;div&gt;Small modal dialog&lt;/div&gt;&#039;,
+          size: &#039;sm&#039;
+        });
+
+        expect($document.find(&#039;div.modal-dialog&#039;)).toHaveClass(&#039;modal-sm&#039;);
+      });
+
+      it(&#039;should support creating large modal dialogs&#039;, function () {
+        open({
+          template: &#039;&lt;div&gt;Large modal dialog&lt;/div&gt;&#039;,
+          size: &#039;lg&#039;
+        });
+
+        expect($document.find(&#039;div.modal-dialog&#039;)).toHaveClass(&#039;modal-lg&#039;);
+      });
+    });
+  });
+
+  describe(&#039;multiple modals&#039;, function () {
+
+    it(&#039;it should allow opening of multiple modals&#039;, function () {
+
+      var modal1 = open({template: &#039;&lt;div&gt;Modal1&lt;/div&gt;&#039;});
+      var modal2 = open({template: &#039;&lt;div&gt;Modal2&lt;/div&gt;&#039;});
+      expect($document).toHaveModalsOpen(2);
+
+      dismiss(modal2);
+      expect($document).toHaveModalsOpen(1);
+      expect($document).toHaveModalOpenWithContent(&#039;Modal1&#039;, &#039;div&#039;);
+
+      dismiss(modal1);
+      expect($document).toHaveModalsOpen(0);
+    });
+
+    it(&#039;should not close any modals on ESC if the topmost one does not allow it&#039;, function () {
+
+      var modal1 = open({template: &#039;&lt;div&gt;Modal1&lt;/div&gt;&#039;});
+      var modal2 = open({template: &#039;&lt;div&gt;Modal2&lt;/div&gt;&#039;, keyboard: false});
+
+      triggerKeyDown($document, 27);
+      $rootScope.$digest();
+
+      expect($document).toHaveModalsOpen(2);
+    });
+
+    it(&#039;should not close any modals on click if a topmost modal does not have backdrop&#039;, function () {
+
+      var modal1 = open({template: &#039;&lt;div&gt;Modal1&lt;/div&gt;&#039;});
+      var modal2 = open({template: &#039;&lt;div&gt;Modal2&lt;/div&gt;&#039;, backdrop: false});
+
+      $document.find(&#039;body &gt; div.modal-backdrop&#039;).click();
+      $rootScope.$digest();
+
+      expect($document).toHaveModalsOpen(2);
+    });
+
+    it(&#039;multiple modals should not interfere with default options&#039;, function () {
+
+      var modal1 = open({template: &#039;&lt;div&gt;Modal1&lt;/div&gt;&#039;, backdrop: false});
+      var modal2 = open({template: &#039;&lt;div&gt;Modal2&lt;/div&gt;&#039;});
+      $rootScope.$digest();
+
+      expect($document).toHaveBackdrop();
+    });
+
+    it(&#039;should add &quot;modal-open&quot; class when a modal gets opened&#039;, function () {
+
+      var body = $document.find(&#039;body&#039;);
+      expect(body).not.toHaveClass(&#039;modal-open&#039;);
+
+      var modal1 = open({template: &#039;&lt;div&gt;Content1&lt;/div&gt;&#039;});
+      expect(body).toHaveClass(&#039;modal-open&#039;);
+
+      var modal2 = open({template: &#039;&lt;div&gt;Content1&lt;/div&gt;&#039;});
+      expect(body).toHaveClass(&#039;modal-open&#039;);
+
+      dismiss(modal1);
+      expect(body).toHaveClass(&#039;modal-open&#039;);
+
+      dismiss(modal2);
+      expect(body).not.toHaveClass(&#039;modal-open&#039;);
+    });
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

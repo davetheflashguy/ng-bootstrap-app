@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/tabs/tabs.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/tabs/tabs.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">75.77</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">265</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">35.35</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.21</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * @ngdoc overview
+ * @name ui.bootstrap.tabs
+ *
+ * @description
+ * AngularJS version of the tabs directive.
+ */
+
+angular.module(&#039;ui.bootstrap.tabs&#039;, [])
+
+.controller(&#039;TabsetController&#039;, [&#039;$scope&#039;, function TabsetCtrl($scope) {
+  var ctrl = this,
+      tabs = ctrl.tabs = $scope.tabs = [];
+
+  ctrl.select = function(selectedTab) {
+    angular.forEach(tabs, function(tab) {
+      if (tab.active &amp;&amp; tab !== selectedTab) {
+        tab.active = false;
+        tab.onDeselect();
+      }
+    });
+    selectedTab.active = true;
+    selectedTab.onSelect();
+  };
+
+  ctrl.addTab = function addTab(tab) {
+    tabs.push(tab);
+    // we can&#039;t run the select function on the first tab
+    // since that would select it twice
+    if (tabs.length === 1) {
+      tab.active = true;
+    } else if (tab.active) {
+      ctrl.select(tab);
+    }
+  };
+
+  ctrl.removeTab = function removeTab(tab) {
+    var index = tabs.indexOf(tab);
+    //Select a new tab if the tab to be removed is selected
+    if (tab.active &amp;&amp; tabs.length &gt; 1) {
+      //If this is the last tab, select the previous tab. else, the next tab.
+      var newActiveIndex = index == tabs.length - 1 ? index - 1 : index + 1;
+      ctrl.select(tabs[newActiveIndex]);
+    }
+    tabs.splice(index, 1);
+  };
+}])
+
+/**
+ * @ngdoc directive
+ * @name ui.bootstrap.tabs.directive:tabset
+ * @restrict EA
+ *
+ * @description
+ * Tabset is the outer container for the tabs directive
+ *
+ * @param {boolean=} vertical Whether or not to use vertical styling for the tabs.
+ * @param {boolean=} justified Whether or not to use justified styling for the tabs.
+ *
+ * @example
+&lt;example module=&quot;ui.bootstrap&quot;&gt;
+  &lt;file name=&quot;index.html&quot;&gt;
+    &lt;tabset&gt;
+      &lt;tab heading=&quot;Tab 1&quot;&gt;&lt;b&gt;First&lt;/b&gt; Content!&lt;/tab&gt;
+      &lt;tab heading=&quot;Tab 2&quot;&gt;&lt;i&gt;Second&lt;/i&gt; Content!&lt;/tab&gt;
+    &lt;/tabset&gt;
+    &lt;hr /&gt;
+    &lt;tabset vertical=&quot;true&quot;&gt;
+      &lt;tab heading=&quot;Vertical Tab 1&quot;&gt;&lt;b&gt;First&lt;/b&gt; Vertical Content!&lt;/tab&gt;
+      &lt;tab heading=&quot;Vertical Tab 2&quot;&gt;&lt;i&gt;Second&lt;/i&gt; Vertical Content!&lt;/tab&gt;
+    &lt;/tabset&gt;
+    &lt;tabset justified=&quot;true&quot;&gt;
+      &lt;tab heading=&quot;Justified Tab 1&quot;&gt;&lt;b&gt;First&lt;/b&gt; Justified Content!&lt;/tab&gt;
+      &lt;tab heading=&quot;Justified Tab 2&quot;&gt;&lt;i&gt;Second&lt;/i&gt; Justified Content!&lt;/tab&gt;
+    &lt;/tabset&gt;
+  &lt;/file&gt;
+&lt;/example&gt;
+ */
+.directive(&#039;tabset&#039;, function() {
+  return {
+    restrict: &#039;EA&#039;,
+    transclude: true,
+    replace: true,
+    scope: {
+      type: &#039;@&#039;
+    },
+    controller: &#039;TabsetController&#039;,
+    templateUrl: &#039;template/tabs/tabset.html&#039;,
+    link: function(scope, element, attrs) {
+      scope.vertical = angular.isDefined(attrs.vertical) ? scope.$parent.$eval(attrs.vertical) : false;
+      scope.justified = angular.isDefined(attrs.justified) ? scope.$parent.$eval(attrs.justified) : false;
+    }
+  };
+})
+
+/**
+ * @ngdoc directive
+ * @name ui.bootstrap.tabs.directive:tab
+ * @restrict EA
+ *
+ * @param {string=} heading The visible heading, or title, of the tab. Set HTML headings with {@link ui.bootstrap.tabs.directive:tabHeading tabHeading}.
+ * @param {string=} select An expression to evaluate when the tab is selected.
+ * @param {boolean=} active A binding, telling whether or not this tab is selected.
+ * @param {boolean=} disabled A binding, telling whether or not this tab is disabled.
+ *
+ * @description
+ * Creates a tab with a heading and content. Must be placed within a {@link ui.bootstrap.tabs.directive:tabset tabset}.
+ *
+ * @example
+&lt;example module=&quot;ui.bootstrap&quot;&gt;
+  &lt;file name=&quot;index.html&quot;&gt;
+    &lt;div ng-controller=&quot;TabsDemoCtrl&quot;&gt;
+      &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;items[0].active = true&quot;&gt;
+        Select item 1, using active binding
+      &lt;/button&gt;
+      &lt;button class=&quot;btn btn-small&quot; ng-click=&quot;items[1].disabled = !items[1].disabled&quot;&gt;
+        Enable/disable item 2, using disabled binding
+      &lt;/button&gt;
+      &lt;br /&gt;
+      &lt;tabset&gt;
+        &lt;tab heading=&quot;Tab 1&quot;&gt;First Tab&lt;/tab&gt;
+        &lt;tab select=&quot;alertMe()&quot;&gt;
+          &lt;tab-heading&gt;&lt;i class=&quot;icon-bell&quot;&gt;&lt;/i&gt; Alert me!&lt;/tab-heading&gt;
+          Second Tab, with alert callback and html heading!
+        &lt;/tab&gt;
+        &lt;tab ng-repeat=&quot;item in items&quot;
+          heading=&quot;{{item.title}}&quot;
+          disabled=&quot;item.disabled&quot;
+          active=&quot;item.active&quot;&gt;
+          {{item.content}}
+        &lt;/tab&gt;
+      &lt;/tabset&gt;
+    &lt;/div&gt;
+  &lt;/file&gt;
+  &lt;file name=&quot;script.js&quot;&gt;
+    function TabsDemoCtrl($scope) {
+      $scope.items = [
+        { title:&quot;Dynamic Title 1&quot;, content:&quot;Dynamic Item 0&quot; },
+        { title:&quot;Dynamic Title 2&quot;, content:&quot;Dynamic Item 1&quot;, disabled: true }
+      ];
+
+      $scope.alertMe = function() {
+        setTimeout(function() {
+          alert(&quot;You&#039;ve selected the alert tab!&quot;);
+        });
+      };
+    };
+  &lt;/file&gt;
+&lt;/example&gt;
+ */
+
+/**
+ * @ngdoc directive
+ * @name ui.bootstrap.tabs.directive:tabHeading
+ * @restrict EA
+ *
+ * @description
+ * Creates an HTML heading for a {@link ui.bootstrap.tabs.directive:tab tab}. Must be placed as a child of a tab element.
+ *
+ * @example
+&lt;example module=&quot;ui.bootstrap&quot;&gt;
+  &lt;file name=&quot;index.html&quot;&gt;
+    &lt;tabset&gt;
+      &lt;tab&gt;
+        &lt;tab-heading&gt;&lt;b&gt;HTML&lt;/b&gt; in my titles?!&lt;/tab-heading&gt;
+        And some content, too!
+      &lt;/tab&gt;
+      &lt;tab&gt;
+        &lt;tab-heading&gt;&lt;i class=&quot;icon-heart&quot;&gt;&lt;/i&gt; Icon heading?!?&lt;/tab-heading&gt;
+        That&#039;s right.
+      &lt;/tab&gt;
+    &lt;/tabset&gt;
+  &lt;/file&gt;
+&lt;/example&gt;
+ */
+.directive(&#039;tab&#039;, [&#039;$parse&#039;, function($parse) {
+  return {
+    require: &#039;^tabset&#039;,
+    restrict: &#039;EA&#039;,
+    replace: true,
+    templateUrl: &#039;template/tabs/tab.html&#039;,
+    transclude: true,
+    scope: {
+      active: &#039;=?&#039;,
+      heading: &#039;@&#039;,
+      onSelect: &#039;&amp;select&#039;, //This callback is called in contentHeadingTransclude
+                          //once it inserts the tab&#039;s content into the dom
+      onDeselect: &#039;&amp;deselect&#039;
+    },
+    controller: function() {
+      //Empty controller so other directives can require being &#039;under&#039; a tab
+    },
+    compile: function(elm, attrs, transclude) {
+      return function postLink(scope, elm, attrs, tabsetCtrl) {
+        scope.$watch(&#039;active&#039;, function(active) {
+          if (active) {
+            tabsetCtrl.select(scope);
+          }
+        });
+
+        scope.disabled = false;
+        if ( attrs.disabled ) {
+          scope.$parent.$watch($parse(attrs.disabled), function(value) {
+            scope.disabled = !! value;
+          });
+        }
+
+        scope.select = function() {
+          if ( !scope.disabled ) {
+            scope.active = true;
+          }
+        };
+
+        tabsetCtrl.addTab(scope);
+        scope.$on(&#039;$destroy&#039;, function() {
+          tabsetCtrl.removeTab(scope);
+        });
+
+        //We need to transclude later, once the content container is ready.
+        //when this link happens, we&#039;re inside a tab heading.
+        scope.$transcludeFn = transclude;
+      };
+    }
+  };
+}])
+
+.directive(&#039;tabHeadingTransclude&#039;, [function() {
+  return {
+    restrict: &#039;A&#039;,
+    require: &#039;^tab&#039;,
+    link: function(scope, elm, attrs, tabCtrl) {
+      scope.$watch(&#039;headingElement&#039;, function updateHeadingElement(heading) {
+        if (heading) {
+          elm.html(&#039;&#039;);
+          elm.append(heading);
+        }
+      });
+    }
+  };
+}])
+
+.directive(&#039;tabContentTransclude&#039;, function() {
+  return {
+    restrict: &#039;A&#039;,
+    require: &#039;^tabset&#039;,
+    link: function(scope, elm, attrs) {
+      var tab = scope.$eval(attrs.tabContentTransclude);
+
+      //Now our tab is ready to be transcluded: both the tab heading area
+      //and the tab content area are loaded.  Transclude &#039;em both.
+      tab.$transcludeFn(tab.$parent, function(contents) {
+        angular.forEach(contents, function(node) {
+          if (isTabHeading(node)) {
+            //Let tabHeadingTransclude know.
+            tab.headingElement = node;
+          } else {
+            elm.append(node);
+          }
+        });
+      });
+    }
+  };
+  function isTabHeading(node) {
+    return node.tagName &amp;&amp;  (
+      node.hasAttribute(&#039;tab-heading&#039;) ||
+      node.hasAttribute(&#039;data-tab-heading&#039;) ||
+      node.tagName.toLowerCase() === &#039;tab-heading&#039; ||
+      node.tagName.toLowerCase() === &#039;data-tab-heading&#039;
+    );
+  }
+})
+
+;</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

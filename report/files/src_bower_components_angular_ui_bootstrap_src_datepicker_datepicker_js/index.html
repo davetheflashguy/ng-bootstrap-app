@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/datepicker/datepicker.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/datepicker/datepicker.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">66.17</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">639</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">72.03</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">8.88</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">angular.module(&#039;ui.bootstrap.datepicker&#039;, [&#039;ui.bootstrap.dateparser&#039;, &#039;ui.bootstrap.position&#039;])
+
+.constant(&#039;datepickerConfig&#039;, {
+  formatDay: &#039;dd&#039;,
+  formatMonth: &#039;MMMM&#039;,
+  formatYear: &#039;yyyy&#039;,
+  formatDayHeader: &#039;EEE&#039;,
+  formatDayTitle: &#039;MMMM yyyy&#039;,
+  formatMonthTitle: &#039;yyyy&#039;,
+  datepickerMode: &#039;day&#039;,
+  minMode: &#039;day&#039;,
+  maxMode: &#039;year&#039;,
+  showWeeks: true,
+  startingDay: 0,
+  yearRange: 20,
+  minDate: null,
+  maxDate: null
+})
+
+.controller(&#039;DatepickerController&#039;, [&#039;$scope&#039;, &#039;$attrs&#039;, &#039;$parse&#039;, &#039;$interpolate&#039;, &#039;$timeout&#039;, &#039;$log&#039;, &#039;dateFilter&#039;, &#039;datepickerConfig&#039;, function($scope, $attrs, $parse, $interpolate, $timeout, $log, dateFilter, datepickerConfig) {
+  var self = this,
+      ngModelCtrl = { $setViewValue: angular.noop }; // nullModelCtrl;
+
+  // Modes chain
+  this.modes = [&#039;day&#039;, &#039;month&#039;, &#039;year&#039;];
+
+  // Configuration attributes
+  angular.forEach([&#039;formatDay&#039;, &#039;formatMonth&#039;, &#039;formatYear&#039;, &#039;formatDayHeader&#039;, &#039;formatDayTitle&#039;, &#039;formatMonthTitle&#039;,
+                   &#039;minMode&#039;, &#039;maxMode&#039;, &#039;showWeeks&#039;, &#039;startingDay&#039;, &#039;yearRange&#039;], function( key, index ) {
+    self[key] = angular.isDefined($attrs[key]) ? (index &lt; 8 ? $interpolate($attrs[key])($scope.$parent) : $scope.$parent.$eval($attrs[key])) : datepickerConfig[key];
+  });
+
+  // Watchable date attributes
+  angular.forEach([&#039;minDate&#039;, &#039;maxDate&#039;], function( key ) {
+    if ( $attrs[key] ) {
+      $scope.$parent.$watch($parse($attrs[key]), function(value) {
+        self[key] = value ? new Date(value) : null;
+        self.refreshView();
+      });
+    } else {
+      self[key] = datepickerConfig[key] ? new Date(datepickerConfig[key]) : null;
+    }
+  });
+
+  $scope.datepickerMode = $scope.datepickerMode || datepickerConfig.datepickerMode;
+  $scope.uniqueId = &#039;datepicker-&#039; + $scope.$id + &#039;-&#039; + Math.floor(Math.random() * 10000);
+  this.activeDate = angular.isDefined($attrs.initDate) ? $scope.$parent.$eval($attrs.initDate) : new Date();
+
+  $scope.isActive = function(dateObject) {
+    if (self.compare(dateObject.date, self.activeDate) === 0) {
+      $scope.activeDateId = dateObject.uid;
+      return true;
+    }
+    return false;
+  };
+
+  this.init = function( ngModelCtrl_ ) {
+    ngModelCtrl = ngModelCtrl_;
+
+    ngModelCtrl.$render = function() {
+      self.render();
+    };
+  };
+
+  this.render = function() {
+    if ( ngModelCtrl.$modelValue ) {
+      var date = new Date( ngModelCtrl.$modelValue ),
+          isValid = !isNaN(date);
+
+      if ( isValid ) {
+        this.activeDate = date;
+      } else {
+        $log.error(&#039;Datepicker directive: &quot;ng-model&quot; value must be a Date object, a number of milliseconds since 01.01.1970 or a string representing an RFC2822 or ISO 8601 date.&#039;);
+      }
+      ngModelCtrl.$setValidity(&#039;date&#039;, isValid);
+    }
+    this.refreshView();
+  };
+
+  this.refreshView = function() {
+    if ( this.element ) {
+      this._refreshView();
+
+      var date = ngModelCtrl.$modelValue ? new Date(ngModelCtrl.$modelValue) : null;
+      ngModelCtrl.$setValidity(&#039;date-disabled&#039;, !date || (this.element &amp;&amp; !this.isDisabled(date)));
+    }
+  };
+
+  this.createDateObject = function(date, format) {
+    var model = ngModelCtrl.$modelValue ? new Date(ngModelCtrl.$modelValue) : null;
+    return {
+      date: date,
+      label: dateFilter(date, format),
+      selected: model &amp;&amp; this.compare(date, model) === 0,
+      disabled: this.isDisabled(date),
+      current: this.compare(date, new Date()) === 0
+    };
+  };
+
+  this.isDisabled = function( date ) {
+    return ((this.minDate &amp;&amp; this.compare(date, this.minDate) &lt; 0) || (this.maxDate &amp;&amp; this.compare(date, this.maxDate) &gt; 0) || ($attrs.dateDisabled &amp;&amp; $scope.dateDisabled({date: date, mode: $scope.datepickerMode})));
+  };
+
+  // Split array into smaller arrays
+  this.split = function(arr, size) {
+    var arrays = [];
+    while (arr.length &gt; 0) {
+      arrays.push(arr.splice(0, size));
+    }
+    return arrays;
+  };
+
+  $scope.select = function( date ) {
+    if ( $scope.datepickerMode === self.minMode ) {
+      var dt = ngModelCtrl.$modelValue ? new Date( ngModelCtrl.$modelValue ) : new Date(0, 0, 0, 0, 0, 0, 0);
+      dt.setFullYear( date.getFullYear(), date.getMonth(), date.getDate() );
+      ngModelCtrl.$setViewValue( dt );
+      ngModelCtrl.$render();
+    } else {
+      self.activeDate = date;
+      $scope.datepickerMode = self.modes[ self.modes.indexOf( $scope.datepickerMode ) - 1 ];
+    }
+  };
+
+  $scope.move = function( direction ) {
+    var year = self.activeDate.getFullYear() + direction * (self.step.years || 0),
+        month = self.activeDate.getMonth() + direction * (self.step.months || 0);
+    self.activeDate.setFullYear(year, month, 1);
+    self.refreshView();
+  };
+
+  $scope.toggleMode = function( direction ) {
+    direction = direction || 1;
+
+    if (($scope.datepickerMode === self.maxMode &amp;&amp; direction === 1) || ($scope.datepickerMode === self.minMode &amp;&amp; direction === -1)) {
+      return;
+    }
+
+    $scope.datepickerMode = self.modes[ self.modes.indexOf( $scope.datepickerMode ) + direction ];
+  };
+
+  // Key event mapper
+  $scope.keys = { 13:&#039;enter&#039;, 32:&#039;space&#039;, 33:&#039;pageup&#039;, 34:&#039;pagedown&#039;, 35:&#039;end&#039;, 36:&#039;home&#039;, 37:&#039;left&#039;, 38:&#039;up&#039;, 39:&#039;right&#039;, 40:&#039;down&#039; };
+
+  var focusElement = function() {
+    $timeout(function() {
+      self.element[0].focus();
+    }, 0 , false);
+  };
+
+  // Listen for focus requests from popup directive
+  $scope.$on(&#039;datepicker.focus&#039;, focusElement);
+
+  $scope.keydown = function( evt ) {
+    var key = $scope.keys[evt.which];
+
+    if ( !key || evt.shiftKey || evt.altKey ) {
+      return;
+    }
+
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    if (key === &#039;enter&#039; || key === &#039;space&#039;) {
+      if ( self.isDisabled(self.activeDate)) {
+        return; // do nothing
+      }
+      $scope.select(self.activeDate);
+      focusElement();
+    } else if (evt.ctrlKey &amp;&amp; (key === &#039;up&#039; || key === &#039;down&#039;)) {
+      $scope.toggleMode(key === &#039;up&#039; ? 1 : -1);
+      focusElement();
+    } else {
+      self.handleKeyDown(key, evt);
+      self.refreshView();
+    }
+  };
+}])
+
+.directive( &#039;datepicker&#039;, function () {
+  return {
+    restrict: &#039;EA&#039;,
+    replace: true,
+    templateUrl: &#039;template/datepicker/datepicker.html&#039;,
+    scope: {
+      datepickerMode: &#039;=?&#039;,
+      dateDisabled: &#039;&amp;&#039;
+    },
+    require: [&#039;datepicker&#039;, &#039;?^ngModel&#039;],
+    controller: &#039;DatepickerController&#039;,
+    link: function(scope, element, attrs, ctrls) {
+      var datepickerCtrl = ctrls[0], ngModelCtrl = ctrls[1];
+
+      if ( ngModelCtrl ) {
+        datepickerCtrl.init( ngModelCtrl );
+      }
+    }
+  };
+})
+
+.directive(&#039;daypicker&#039;, [&#039;dateFilter&#039;, function (dateFilter) {
+  return {
+    restrict: &#039;EA&#039;,
+    replace: true,
+    templateUrl: &#039;template/datepicker/day.html&#039;,
+    require: &#039;^datepicker&#039;,
+    link: function(scope, element, attrs, ctrl) {
+      scope.showWeeks = ctrl.showWeeks;
+
+      ctrl.step = { months: 1 };
+      ctrl.element = element;
+
+      var DAYS_IN_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      function getDaysInMonth( year, month ) {
+        return ((month === 1) &amp;&amp; (year % 4 === 0) &amp;&amp; ((year % 100 !== 0) || (year % 400 === 0))) ? 29 : DAYS_IN_MONTH[month];
+      }
+
+      function getDates(startDate, n) {
+        var dates = new Array(n), current = new Date(startDate), i = 0;
+        current.setHours(12); // Prevent repeated dates because of timezone bug
+        while ( i &lt; n ) {
+          dates[i++] = new Date(current);
+          current.setDate( current.getDate() + 1 );
+        }
+        return dates;
+      }
+
+      ctrl._refreshView = function() {
+        var year = ctrl.activeDate.getFullYear(),
+          month = ctrl.activeDate.getMonth(),
+          firstDayOfMonth = new Date(year, month, 1),
+          difference = ctrl.startingDay - firstDayOfMonth.getDay(),
+          numDisplayedFromPreviousMonth = (difference &gt; 0) ? 7 - difference : - difference,
+          firstDate = new Date(firstDayOfMonth);
+
+        if ( numDisplayedFromPreviousMonth &gt; 0 ) {
+          firstDate.setDate( - numDisplayedFromPreviousMonth + 1 );
+        }
+
+        // 42 is the number of days on a six-month calendar
+        var days = getDates(firstDate, 42);
+        for (var i = 0; i &lt; 42; i ++) {
+          days[i] = angular.extend(ctrl.createDateObject(days[i], ctrl.formatDay), {
+            secondary: days[i].getMonth() !== month,
+            uid: scope.uniqueId + &#039;-&#039; + i
+          });
+        }
+
+        scope.labels = new Array(7);
+        for (var j = 0; j &lt; 7; j++) {
+          scope.labels[j] = {
+            abbr: dateFilter(days[j].date, ctrl.formatDayHeader),
+            full: dateFilter(days[j].date, &#039;EEEE&#039;)
+          };
+        }
+
+        scope.title = dateFilter(ctrl.activeDate, ctrl.formatDayTitle);
+        scope.rows = ctrl.split(days, 7);
+
+        if ( scope.showWeeks ) {
+          scope.weekNumbers = [];
+          var weekNumber = getISO8601WeekNumber( scope.rows[0][0].date ),
+              numWeeks = scope.rows.length;
+          while( scope.weekNumbers.push(weekNumber++) &lt; numWeeks ) {}
+        }
+      };
+
+      ctrl.compare = function(date1, date2) {
+        return (new Date( date1.getFullYear(), date1.getMonth(), date1.getDate() ) - new Date( date2.getFullYear(), date2.getMonth(), date2.getDate() ) );
+      };
+
+      function getISO8601WeekNumber(date) {
+        var checkDate = new Date(date);
+        checkDate.setDate(checkDate.getDate() + 4 - (checkDate.getDay() || 7)); // Thursday
+        var time = checkDate.getTime();
+        checkDate.setMonth(0); // Compare with Jan 1
+        checkDate.setDate(1);
+        return Math.floor(Math.round((time - checkDate) / 86400000) / 7) + 1;
+      }
+
+      ctrl.handleKeyDown = function( key, evt ) {
+        var date = ctrl.activeDate.getDate();
+
+        if (key === &#039;left&#039;) {
+          date = date - 1;   // up
+        } else if (key === &#039;up&#039;) {
+          date = date - 7;   // down
+        } else if (key === &#039;right&#039;) {
+          date = date + 1;   // down
+        } else if (key === &#039;down&#039;) {
+          date = date + 7;
+        } else if (key === &#039;pageup&#039; || key === &#039;pagedown&#039;) {
+          var month = ctrl.activeDate.getMonth() + (key === &#039;pageup&#039; ? - 1 : 1);
+          ctrl.activeDate.setMonth(month, 1);
+          date = Math.min(getDaysInMonth(ctrl.activeDate.getFullYear(), ctrl.activeDate.getMonth()), date);
+        } else if (key === &#039;home&#039;) {
+          date = 1;
+        } else if (key === &#039;end&#039;) {
+          date = getDaysInMonth(ctrl.activeDate.getFullYear(), ctrl.activeDate.getMonth());
+        }
+        ctrl.activeDate.setDate(date);
+      };
+
+      ctrl.refreshView();
+    }
+  };
+}])
+
+.directive(&#039;monthpicker&#039;, [&#039;dateFilter&#039;, function (dateFilter) {
+  return {
+    restrict: &#039;EA&#039;,
+    replace: true,
+    templateUrl: &#039;template/datepicker/month.html&#039;,
+    require: &#039;^datepicker&#039;,
+    link: function(scope, element, attrs, ctrl) {
+      ctrl.step = { years: 1 };
+      ctrl.element = element;
+
+      ctrl._refreshView = function() {
+        var months = new Array(12),
+            year = ctrl.activeDate.getFullYear();
+
+        for ( var i = 0; i &lt; 12; i++ ) {
+          months[i] = angular.extend(ctrl.createDateObject(new Date(year, i, 1), ctrl.formatMonth), {
+            uid: scope.uniqueId + &#039;-&#039; + i
+          });
+        }
+
+        scope.title = dateFilter(ctrl.activeDate, ctrl.formatMonthTitle);
+        scope.rows = ctrl.split(months, 3);
+      };
+
+      ctrl.compare = function(date1, date2) {
+        return new Date( date1.getFullYear(), date1.getMonth() ) - new Date( date2.getFullYear(), date2.getMonth() );
+      };
+
+      ctrl.handleKeyDown = function( key, evt ) {
+        var date = ctrl.activeDate.getMonth();
+
+        if (key === &#039;left&#039;) {
+          date = date - 1;   // up
+        } else if (key === &#039;up&#039;) {
+          date = date - 3;   // down
+        } else if (key === &#039;right&#039;) {
+          date = date + 1;   // down
+        } else if (key === &#039;down&#039;) {
+          date = date + 3;
+        } else if (key === &#039;pageup&#039; || key === &#039;pagedown&#039;) {
+          var year = ctrl.activeDate.getFullYear() + (key === &#039;pageup&#039; ? - 1 : 1);
+          ctrl.activeDate.setFullYear(year);
+        } else if (key === &#039;home&#039;) {
+          date = 0;
+        } else if (key === &#039;end&#039;) {
+          date = 11;
+        }
+        ctrl.activeDate.setMonth(date);
+      };
+
+      ctrl.refreshView();
+    }
+  };
+}])
+
+.directive(&#039;yearpicker&#039;, [&#039;dateFilter&#039;, function (dateFilter) {
+  return {
+    restrict: &#039;EA&#039;,
+    replace: true,
+    templateUrl: &#039;template/datepicker/year.html&#039;,
+    require: &#039;^datepicker&#039;,
+    link: function(scope, element, attrs, ctrl) {
+      var range = ctrl.yearRange;
+
+      ctrl.step = { years: range };
+      ctrl.element = element;
+
+      function getStartingYear( year ) {
+        return parseInt((year - 1) / range, 10) * range + 1;
+      }
+
+      ctrl._refreshView = function() {
+        var years = new Array(range);
+
+        for ( var i = 0, start = getStartingYear(ctrl.activeDate.getFullYear()); i &lt; range; i++ ) {
+          years[i] = angular.extend(ctrl.createDateObject(new Date(start + i, 0, 1), ctrl.formatYear), {
+            uid: scope.uniqueId + &#039;-&#039; + i
+          });
+        }
+
+        scope.title = [years[0].label, years[range - 1].label].join(&#039; - &#039;);
+        scope.rows = ctrl.split(years, 5);
+      };
+
+      ctrl.compare = function(date1, date2) {
+        return date1.getFullYear() - date2.getFullYear();
+      };
+
+      ctrl.handleKeyDown = function( key, evt ) {
+        var date = ctrl.activeDate.getFullYear();
+
+        if (key === &#039;left&#039;) {
+          date = date - 1;   // up
+        } else if (key === &#039;up&#039;) {
+          date = date - 5;   // down
+        } else if (key === &#039;right&#039;) {
+          date = date + 1;   // down
+        } else if (key === &#039;down&#039;) {
+          date = date + 5;
+        } else if (key === &#039;pageup&#039; || key === &#039;pagedown&#039;) {
+          date += (key === &#039;pageup&#039; ? - 1 : 1) * ctrl.step.years;
+        } else if (key === &#039;home&#039;) {
+          date = getStartingYear( ctrl.activeDate.getFullYear() );
+        } else if (key === &#039;end&#039;) {
+          date = getStartingYear( ctrl.activeDate.getFullYear() ) + range - 1;
+        }
+        ctrl.activeDate.setFullYear(date);
+      };
+
+      ctrl.refreshView();
+    }
+  };
+}])
+
+.constant(&#039;datepickerPopupConfig&#039;, {
+  datepickerPopup: &#039;yyyy-MM-dd&#039;,
+  currentText: &#039;Today&#039;,
+  clearText: &#039;Clear&#039;,
+  closeText: &#039;Done&#039;,
+  closeOnDateSelection: true,
+  appendToBody: false,
+  showButtonBar: true
+})
+
+.directive(&#039;datepickerPopup&#039;, [&#039;$compile&#039;, &#039;$parse&#039;, &#039;$document&#039;, &#039;$position&#039;, &#039;dateFilter&#039;, &#039;dateParser&#039;, &#039;datepickerPopupConfig&#039;,
+function ($compile, $parse, $document, $position, dateFilter, dateParser, datepickerPopupConfig) {
+  return {
+    restrict: &#039;EA&#039;,
+    require: &#039;ngModel&#039;,
+    scope: {
+      isOpen: &#039;=?&#039;,
+      currentText: &#039;@&#039;,
+      clearText: &#039;@&#039;,
+      closeText: &#039;@&#039;,
+      dateDisabled: &#039;&amp;&#039;
+    },
+    link: function(scope, element, attrs, ngModel) {
+      var dateFormat,
+          closeOnDateSelection = angular.isDefined(attrs.closeOnDateSelection) ? scope.$parent.$eval(attrs.closeOnDateSelection) : datepickerPopupConfig.closeOnDateSelection,
+          appendToBody = angular.isDefined(attrs.datepickerAppendToBody) ? scope.$parent.$eval(attrs.datepickerAppendToBody) : datepickerPopupConfig.appendToBody;
+
+      scope.showButtonBar = angular.isDefined(attrs.showButtonBar) ? scope.$parent.$eval(attrs.showButtonBar) : datepickerPopupConfig.showButtonBar;
+
+      scope.getText = function( key ) {
+        return scope[key + &#039;Text&#039;] || datepickerPopupConfig[key + &#039;Text&#039;];
+      };
+
+      attrs.$observe(&#039;datepickerPopup&#039;, function(value) {
+          dateFormat = value || datepickerPopupConfig.datepickerPopup;
+          ngModel.$render();
+      });
+
+      // popup element used to display calendar
+      var popupEl = angular.element(&#039;&lt;div datepicker-popup-wrap&gt;&lt;div datepicker&gt;&lt;/div&gt;&lt;/div&gt;&#039;);
+      popupEl.attr({
+        &#039;ng-model&#039;: &#039;date&#039;,
+        &#039;ng-change&#039;: &#039;dateSelection()&#039;
+      });
+
+      function cameltoDash( string ){
+        return string.replace(/([A-Z])/g, function($1) { return &#039;-&#039; + $1.toLowerCase(); });
+      }
+
+      // datepicker element
+      var datepickerEl = angular.element(popupEl.children()[0]);
+      if ( attrs.datepickerOptions ) {
+        angular.forEach(scope.$parent.$eval(attrs.datepickerOptions), function( value, option ) {
+          datepickerEl.attr( cameltoDash(option), value );
+        });
+      }
+
+      scope.watchData = {};
+      angular.forEach([&#039;minDate&#039;, &#039;maxDate&#039;, &#039;datepickerMode&#039;], function( key ) {
+        if ( attrs[key] ) {
+          var getAttribute = $parse(attrs[key]);
+          scope.$parent.$watch(getAttribute, function(value){
+            scope.watchData[key] = value;
+          });
+          datepickerEl.attr(cameltoDash(key), &#039;watchData.&#039; + key);
+
+          // Propagate changes from datepicker to outside
+          if ( key === &#039;datepickerMode&#039; ) {
+            var setAttribute = getAttribute.assign;
+            scope.$watch(&#039;watchData.&#039; + key, function(value, oldvalue) {
+              if ( value !== oldvalue ) {
+                setAttribute(scope.$parent, value);
+              }
+            });
+          }
+        }
+      });
+      if (attrs.dateDisabled) {
+        datepickerEl.attr(&#039;date-disabled&#039;, &#039;dateDisabled({ date: date, mode: mode })&#039;);
+      }
+
+      function parseDate(viewValue) {
+        if (!viewValue) {
+          ngModel.$setValidity(&#039;date&#039;, true);
+          return null;
+        } else if (angular.isDate(viewValue) &amp;&amp; !isNaN(viewValue)) {
+          ngModel.$setValidity(&#039;date&#039;, true);
+          return viewValue;
+        } else if (angular.isString(viewValue)) {
+          var date = dateParser.parse(viewValue, dateFormat) || new Date(viewValue);
+          if (isNaN(date)) {
+            ngModel.$setValidity(&#039;date&#039;, false);
+            return undefined;
+          } else {
+            ngModel.$setValidity(&#039;date&#039;, true);
+            return date;
+          }
+        } else {
+          ngModel.$setValidity(&#039;date&#039;, false);
+          return undefined;
+        }
+      }
+      ngModel.$parsers.unshift(parseDate);
+
+      // Inner change
+      scope.dateSelection = function(dt) {
+        if (angular.isDefined(dt)) {
+          scope.date = dt;
+        }
+        ngModel.$setViewValue(scope.date);
+        ngModel.$render();
+
+        if ( closeOnDateSelection ) {
+          scope.isOpen = false;
+          element[0].focus();
+        }
+      };
+
+      element.bind(&#039;input change keyup&#039;, function() {
+        scope.$apply(function() {
+          scope.date = ngModel.$modelValue;
+        });
+      });
+
+      // Outter change
+      ngModel.$render = function() {
+        var date = ngModel.$viewValue ? dateFilter(ngModel.$viewValue, dateFormat) : &#039;&#039;;
+        element.val(date);
+        scope.date = parseDate( ngModel.$modelValue );
+      };
+
+      var documentClickBind = function(event) {
+        if (scope.isOpen &amp;&amp; event.target !== element[0]) {
+          scope.$apply(function() {
+            scope.isOpen = false;
+          });
+        }
+      };
+
+      var keydown = function(evt, noApply) {
+        scope.keydown(evt);
+      };
+      element.bind(&#039;keydown&#039;, keydown);
+
+      scope.keydown = function(evt) {
+        if (evt.which === 27) {
+          evt.preventDefault();
+          evt.stopPropagation();
+          scope.close();
+        } else if (evt.which === 40 &amp;&amp; !scope.isOpen) {
+          scope.isOpen = true;
+        }
+      };
+
+      scope.$watch(&#039;isOpen&#039;, function(value) {
+        if (value) {
+          scope.$broadcast(&#039;datepicker.focus&#039;);
+          scope.position = appendToBody ? $position.offset(element) : $position.position(element);
+          scope.position.top = scope.position.top + element.prop(&#039;offsetHeight&#039;);
+
+          $document.bind(&#039;click&#039;, documentClickBind);
+        } else {
+          $document.unbind(&#039;click&#039;, documentClickBind);
+        }
+      });
+
+      scope.select = function( date ) {
+        if (date === &#039;today&#039;) {
+          var today = new Date();
+          if (angular.isDate(ngModel.$modelValue)) {
+            date = new Date(ngModel.$modelValue);
+            date.setFullYear(today.getFullYear(), today.getMonth(), today.getDate());
+          } else {
+            date = new Date(today.setHours(0, 0, 0, 0));
+          }
+        }
+        scope.dateSelection( date );
+      };
+
+      scope.close = function() {
+        scope.isOpen = false;
+        element[0].focus();
+      };
+
+      var $popup = $compile(popupEl)(scope);
+      // Prevent jQuery cache memory leak (template is now redundant after linking)
+      popupEl.remove();
+
+      if ( appendToBody ) {
+        $document.find(&#039;body&#039;).append($popup);
+      } else {
+        element.after($popup);
+      }
+
+      scope.$on(&#039;$destroy&#039;, function() {
+        $popup.remove();
+        element.unbind(&#039;keydown&#039;, keydown);
+        $document.unbind(&#039;click&#039;, documentClickBind);
+      });
+    }
+  };
+}])
+
+.directive(&#039;datepickerPopupWrap&#039;, function() {
+  return {
+    restrict:&#039;EA&#039;,
+    replace: true,
+    transclude: true,
+    templateUrl: &#039;template/datepicker/popup.html&#039;,
+    link:function (scope, element, attrs) {
+      element.bind(&#039;click&#039;, function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+      });
+    }
+  };
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

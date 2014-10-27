@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/typeahead/test/typeahead.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/typeahead/test/typeahead.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">74.14</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">673</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">32.57</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">6.90</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;typeahead tests&#039;, function () {
+
+  var $scope, $compile, $document, $timeout;
+  var changeInputValueTo;
+
+  beforeEach(module(&#039;ui.bootstrap.typeahead&#039;));
+  beforeEach(module(&#039;template/typeahead/typeahead-popup.html&#039;));
+  beforeEach(module(&#039;template/typeahead/typeahead-match.html&#039;));
+  beforeEach(module(function($compileProvider) {
+    $compileProvider.directive(&#039;formatter&#039;, function () {
+      return {
+        require: &#039;ngModel&#039;,
+        link: function (scope, elm, attrs, ngModelCtrl) {
+          ngModelCtrl.$formatters.unshift(function (viewVal) {
+            return &#039;formatted&#039; + viewVal;
+          });
+        }
+      };
+    });
+  }));
+  beforeEach(inject(function (_$rootScope_, _$compile_, _$document_, _$timeout_, $sniffer) {
+    $scope = _$rootScope_;
+    $scope.source = [&#039;foo&#039;, &#039;bar&#039;, &#039;baz&#039;];
+    $scope.states = [
+      {code: &#039;AL&#039;, name: &#039;Alaska&#039;},
+      {code: &#039;CL&#039;, name: &#039;California&#039;}
+    ];
+    $compile = _$compile_;
+    $document = _$document_;
+    $timeout = _$timeout_;
+    changeInputValueTo = function (element, value) {
+      var inputEl = findInput(element);
+      inputEl.val(value);
+      inputEl.trigger($sniffer.hasEvent(&#039;input&#039;) ? &#039;input&#039; : &#039;change&#039;);
+      $scope.$digest();
+    };
+  }));
+
+  //utility functions
+  var prepareInputEl = function (inputTpl) {
+    var el = $compile(angular.element(inputTpl))($scope);
+    $scope.$digest();
+    return el;
+  };
+
+  var findInput = function (element) {
+    return element.find(&#039;input&#039;);
+  };
+
+  var findDropDown = function (element) {
+    return element.find(&#039;ul.dropdown-menu&#039;);
+  };
+
+  var findMatches = function (element) {
+    return findDropDown(element).find(&#039;li&#039;);
+  };
+
+  var triggerKeyDown = function (element, keyCode) {
+    var inputEl = findInput(element);
+    var e = $.Event(&#039;keydown&#039;);
+    e.which = keyCode;
+    inputEl.trigger(e);
+  };
+
+  //custom matchers
+  beforeEach(function () {
+    this.addMatchers({
+      toBeClosed: function () {
+        var typeaheadEl = findDropDown(this.actual);
+        this.message = function () {
+          return &#039;Expected &quot;&#039; + angular.mock.dump(typeaheadEl) + &#039;&quot; to be closed.&#039;;
+        };
+        return typeaheadEl.hasClass(&#039;ng-hide&#039;) === true;
+
+      }, toBeOpenWithActive: function (noOfMatches, activeIdx) {
+
+        var typeaheadEl = findDropDown(this.actual);
+        var liEls = findMatches(this.actual);
+
+        this.message = function () {
+          return &#039;Expected &quot;&#039; + this.actual + &#039;&quot; to be opened.&#039;;
+        };
+        return typeaheadEl.length === 1 &amp;&amp; typeaheadEl.hasClass(&#039;ng-hide&#039;) === false &amp;&amp; liEls.length === noOfMatches &amp;&amp; $(liEls[activeIdx]).hasClass(&#039;active&#039;);
+      }
+    });
+  });
+
+  afterEach(function () {
+    findDropDown($document.find(&#039;body&#039;)).remove();
+  });
+
+  //coarse grained, &quot;integration&quot; tests
+  describe(&#039;initial state and model changes&#039;, function () {
+
+    it(&#039;should be closed by default&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source&quot;&gt;&lt;/div&gt;&#039;);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should correctly render initial state if the &quot;as&quot; keyword is used&#039;, function () {
+
+      $scope.result = $scope.states[0];
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;state as state.name for state in states&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      expect(inputEl.val()).toEqual(&#039;Alaska&#039;);
+    });
+
+    it(&#039;should default to bound model for initial rendering if there is not enough info to render label&#039;, function () {
+
+      $scope.result = $scope.states[0].code;
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;state.code as state.name + state.code for state in states&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      expect(inputEl.val()).toEqual(&#039;AL&#039;);
+    });
+
+    it(&#039;should not get open on model change&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source&quot;&gt;&lt;/div&gt;&#039;);
+      $scope.$apply(function () {
+        $scope.result = &#039;foo&#039;;
+      });
+      expect(element).toBeClosed();
+    });
+  });
+
+  describe(&#039;basic functionality&#039;, function () {
+
+    it(&#039;should open and close typeahead based on matches&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+      var ownsId = inputEl.attr(&#039;aria-owns&#039;);
+
+      expect(inputEl.attr(&#039;aria-expanded&#039;)).toBe(&#039;false&#039;);
+      expect(inputEl.attr(&#039;aria-activedescendant&#039;)).toBeUndefined();
+
+      changeInputValueTo(element, &#039;ba&#039;);
+      expect(element).toBeOpenWithActive(2, 0);
+      expect(findDropDown(element).attr(&#039;id&#039;)).toBe(ownsId);
+      expect(inputEl.attr(&#039;aria-expanded&#039;)).toBe(&#039;true&#039;);
+      var activeOptionId = ownsId + &#039;-option-0&#039;;
+      expect(inputEl.attr(&#039;aria-activedescendant&#039;)).toBe(activeOptionId);
+      expect(findDropDown(element).find(&#039;li.active&#039;).attr(&#039;id&#039;)).toBe(activeOptionId);
+
+      changeInputValueTo(element, &#039;&#039;);
+      expect(element).toBeClosed();
+      expect(inputEl.attr(&#039;aria-expanded&#039;)).toBe(&#039;false&#039;);
+      expect(inputEl.attr(&#039;aria-activedescendant&#039;)).toBeUndefined();
+    });
+
+    it(&#039;should allow expressions over multiple lines&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source \n&#039; +
+        &#039;| filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;ba&#039;);
+      expect(element).toBeOpenWithActive(2, 0);
+
+      changeInputValueTo(element, &#039;&#039;);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should not open typeahead if input value smaller than a defined threshold&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-min-length=&quot;2&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;b&#039;);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should support custom model selecting function&#039;, function () {
+      $scope.updaterFn = function (selectedItem) {
+        return &#039;prefix&#039; + selectedItem;
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;updaterFn(item) as item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;f&#039;);
+      triggerKeyDown(element, 13);
+      expect($scope.result).toEqual(&#039;prefixfoo&#039;);
+    });
+
+    it(&#039;should support custom label rendering function&#039;, function () {
+      $scope.formatterFn = function (sourceItem) {
+        return &#039;prefix&#039; + sourceItem;
+      };
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item as formatterFn(item) for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;fo&#039;);
+      var matchHighlight = findMatches(element).find(&#039;a&#039;).html();
+      expect(matchHighlight).toEqual(&#039;prefix&lt;strong&gt;fo&lt;/strong&gt;o&#039;);
+    });
+
+    it(&#039;should by default bind view value to model even if not part of matches&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;not in matches&#039;);
+      expect($scope.result).toEqual(&#039;not in matches&#039;);
+    });
+
+    it(&#039;should support the editable property to limit model bindings to matches only&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-editable=&quot;false&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;not in matches&#039;);
+      expect($scope.result).toEqual(undefined);
+    });
+
+    it(&#039;should set validation errors for non-editable inputs&#039;, function () {
+
+      var element = prepareInputEl(
+        &#039;&lt;div&gt;&lt;form name=&quot;form&quot;&gt;&#039; +
+          &#039;&lt;input name=&quot;input&quot; ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-editable=&quot;false&quot;&gt;&#039; +
+        &#039;&lt;/form&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;not in matches&#039;);
+      expect($scope.result).toEqual(undefined);
+      expect($scope.form.input.$error.editable).toBeTruthy();
+
+      changeInputValueTo(element, &#039;foo&#039;);
+      triggerKeyDown(element, 13);
+      expect($scope.result).toEqual(&#039;foo&#039;);
+      expect($scope.form.input.$error.editable).toBeFalsy();
+    });
+
+    it(&#039;should not set editable validation error for empty input&#039;, function () {
+      var element = prepareInputEl(
+        &#039;&lt;div&gt;&lt;form name=&quot;form&quot;&gt;&#039; +
+          &#039;&lt;input name=&quot;input&quot; ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-editable=&quot;false&quot;&gt;&#039; +
+        &#039;&lt;/form&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;not in matches&#039;);
+      expect($scope.result).toEqual(undefined);
+      expect($scope.form.input.$error.editable).toBeTruthy();
+      changeInputValueTo(element, &#039;&#039;);
+      expect($scope.result).toEqual(&#039;&#039;);
+      expect($scope.form.input.$error.editable).toBeFalsy();
+    });
+
+    it(&#039;should bind loading indicator expression&#039;, inject(function ($timeout) {
+
+      $scope.isLoading = false;
+      $scope.loadMatches = function (viewValue) {
+        return $timeout(function () {
+          return [];
+        }, 1000);
+      };
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in loadMatches()&quot; typeahead-loading=&quot;isLoading&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;foo&#039;);
+
+      expect($scope.isLoading).toBeTruthy();
+      $timeout.flush();
+      expect($scope.isLoading).toBeFalsy();
+    }));
+
+    it(&#039;should support timeout before trying to match $viewValue&#039;, inject(function ($timeout) {
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-wait-ms=&quot;200&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;foo&#039;);
+      expect(element).toBeClosed();
+
+      $timeout.flush();
+      expect(element).toBeOpenWithActive(1, 0);
+    }));
+
+    it(&#039;should cancel old timeouts when something is typed within waitTime&#039;, inject(function ($timeout) {
+      var values = [];
+      $scope.loadMatches = function(viewValue) {
+        values.push(viewValue);
+        return $scope.source;
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in loadMatches($viewValue) | filter:$viewValue&quot; typeahead-wait-ms=&quot;200&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;first&#039;);
+      changeInputValueTo(element, &#039;second&#039;);
+
+      $timeout.flush();
+
+      expect(values).not.toContain(&#039;first&#039;);
+    }));
+
+    it(&#039;should allow timeouts when something is typed after waitTime has passed&#039;, inject(function ($timeout) {
+      var values = [];
+
+      $scope.loadMatches = function(viewValue) {
+        values.push(viewValue);
+        return $scope.source;
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in loadMatches($viewValue) | filter:$viewValue&quot; typeahead-wait-ms=&quot;200&quot;&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;first&#039;);
+      $timeout.flush();
+
+      expect(values).toContain(&#039;first&#039;);
+
+      changeInputValueTo(element, &#039;second&#039;);
+      $timeout.flush();
+
+      expect(values).toContain(&#039;second&#039;);
+    }));
+
+    it(&#039;should support custom templates for matched items&#039;, inject(function ($templateCache) {
+
+      $templateCache.put(&#039;custom.html&#039;, &#039;&lt;p&gt;{{ index }} {{ match.label }}&lt;/p&gt;&#039;);
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead-template-url=&quot;custom.html&quot; typeahead=&quot;state as state.name for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;Al&#039;);
+
+      expect(findMatches(element).eq(0).find(&#039;p&#039;).text()).toEqual(&#039;0 Alaska&#039;);
+    }));
+
+    it(&#039;should throw error on invalid expression&#039;, function () {
+      var prepareInvalidDir = function () {
+        prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;an invalid expression&quot;&gt;&lt;/div&gt;&#039;);
+      };
+      expect(prepareInvalidDir).toThrow();
+    });
+  });
+
+  describe(&#039;selecting a match&#039;, function () {
+
+    it(&#039;should select a match on enter&#039;, function () {
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;b&#039;);
+      triggerKeyDown(element, 13);
+
+      expect($scope.result).toEqual(&#039;bar&#039;);
+      expect(inputEl.val()).toEqual(&#039;bar&#039;);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should select a match on tab&#039;, function () {
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;b&#039;);
+      triggerKeyDown(element, 9);
+
+      expect($scope.result).toEqual(&#039;bar&#039;);
+      expect(inputEl.val()).toEqual(&#039;bar&#039;);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should select match on click&#039;, function () {
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;b&#039;);
+      var match = $(findMatches(element)[1]).find(&#039;a&#039;)[0];
+
+      $(match).click();
+      $scope.$digest();
+
+      expect($scope.result).toEqual(&#039;baz&#039;);
+      expect(inputEl.val()).toEqual(&#039;baz&#039;);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should invoke select callback on select&#039;, function () {
+
+      $scope.onSelect = function ($item, $model, $label) {
+        $scope.$item = $item;
+        $scope.$model = $model;
+        $scope.$label = $label;
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead-on-select=&quot;onSelect($item, $model, $label)&quot; typeahead=&quot;state.code as state.name for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;Alas&#039;);
+      triggerKeyDown(element, 13);
+
+      expect($scope.result).toEqual(&#039;AL&#039;);
+      expect($scope.$item).toEqual($scope.states[0]);
+      expect($scope.$model).toEqual(&#039;AL&#039;);
+      expect($scope.$label).toEqual(&#039;Alaska&#039;);
+    });
+
+    it(&#039;should correctly update inputs value on mapping where label is not derived from the model&#039;, function () {
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;state.code as state.name for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;Alas&#039;);
+      triggerKeyDown(element, 13);
+
+      expect($scope.result).toEqual(&#039;AL&#039;);
+      expect(inputEl.val()).toEqual(&#039;AL&#039;);
+    });
+  });
+
+  describe(&#039;pop-up interaction&#039;, function () {
+    var element;
+
+    beforeEach(function () {
+      element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+    });
+
+    it(&#039;should activate prev/next matches on up/down keys&#039;, function () {
+      changeInputValueTo(element, &#039;b&#039;);
+      expect(element).toBeOpenWithActive(2, 0);
+
+      // Down arrow key
+      triggerKeyDown(element, 40);
+      expect(element).toBeOpenWithActive(2, 1);
+
+      // Down arrow key goes back to first element
+      triggerKeyDown(element, 40);
+      expect(element).toBeOpenWithActive(2, 0);
+
+      // Up arrow key goes back to last element
+      triggerKeyDown(element, 38);
+      expect(element).toBeOpenWithActive(2, 1);
+
+      // Up arrow key goes back to last element
+      triggerKeyDown(element, 38);
+      expect(element).toBeOpenWithActive(2, 0);
+    });
+
+    it(&#039;should close popup on escape key&#039;, function () {
+      changeInputValueTo(element, &#039;b&#039;);
+      expect(element).toBeOpenWithActive(2, 0);
+
+      // Escape key
+      triggerKeyDown(element, 27);
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should highlight match on mouseenter&#039;, function () {
+      changeInputValueTo(element, &#039;b&#039;);
+      expect(element).toBeOpenWithActive(2, 0);
+
+      findMatches(element).eq(1).trigger(&#039;mouseenter&#039;);
+      expect(element).toBeOpenWithActive(2, 1);
+    });
+
+  });
+
+  describe(&#039;promises&#039;, function () {
+    var element, deferred;
+
+    beforeEach(inject(function ($q) {
+      deferred = $q.defer();
+      $scope.source = function () {
+        return deferred.promise;
+      };
+      element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source()&quot;&gt;&lt;/div&gt;&#039;);
+    }));
+
+    it(&#039;should display matches from promise&#039;, function () {
+      changeInputValueTo(element, &#039;c&#039;);
+      expect(element).toBeClosed();
+
+      deferred.resolve([&#039;good&#039;, &#039;stuff&#039;]);
+      $scope.$digest();
+      expect(element).toBeOpenWithActive(2, 0);
+    });
+
+    it(&#039;should not display anything when promise is rejected&#039;, function () {
+      changeInputValueTo(element, &#039;c&#039;);
+      expect(element).toBeClosed();
+
+      deferred.reject(&#039;fail&#039;);
+      $scope.$digest();
+      expect(element).toBeClosed();
+    });
+
+  });
+
+  describe(&#039;non-regressions tests&#039;, function () {
+
+    it(&#039;issue 231 - closes matches popup on click outside typeahead&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;b&#039;);
+
+      $document.find(&#039;body&#039;).click();
+      $scope.$digest();
+
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;issue 591 - initial formatting for un-selected match and complex label expression&#039;, function () {
+
+      var inputEl = findInput(prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;state as state.name + \&#039; \&#039; + state.code for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;));
+      expect(inputEl.val()).toEqual(&#039;&#039;);
+    });
+
+    it(&#039;issue 786 - name of internal model should not conflict with scope model name&#039;, function () {
+      $scope.state = $scope.states[0];
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;state&quot; typeahead=&quot;state as state.name for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      expect(inputEl.val()).toEqual(&#039;Alaska&#039;);
+    });
+
+    it(&#039;issue 863 - it should work correctly with input type=&quot;email&quot;&#039;, function () {
+
+      $scope.emails = [&#039;foo@host.com&#039;, &#039;bar@host.com&#039;];
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input type=&quot;email&quot; ng-model=&quot;email&quot; typeahead=&quot;email for email in emails | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;bar&#039;);
+      expect(element).toBeOpenWithActive(1, 0);
+
+      triggerKeyDown(element, 13);
+
+      expect($scope.email).toEqual(&#039;bar@host.com&#039;);
+      expect(inputEl.val()).toEqual(&#039;bar@host.com&#039;);
+    });
+
+    it(&#039;issue 964 - should not show popup with matches if an element is not focused&#039;, function () {
+
+      $scope.items = function(viewValue) {
+        return $timeout(function(){
+          return [viewValue];
+        });
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in items($viewValue)&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;match&#039;);
+      $scope.$digest();
+
+      inputEl.blur();
+      $timeout.flush();
+
+      expect(element).toBeClosed();
+    });
+
+    it(&#039;should properly update loading callback if an element is not focused&#039;, function () {
+
+      $scope.items = function(viewValue) {
+        return $timeout(function(){
+          return [viewValue];
+        });
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead-loading=&quot;isLoading&quot; typeahead=&quot;item for item in items($viewValue)&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      changeInputValueTo(element, &#039;match&#039;);
+      $scope.$digest();
+
+      inputEl.blur();
+      $timeout.flush();
+
+      expect($scope.isLoading).toBeFalsy();
+    });
+
+    it(&#039;issue 1140 - should properly update loading callback when deleting characters&#039;, function () {
+
+      $scope.items = function(viewValue) {
+        return $timeout(function(){
+          return [viewValue];
+        });
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead-min-length=&quot;2&quot; typeahead-loading=&quot;isLoading&quot; typeahead=&quot;item for item in items($viewValue)&quot;&gt;&lt;/div&gt;&#039;);
+
+      changeInputValueTo(element, &#039;match&#039;);
+      $scope.$digest();
+
+      expect($scope.isLoading).toBeTruthy();
+
+      changeInputValueTo(element, &#039;m&#039;);
+      $timeout.flush();
+      $scope.$digest();
+
+      expect($scope.isLoading).toBeFalsy();
+    });
+
+    it(&#039;should cancel old timeout when deleting characters&#039;, inject(function ($timeout) {
+      var values = [];
+      $scope.loadMatches = function(viewValue) {
+        values.push(viewValue);
+        return $scope.source;
+      };
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in loadMatches($viewValue) | filter:$viewValue&quot; typeahead-min-length=&quot;2&quot; typeahead-wait-ms=&quot;200&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;match&#039;);
+      changeInputValueTo(element, &#039;m&#039;);
+
+      $timeout.flush();
+
+      expect(values).not.toContain(&#039;match&#039;);
+    }));
+
+    it(&#039;does not close matches popup on click in input&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      // Note that this bug can only be found when element is in the document
+      $document.find(&#039;body&#039;).append(element);
+      // Extra teardown for this spec
+      this.after(function () { element.remove(); });
+
+      changeInputValueTo(element, &#039;b&#039;);
+
+      inputEl.click();
+      $scope.$digest();
+
+      expect(element).toBeOpenWithActive(2, 0);
+    });
+
+    it(&#039;issue #1238 - allow names like &quot;query&quot; to be used inside &quot;in&quot; expressions &#039;, function () {
+
+      $scope.query = function() {
+        return [&#039;foo&#039;, &#039;bar&#039;];
+      };
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in query($viewValue)&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;bar&#039;);
+
+      expect(element).toBeOpenWithActive(2, 0);
+    });
+
+    it(&#039;issue #1773 - should not trigger an error when used with ng-focus&#039;, function () {
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; ng-focus=&quot;foo()&quot;&gt;&lt;/div&gt;&#039;);
+      var inputEl = findInput(element);
+
+      // Note that this bug can only be found when element is in the document
+      $document.find(&#039;body&#039;).append(element);
+      // Extra teardown for this spec
+      this.after(function () { element.remove(); });
+
+      changeInputValueTo(element, &#039;b&#039;);
+      var match = $(findMatches(element)[1]).find(&#039;a&#039;)[0];
+
+      $(match).click();
+      $scope.$digest();
+    });
+  });
+
+  describe(&#039;input formatting&#039;, function () {
+
+    it(&#039;should co-operate with existing formatters&#039;, function () {
+
+      $scope.result = $scope.states[0];
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result.name&quot; formatter typeahead=&quot;state.name for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;),
+      inputEl = findInput(element);
+
+      expect(inputEl.val()).toEqual(&#039;formatted&#039; + $scope.result.name);
+    });
+
+    it(&#039;should support a custom input formatting function&#039;, function () {
+
+      $scope.result = $scope.states[0];
+      $scope.formatInput = function($model) {
+        return $model.code;
+      };
+
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead-input-formatter=&quot;formatInput($model)&quot; typeahead=&quot;state as state.name for state in states | filter:$viewValue&quot;&gt;&lt;/div&gt;&#039;),
+      inputEl = findInput(element);
+
+      expect(inputEl.val()).toEqual(&#039;AL&#039;);
+      expect($scope.result).toEqual($scope.states[0]);
+    });
+
+
+  });
+
+  describe(&#039;append to body&#039;, function () {
+    it(&#039;append typeahead results to body&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-append-to-body=&quot;true&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;ba&#039;);
+      expect($document.find(&#039;body&#039;)).toBeOpenWithActive(2, 0);
+    });
+
+    it(&#039;should not append to body when value of the attribute is false&#039;, function () {
+      var element = prepareInputEl(&#039;&lt;div&gt;&lt;input ng-model=&quot;result&quot; typeahead=&quot;item for item in source | filter:$viewValue&quot; typeahead-append-to-body=&quot;false&quot;&gt;&lt;/div&gt;&#039;);
+      changeInputValueTo(element, &#039;ba&#039;);
+      expect(findDropDown($document.find(&#039;body&#039;)).length).toEqual(0);
+    });
+  });
+
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

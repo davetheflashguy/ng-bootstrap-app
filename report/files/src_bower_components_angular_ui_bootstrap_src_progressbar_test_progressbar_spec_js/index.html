@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/progressbar/test/progressbar.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/progressbar/test/progressbar.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">71.72</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">212</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">36.67</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">2.50</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;progressbar directive&#039;, function () {
+  var $rootScope, element;
+  beforeEach(module(&#039;ui.bootstrap.progressbar&#039;));
+  beforeEach(module(&#039;template/progressbar/progressbar.html&#039;, &#039;template/progressbar/progress.html&#039;, &#039;template/progressbar/bar.html&#039;));
+  beforeEach(inject(function(_$compile_, _$rootScope_) {
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    $rootScope.value = 22;
+    element = $compile(&#039;&lt;progressbar animate=&quot;false&quot; value=&quot;value&quot;&gt;{{value}} %&lt;/progressbar&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+  }));
+
+  var BAR_CLASS = &#039;progress-bar&#039;;
+
+  function getBar(i) {
+    return element.children().eq(i);
+  }
+
+  it(&#039;has a &quot;progress&quot; css class&#039;, function() {
+    expect(element).toHaveClass(&#039;progress&#039;);
+  });
+
+  it(&#039;contains one child element with &quot;bar&quot; css class&#039;, function() {
+    expect(element.children().length).toBe(1);
+    expect(getBar(0)).toHaveClass(BAR_CLASS);
+  });
+
+  it(&#039;has a &quot;bar&quot; element with expected width&#039;, function() {
+    expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;22%&#039;);
+  });
+
+  it(&#039;has the appropriate aria markup&#039;, function() {
+    var bar = getBar(0);
+    expect(bar.attr(&#039;role&#039;)).toBe(&#039;progressbar&#039;);
+    expect(bar.attr(&#039;aria-valuemin&#039;)).toBe(&#039;0&#039;);
+    expect(bar.attr(&#039;aria-valuemax&#039;)).toBe(&#039;100&#039;);
+    expect(bar.attr(&#039;aria-valuenow&#039;)).toBe(&#039;22&#039;);
+    expect(bar.attr(&#039;aria-valuetext&#039;)).toBe(&#039;22%&#039;);
+  });
+
+  it(&#039;transcludes &quot;bar&quot; text&#039;, function() {
+    expect(getBar(0).text()).toBe(&#039;22 %&#039;);
+  });
+
+  it(&#039;it should be possible to add additional classes&#039;, function () {
+    element = $compile(&#039;&lt;progress class=&quot;progress-striped active&quot; max=&quot;200&quot;&gt;&lt;bar class=&quot;pizza&quot;&gt;&lt;/bar&gt;&lt;/progress&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+
+    expect(element).toHaveClass(&#039;progress-striped&#039;);
+    expect(element).toHaveClass(&#039;active&#039;);
+
+    expect(getBar(0)).toHaveClass(&#039;pizza&#039;);
+  });
+
+  it(&#039;adjusts the &quot;bar&quot; width and aria when value changes&#039;, function() {
+      $rootScope.value = 60;
+      $rootScope.$digest();
+
+      var bar = getBar(0);
+      expect(bar.css(&#039;width&#039;)).toBe(&#039;60%&#039;);
+
+      expect(bar.attr(&#039;aria-valuemin&#039;)).toBe(&#039;0&#039;);
+      expect(bar.attr(&#039;aria-valuemax&#039;)).toBe(&#039;100&#039;);
+      expect(bar.attr(&#039;aria-valuenow&#039;)).toBe(&#039;60&#039;);
+      expect(bar.attr(&#039;aria-valuetext&#039;)).toBe(&#039;60%&#039;);
+    });
+
+  it(&#039;allows fractional &quot;bar&quot; width values, rounded to two places&#039;, function () {
+    $rootScope.value = 5.625;
+    $rootScope.$digest();
+    expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;5.63%&#039;);
+
+    $rootScope.value = 1.3;
+    $rootScope.$digest();
+    expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;1.3%&#039;);
+  });
+
+  it(&#039;does not include decimals in aria values&#039;, function () {
+    $rootScope.value = 50.34;
+    $rootScope.$digest();
+
+    var bar = getBar(0);
+    expect(bar.css(&#039;width&#039;)).toBe(&#039;50.34%&#039;);
+    expect(bar.attr(&#039;aria-valuetext&#039;)).toBe(&#039;50%&#039;);
+  });
+
+  describe(&#039;&quot;max&quot; attribute&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.max = 200;
+      element = $compile(&#039;&lt;progressbar max=&quot;max&quot; animate=&quot;false&quot; value=&quot;value&quot;&gt;{{value}}/{{max}}&lt;/progressbar&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;has the appropriate aria markup&#039;, function() {
+      expect(getBar(0).attr(&#039;aria-valuemax&#039;)).toBe(&#039;200&#039;);
+    });
+
+    it(&#039;adjusts the &quot;bar&quot; width&#039;, function() {
+      expect(element.children().eq(0).css(&#039;width&#039;)).toBe(&#039;11%&#039;);
+    });
+
+    it(&#039;adjusts the &quot;bar&quot; width when value changes&#039;, function() {
+      $rootScope.value = 60;
+      $rootScope.$digest();
+      expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;30%&#039;);
+
+      $rootScope.value += 12;
+      $rootScope.$digest();
+      expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;36%&#039;);
+
+      $rootScope.value = 0;
+      $rootScope.$digest();
+      expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;0%&#039;);
+    });
+
+    it(&#039;transcludes &quot;bar&quot; text&#039;, function() {
+      expect(getBar(0).text()).toBe(&#039;22/200&#039;);
+    });
+  });
+
+  describe(&#039;&quot;type&quot; attribute&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.type = &#039;success&#039;;
+      element = $compile(&#039;&lt;progressbar value=&quot;value&quot; type=&quot;{{type}}&quot;&gt;&lt;/progressbar&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;should use correct classes&#039;, function() {
+      expect(getBar(0)).toHaveClass(BAR_CLASS);
+      expect(getBar(0)).toHaveClass(BAR_CLASS + &#039;-success&#039;);
+    });
+
+    it(&#039;should change classes if type changed&#039;, function() {
+      $rootScope.type = &#039;warning&#039;;
+      $rootScope.value += 1;
+      $rootScope.$digest();
+
+      var barEl = getBar(0);
+      expect(barEl).toHaveClass(BAR_CLASS);
+      expect(barEl).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(barEl).toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+    });
+  });
+
+  describe(&#039;stacked&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.objects = [
+        { value: 10, type: &#039;success&#039; },
+        { value: 50, type: &#039;warning&#039; },
+        { value: 20 }
+      ];
+      element = $compile(&#039;&lt;progress animate=&quot;false&quot;&gt;&lt;bar ng-repeat=&quot;o in objects&quot; value=&quot;o.value&quot; type=&quot;{{o.type}}&quot;&gt;{{o.value}}&lt;/bar&gt;&lt;/progress&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;contains the right number of bars&#039;, function() {
+      expect(element.children().length).toBe(3);
+      for (var i = 0; i &lt; 3; i++) {
+        expect(getBar(i)).toHaveClass(BAR_CLASS);
+      }
+    });
+
+    it(&#039;renders each bar with the appropriate width&#039;, function() {
+      expect(getBar(0).css(&#039;width&#039;)).toBe(&#039;10%&#039;);
+      expect(getBar(1).css(&#039;width&#039;)).toBe(&#039;50%&#039;);
+      expect(getBar(2).css(&#039;width&#039;)).toBe(&#039;20%&#039;);
+    });
+
+    it(&#039;uses correct classes&#039;, function() {
+      expect(getBar(0)).toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(0)).not.toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+
+      expect(getBar(1)).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(1)).toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+
+      expect(getBar(2)).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(2)).not.toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+    });
+
+    it(&#039;should change classes if type changed&#039;, function() {
+      $rootScope.objects = [
+        { value: 20, type: &#039;warning&#039; },
+        { value: 50 },
+        { value: 30, type: &#039;info&#039; }
+      ];
+      $rootScope.$digest();
+
+      expect(getBar(0)).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(0)).toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+
+      expect(getBar(1)).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(1)).not.toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+
+      expect(getBar(2)).toHaveClass(BAR_CLASS + &#039;-info&#039;);
+      expect(getBar(2)).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(2)).not.toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+    });
+
+    it(&#039;should change classes if type changed&#039;, function() {
+      $rootScope.objects = [
+        { value: 70, type: &#039;info&#039; }
+      ];
+      $rootScope.$digest();
+
+      expect(element.children().length).toBe(1);
+
+      expect(getBar(0)).toHaveClass(BAR_CLASS + &#039;-info&#039;);
+      expect(getBar(0)).not.toHaveClass(BAR_CLASS + &#039;-success&#039;);
+      expect(getBar(0)).not.toHaveClass(BAR_CLASS + &#039;-warning&#039;);
+    });
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

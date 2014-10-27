@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/typeahead/docs/demo.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/typeahead/docs/demo.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">50.87</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">20</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">10.60</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">1.25</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">angular.module(&#039;ui.bootstrap.demo&#039;).controller(&#039;TypeaheadCtrl&#039;, function($scope, $http) {
+
+  $scope.selected = undefined;
+  $scope.states = [&#039;Alabama&#039;, &#039;Alaska&#039;, &#039;Arizona&#039;, &#039;Arkansas&#039;, &#039;California&#039;, &#039;Colorado&#039;, &#039;Connecticut&#039;, &#039;Delaware&#039;, &#039;Florida&#039;, &#039;Georgia&#039;, &#039;Hawaii&#039;, &#039;Idaho&#039;, &#039;Illinois&#039;, &#039;Indiana&#039;, &#039;Iowa&#039;, &#039;Kansas&#039;, &#039;Kentucky&#039;, &#039;Louisiana&#039;, &#039;Maine&#039;, &#039;Maryland&#039;, &#039;Massachusetts&#039;, &#039;Michigan&#039;, &#039;Minnesota&#039;, &#039;Mississippi&#039;, &#039;Missouri&#039;, &#039;Montana&#039;, &#039;Nebraska&#039;, &#039;Nevada&#039;, &#039;New Hampshire&#039;, &#039;New Jersey&#039;, &#039;New Mexico&#039;, &#039;New York&#039;, &#039;North Dakota&#039;, &#039;North Carolina&#039;, &#039;Ohio&#039;, &#039;Oklahoma&#039;, &#039;Oregon&#039;, &#039;Pennsylvania&#039;, &#039;Rhode Island&#039;, &#039;South Carolina&#039;, &#039;South Dakota&#039;, &#039;Tennessee&#039;, &#039;Texas&#039;, &#039;Utah&#039;, &#039;Vermont&#039;, &#039;Virginia&#039;, &#039;Washington&#039;, &#039;West Virginia&#039;, &#039;Wisconsin&#039;, &#039;Wyoming&#039;];
+  // Any function returning a promise object can be used to load values asynchronously
+  $scope.getLocation = function(val) {
+    return $http.get(&#039;http://maps.googleapis.com/maps/api/geocode/json&#039;, {
+      params: {
+        address: val,
+        sensor: false
+      }
+    }).then(function(response){
+      return response.data.results.map(function(item){
+        return item.formatted_address;
+      });
+    });
+  };
+
+  $scope.statesWithFlags = [{&#039;name&#039;:&#039;Alabama&#039;,&#039;flag&#039;:&#039;5/5c/Flag_of_Alabama.svg/45px-Flag_of_Alabama.svg.png&#039;},{&#039;name&#039;:&#039;Alaska&#039;,&#039;flag&#039;:&#039;e/e6/Flag_of_Alaska.svg/43px-Flag_of_Alaska.svg.png&#039;},{&#039;name&#039;:&#039;Arizona&#039;,&#039;flag&#039;:&#039;9/9d/Flag_of_Arizona.svg/45px-Flag_of_Arizona.svg.png&#039;},{&#039;name&#039;:&#039;Arkansas&#039;,&#039;flag&#039;:&#039;9/9d/Flag_of_Arkansas.svg/45px-Flag_of_Arkansas.svg.png&#039;},{&#039;name&#039;:&#039;California&#039;,&#039;flag&#039;:&#039;0/01/Flag_of_California.svg/45px-Flag_of_California.svg.png&#039;},{&#039;name&#039;:&#039;Colorado&#039;,&#039;flag&#039;:&#039;4/46/Flag_of_Colorado.svg/45px-Flag_of_Colorado.svg.png&#039;},{&#039;name&#039;:&#039;Connecticut&#039;,&#039;flag&#039;:&#039;9/96/Flag_of_Connecticut.svg/39px-Flag_of_Connecticut.svg.png&#039;},{&#039;name&#039;:&#039;Delaware&#039;,&#039;flag&#039;:&#039;c/c6/Flag_of_Delaware.svg/45px-Flag_of_Delaware.svg.png&#039;},{&#039;name&#039;:&#039;Florida&#039;,&#039;flag&#039;:&#039;f/f7/Flag_of_Florida.svg/45px-Flag_of_Florida.svg.png&#039;},{&#039;name&#039;:&#039;Georgia&#039;,&#039;flag&#039;:&#039;5/54/Flag_of_Georgia_%28U.S._state%29.svg/46px-Flag_of_Georgia_%28U.S._state%29.svg.png&#039;},{&#039;name&#039;:&#039;Hawaii&#039;,&#039;flag&#039;:&#039;e/ef/Flag_of_Hawaii.svg/46px-Flag_of_Hawaii.svg.png&#039;},{&#039;name&#039;:&#039;Idaho&#039;,&#039;flag&#039;:&#039;a/a4/Flag_of_Idaho.svg/38px-Flag_of_Idaho.svg.png&#039;},{&#039;name&#039;:&#039;Illinois&#039;,&#039;flag&#039;:&#039;0/01/Flag_of_Illinois.svg/46px-Flag_of_Illinois.svg.png&#039;},{&#039;name&#039;:&#039;Indiana&#039;,&#039;flag&#039;:&#039;a/ac/Flag_of_Indiana.svg/45px-Flag_of_Indiana.svg.png&#039;},{&#039;name&#039;:&#039;Iowa&#039;,&#039;flag&#039;:&#039;a/aa/Flag_of_Iowa.svg/44px-Flag_of_Iowa.svg.png&#039;},{&#039;name&#039;:&#039;Kansas&#039;,&#039;flag&#039;:&#039;d/da/Flag_of_Kansas.svg/46px-Flag_of_Kansas.svg.png&#039;},{&#039;name&#039;:&#039;Kentucky&#039;,&#039;flag&#039;:&#039;8/8d/Flag_of_Kentucky.svg/46px-Flag_of_Kentucky.svg.png&#039;},{&#039;name&#039;:&#039;Louisiana&#039;,&#039;flag&#039;:&#039;e/e0/Flag_of_Louisiana.svg/46px-Flag_of_Louisiana.svg.png&#039;},{&#039;name&#039;:&#039;Maine&#039;,&#039;flag&#039;:&#039;3/35/Flag_of_Maine.svg/45px-Flag_of_Maine.svg.png&#039;},{&#039;name&#039;:&#039;Maryland&#039;,&#039;flag&#039;:&#039;a/a0/Flag_of_Maryland.svg/45px-Flag_of_Maryland.svg.png&#039;},{&#039;name&#039;:&#039;Massachusetts&#039;,&#039;flag&#039;:&#039;f/f2/Flag_of_Massachusetts.svg/46px-Flag_of_Massachusetts.svg.png&#039;},{&#039;name&#039;:&#039;Michigan&#039;,&#039;flag&#039;:&#039;b/b5/Flag_of_Michigan.svg/45px-Flag_of_Michigan.svg.png&#039;},{&#039;name&#039;:&#039;Minnesota&#039;,&#039;flag&#039;:&#039;b/b9/Flag_of_Minnesota.svg/46px-Flag_of_Minnesota.svg.png&#039;},{&#039;name&#039;:&#039;Mississippi&#039;,&#039;flag&#039;:&#039;4/42/Flag_of_Mississippi.svg/45px-Flag_of_Mississippi.svg.png&#039;},{&#039;name&#039;:&#039;Missouri&#039;,&#039;flag&#039;:&#039;5/5a/Flag_of_Missouri.svg/46px-Flag_of_Missouri.svg.png&#039;},{&#039;name&#039;:&#039;Montana&#039;,&#039;flag&#039;:&#039;c/cb/Flag_of_Montana.svg/45px-Flag_of_Montana.svg.png&#039;},{&#039;name&#039;:&#039;Nebraska&#039;,&#039;flag&#039;:&#039;4/4d/Flag_of_Nebraska.svg/46px-Flag_of_Nebraska.svg.png&#039;},{&#039;name&#039;:&#039;Nevada&#039;,&#039;flag&#039;:&#039;f/f1/Flag_of_Nevada.svg/45px-Flag_of_Nevada.svg.png&#039;},{&#039;name&#039;:&#039;New Hampshire&#039;,&#039;flag&#039;:&#039;2/28/Flag_of_New_Hampshire.svg/45px-Flag_of_New_Hampshire.svg.png&#039;},{&#039;name&#039;:&#039;New Jersey&#039;,&#039;flag&#039;:&#039;9/92/Flag_of_New_Jersey.svg/45px-Flag_of_New_Jersey.svg.png&#039;},{&#039;name&#039;:&#039;New Mexico&#039;,&#039;flag&#039;:&#039;c/c3/Flag_of_New_Mexico.svg/45px-Flag_of_New_Mexico.svg.png&#039;},{&#039;name&#039;:&#039;New York&#039;,&#039;flag&#039;:&#039;1/1a/Flag_of_New_York.svg/46px-Flag_of_New_York.svg.png&#039;},{&#039;name&#039;:&#039;North Carolina&#039;,&#039;flag&#039;:&#039;b/bb/Flag_of_North_Carolina.svg/45px-Flag_of_North_Carolina.svg.png&#039;},{&#039;name&#039;:&#039;North Dakota&#039;,&#039;flag&#039;:&#039;e/ee/Flag_of_North_Dakota.svg/38px-Flag_of_North_Dakota.svg.png&#039;},{&#039;name&#039;:&#039;Ohio&#039;,&#039;flag&#039;:&#039;4/4c/Flag_of_Ohio.svg/46px-Flag_of_Ohio.svg.png&#039;},{&#039;name&#039;:&#039;Oklahoma&#039;,&#039;flag&#039;:&#039;6/6e/Flag_of_Oklahoma.svg/45px-Flag_of_Oklahoma.svg.png&#039;},{&#039;name&#039;:&#039;Oregon&#039;,&#039;flag&#039;:&#039;b/b9/Flag_of_Oregon.svg/46px-Flag_of_Oregon.svg.png&#039;},{&#039;name&#039;:&#039;Pennsylvania&#039;,&#039;flag&#039;:&#039;f/f7/Flag_of_Pennsylvania.svg/45px-Flag_of_Pennsylvania.svg.png&#039;},{&#039;name&#039;:&#039;Rhode Island&#039;,&#039;flag&#039;:&#039;f/f3/Flag_of_Rhode_Island.svg/32px-Flag_of_Rhode_Island.svg.png&#039;},{&#039;name&#039;:&#039;South Carolina&#039;,&#039;flag&#039;:&#039;6/69/Flag_of_South_Carolina.svg/45px-Flag_of_South_Carolina.svg.png&#039;},{&#039;name&#039;:&#039;South Dakota&#039;,&#039;flag&#039;:&#039;1/1a/Flag_of_South_Dakota.svg/46px-Flag_of_South_Dakota.svg.png&#039;},{&#039;name&#039;:&#039;Tennessee&#039;,&#039;flag&#039;:&#039;9/9e/Flag_of_Tennessee.svg/46px-Flag_of_Tennessee.svg.png&#039;},{&#039;name&#039;:&#039;Texas&#039;,&#039;flag&#039;:&#039;f/f7/Flag_of_Texas.svg/45px-Flag_of_Texas.svg.png&#039;},{&#039;name&#039;:&#039;Utah&#039;,&#039;flag&#039;:&#039;f/f6/Flag_of_Utah.svg/45px-Flag_of_Utah.svg.png&#039;},{&#039;name&#039;:&#039;Vermont&#039;,&#039;flag&#039;:&#039;4/49/Flag_of_Vermont.svg/46px-Flag_of_Vermont.svg.png&#039;},{&#039;name&#039;:&#039;Virginia&#039;,&#039;flag&#039;:&#039;4/47/Flag_of_Virginia.svg/44px-Flag_of_Virginia.svg.png&#039;},{&#039;name&#039;:&#039;Washington&#039;,&#039;flag&#039;:&#039;5/54/Flag_of_Washington.svg/46px-Flag_of_Washington.svg.png&#039;},{&#039;name&#039;:&#039;West Virginia&#039;,&#039;flag&#039;:&#039;2/22/Flag_of_West_Virginia.svg/46px-Flag_of_West_Virginia.svg.png&#039;},{&#039;name&#039;:&#039;Wisconsin&#039;,&#039;flag&#039;:&#039;2/22/Flag_of_Wisconsin.svg/45px-Flag_of_Wisconsin.svg.png&#039;},{&#039;name&#039;:&#039;Wyoming&#039;,&#039;flag&#039;:&#039;b/bc/Flag_of_Wyoming.svg/43px-Flag_of_Wyoming.svg.png&#039;}];
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

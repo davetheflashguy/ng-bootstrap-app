@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/carousel/test/carousel.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/carousel/test/carousel.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">69.04</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">339</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">49.92</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">3.88</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;carousel&#039;, function() {
+  beforeEach(module(&#039;ui.bootstrap.carousel&#039;, function($compileProvider, $provide) {
+    angular.forEach([&#039;ngSwipeLeft&#039;, &#039;ngSwipeRight&#039;], makeMock);
+    function makeMock(name) {
+      $provide.value(name + &#039;Directive&#039;, []); //remove existing directive if it exists
+      $compileProvider.directive(name, function() {
+        return function(scope, element, attr) {
+          element.on(name, function() {
+            scope.$apply(attr[name]);
+          });
+        };
+      });
+    }
+  }));
+  beforeEach(module(&#039;template/carousel/carousel.html&#039;, &#039;template/carousel/slide.html&#039;));
+
+  var $rootScope, $compile, $controller, $timeout;
+  beforeEach(inject(function(_$rootScope_, _$compile_, _$controller_, _$timeout_) {
+    $rootScope = _$rootScope_;
+    $compile = _$compile_;
+    $controller = _$controller_;
+    $timeout = _$timeout_;
+  }));
+
+  describe(&#039;basics&#039;, function() {
+    var elm, scope;
+    beforeEach(function() {
+      scope = $rootScope.$new();
+      scope.slides = [
+        {active:false,content:&#039;one&#039;},
+        {active:false,content:&#039;two&#039;},
+        {active:false,content:&#039;three&#039;}
+      ];
+      elm = $compile(
+        &#039;&lt;carousel interval=&quot;interval&quot; no-transition=&quot;true&quot; no-pause=&quot;nopause&quot;&gt;&#039; +
+          &#039;&lt;slide ng-repeat=&quot;slide in slides&quot; active=&quot;slide.active&quot;&gt;&#039; +
+            &#039;{{slide.content}}&#039; +
+          &#039;&lt;/slide&gt;&#039; +
+        &#039;&lt;/carousel&gt;&#039;
+      )(scope);
+      scope.interval = 5000;
+      scope.nopause = undefined;
+      scope.$apply();
+    });
+
+    function testSlideActive(slideIndex) {
+      for (var i=0; i&lt;scope.slides.length; i++) {
+        if (i == slideIndex) {
+          expect(scope.slides[i].active).toBe(true);
+        } else {
+          expect(scope.slides[i].active).not.toBe(true);
+        }
+      }
+    }
+
+    it(&#039;should set the selected slide to active = true&#039;, function() {
+      expect(scope.slides[0].content).toBe(&#039;one&#039;);
+      testSlideActive(0);
+      scope.$apply(&#039;slides[1].active=true&#039;);
+      testSlideActive(1);
+    });
+
+    it(&#039;should create clickable prev nav button&#039;, function() {
+      var navPrev = elm.find(&#039;a.left&#039;);
+      var navNext = elm.find(&#039;a.right&#039;);
+
+      expect(navPrev.length).toBe(1);
+      expect(navNext.length).toBe(1);
+    });
+
+    it(&#039;should display clickable slide indicators&#039;, function () {
+      var indicators = elm.find(&#039;ol.carousel-indicators &gt; li&#039;);
+      expect(indicators.length).toBe(3);
+    });
+
+    it(&#039;should hide navigation when only one slide&#039;, function () {
+      scope.slides=[{active:false,content:&#039;one&#039;}];
+      scope.$apply();
+      elm = $compile(
+          &#039;&lt;carousel interval=&quot;interval&quot; no-transition=&quot;true&quot;&gt;&#039; +
+            &#039;&lt;slide ng-repeat=&quot;slide in slides&quot; active=&quot;slide.active&quot;&gt;&#039; +
+              &#039;{{slide.content}}&#039; +
+            &#039;&lt;/slide&gt;&#039; +
+          &#039;&lt;/carousel&gt;&#039;
+        )(scope);
+      var indicators = elm.find(&#039;ol.carousel-indicators &gt; li&#039;);
+      expect(indicators.length).toBe(0);
+
+      var navNext = elm.find(&#039;a.right&#039;);
+      expect(navNext.length).toBe(0);
+
+      var navPrev = elm.find(&#039;a.left&#039;);
+      expect(navPrev.length).toBe(0);
+    });
+
+    it(&#039;should show navigation when there are 3 slides&#039;, function () {
+      var indicators = elm.find(&#039;ol.carousel-indicators &gt; li&#039;);
+      expect(indicators.length).not.toBe(0);
+
+      var navNext = elm.find(&#039;a.right&#039;);
+      expect(navNext.length).not.toBe(0);
+
+      var navPrev = elm.find(&#039;a.left&#039;);
+      expect(navPrev.length).not.toBe(0);
+    });
+
+    it(&#039;should go to next when clicking next button&#039;, function() {
+      var navNext = elm.find(&#039;a.right&#039;);
+      testSlideActive(0);
+      navNext.click();
+      testSlideActive(1);
+      navNext.click();
+      testSlideActive(2);
+      navNext.click();
+      testSlideActive(0);
+    });
+
+    it(&#039;should go to prev when clicking prev button&#039;, function() {
+      var navPrev = elm.find(&#039;a.left&#039;);
+      testSlideActive(0);
+      navPrev.click();
+      testSlideActive(2);
+      navPrev.click();
+      testSlideActive(1);
+      navPrev.click();
+      testSlideActive(0);
+    });
+
+    describe(&#039;swiping&#039;, function() {
+      it(&#039;should go next on swipeLeft&#039;, function() {
+        testSlideActive(0);
+        elm.triggerHandler(&#039;ngSwipeLeft&#039;);
+        testSlideActive(1);
+      });
+
+      it(&#039;should go prev on swipeRight&#039;, function() {
+        testSlideActive(0);
+        elm.triggerHandler(&#039;ngSwipeRight&#039;);
+        testSlideActive(2);
+      });
+    });
+
+    it(&#039;should select a slide when clicking on slide indicators&#039;, function () {
+      var indicators = elm.find(&#039;ol.carousel-indicators &gt; li&#039;);
+      indicators.eq(1).click();
+      testSlideActive(1);
+    });
+
+    it(&#039;shouldnt go forward if interval is NaN or negative&#039;, function() {
+      testSlideActive(0);
+      scope.$apply(&#039;interval = -1&#039;);
+      //no timeout to flush, interval watch doesn&#039;t make a new one when interval is invalid
+      testSlideActive(0);
+      scope.$apply(&#039;interval = 1000&#039;);
+      $timeout.flush();
+      testSlideActive(1);
+      scope.$apply(&#039;interval = false&#039;);
+      testSlideActive(1);
+      scope.$apply(&#039;interval = 1000&#039;);
+      $timeout.flush();
+      testSlideActive(2);
+    });
+
+    it(&#039;should bind the content to slides&#039;, function() {
+      var contents = elm.find(&#039;div.item&#039;);
+
+      expect(contents.length).toBe(3);
+      expect(contents.eq(0).text()).toBe(&#039;one&#039;);
+      expect(contents.eq(1).text()).toBe(&#039;two&#039;);
+      expect(contents.eq(2).text()).toBe(&#039;three&#039;);
+
+      scope.$apply(function() {
+        scope.slides[0].content = &#039;what&#039;;
+        scope.slides[1].content = &#039;no&#039;;
+        scope.slides[2].content = &#039;maybe&#039;;
+      });
+
+      expect(contents.eq(0).text()).toBe(&#039;what&#039;);
+      expect(contents.eq(1).text()).toBe(&#039;no&#039;);
+      expect(contents.eq(2).text()).toBe(&#039;maybe&#039;);
+    });
+
+    it(&#039;should be playing by default and cycle through slides&#039;, function() {
+      testSlideActive(0);
+      $timeout.flush();
+      testSlideActive(1);
+      $timeout.flush();
+      testSlideActive(2);
+      $timeout.flush();
+      testSlideActive(0);
+    });
+
+    it(&#039;should pause and play on mouseover&#039;, function() {
+      testSlideActive(0);
+      $timeout.flush();
+      testSlideActive(1);
+      elm.trigger(&#039;mouseenter&#039;);
+      expect($timeout.flush).toThrow();//pause should cancel current timeout
+      testSlideActive(1);
+      elm.trigger(&#039;mouseleave&#039;);
+      $timeout.flush();
+      testSlideActive(2);
+    });
+
+    it(&#039;should not pause on mouseover if noPause&#039;, function() {
+      scope.$apply(&#039;nopause = true&#039;);
+      testSlideActive(0);
+      elm.trigger(&#039;mouseenter&#039;);
+      $timeout.flush();
+      testSlideActive(1);
+      elm.trigger(&#039;mouseleave&#039;);
+      $timeout.flush();
+      testSlideActive(2);
+    });
+
+    it(&#039;should remove slide from dom and change active slide&#039;, function() {
+      scope.$apply(&#039;slides[2].active = true&#039;);
+      testSlideActive(2);
+      scope.$apply(&#039;slides.splice(0,1)&#039;);
+      expect(elm.find(&#039;div.item&#039;).length).toBe(2);
+      testSlideActive(1);
+      $timeout.flush();
+      testSlideActive(0);
+      scope.$apply(&#039;slides.splice(1,1)&#039;);
+      expect(elm.find(&#039;div.item&#039;).length).toBe(1);
+      testSlideActive(0);
+    });
+
+    it(&#039;should change dom when you reassign ng-repeat slides array&#039;, function() {
+      scope.slides=[{content:&#039;new1&#039;},{content:&#039;new2&#039;},{content:&#039;new3&#039;}];
+      scope.$apply();
+      var contents = elm.find(&#039;div.item&#039;);
+      expect(contents.length).toBe(3);
+      expect(contents.eq(0).text()).toBe(&#039;new1&#039;);
+      expect(contents.eq(1).text()).toBe(&#039;new2&#039;);
+      expect(contents.eq(2).text()).toBe(&#039;new3&#039;);
+    });
+
+    it(&#039;should not change if next is clicked while transitioning&#039;, function() {
+      var carouselScope = elm.children().scope();
+      var next = elm.find(&#039;a.right&#039;);
+
+      testSlideActive(0);
+      carouselScope.$currentTransition = true;
+      next.click();
+
+      testSlideActive(0);
+
+      carouselScope.$currentTransition = null;
+      next.click();
+      testSlideActive(1);
+    });
+
+    it(&#039;issue 1414 - should not continue running timers after scope is destroyed&#039;, function() {
+      testSlideActive(0);
+      $timeout.flush();
+      testSlideActive(1);
+      $timeout.flush();
+      testSlideActive(2);
+      $timeout.flush();
+      testSlideActive(0);
+      scope.$destroy();
+      expect($timeout.flush).toThrow(&#039;No deferred tasks to be flushed&#039;);
+    });
+
+  });
+
+  describe(&#039;controller&#039;, function() {
+    var scope, ctrl;
+    //create an array of slides and add to the scope
+    var slides = [{&#039;content&#039;:1},{&#039;content&#039;:2},{&#039;content&#039;:3},{&#039;content&#039;:4}];
+
+    beforeEach(function() {
+      scope = $rootScope.$new();
+      ctrl = $controller(&#039;CarouselController&#039;, {$scope: scope, $element: null});
+      for(var i = 0;i &lt; slides.length;i++){
+        ctrl.addSlide(slides[i]);
+      }
+    });
+
+    describe(&#039;addSlide&#039;, function() {
+      it(&#039;should set first slide to active = true and the rest to false&#039;, function() {
+        angular.forEach(ctrl.slides, function(slide, i) {
+          if (i !== 0) {
+            expect(slide.active).not.toBe(true);
+          } else {
+            expect(slide.active).toBe(true);
+          }
+        });
+      });
+
+      it(&#039;should add new slide and change active to true if active is true on the added slide&#039;, function() {
+        var newSlide = {active: true};
+        expect(ctrl.slides.length).toBe(4);
+        ctrl.addSlide(newSlide);
+        expect(ctrl.slides.length).toBe(5);
+        expect(ctrl.slides[4].active).toBe(true);
+        expect(ctrl.slides[0].active).toBe(false);
+      });
+
+      it(&#039;should add a new slide and not change the active slide&#039;, function() {
+        var newSlide = {active: false};
+        expect(ctrl.slides.length).toBe(4);
+        ctrl.addSlide(newSlide);
+        expect(ctrl.slides.length).toBe(5);
+        expect(ctrl.slides[4].active).toBe(false);
+        expect(ctrl.slides[0].active).toBe(true);
+      });
+
+      it(&#039;should remove slide and change active slide if needed&#039;, function() {
+        expect(ctrl.slides.length).toBe(4);
+        ctrl.removeSlide(ctrl.slides[0]);
+        expect(ctrl.slides.length).toBe(3);
+        expect(ctrl.currentSlide).toBe(ctrl.slides[0]);
+        ctrl.select(ctrl.slides[2]);
+        ctrl.removeSlide(ctrl.slides[2]);
+        expect(ctrl.slides.length).toBe(2);
+        expect(ctrl.currentSlide).toBe(ctrl.slides[1]);
+        ctrl.removeSlide(ctrl.slides[0]);
+        expect(ctrl.slides.length).toBe(1);
+        expect(ctrl.currentSlide).toBe(ctrl.slides[0]);
+      });
+
+      it(&#039;issue 1414 - should not continue running timers after scope is destroyed&#039;, function() {
+        spyOn(scope, &#039;next&#039;).andCallThrough();
+        scope.interval = 2000;
+        scope.$digest();
+
+        $timeout.flush();
+        expect(scope.next.calls.length).toBe(1);
+
+        scope.$destroy();
+
+        $timeout.flush(scope.interval);
+        expect(scope.next.calls.length).toBe(1);
+      });
+    });
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

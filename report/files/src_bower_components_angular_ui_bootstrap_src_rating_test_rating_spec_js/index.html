@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/rating/test/rating.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/rating/test/rating.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">71.27</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">245</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">39.82</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">2.77</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;rating directive&#039;, function () {
+  var $rootScope, element;
+  beforeEach(module(&#039;ui.bootstrap.rating&#039;));
+  beforeEach(module(&#039;template/rating/rating.html&#039;));
+  beforeEach(inject(function(_$compile_, _$rootScope_) {
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    $rootScope.rate = 3;
+    element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+  }));
+
+  function getStars() {
+    return element.find(&#039;i&#039;);
+  }
+
+  function getStar(number) {
+    return getStars().eq( number - 1 );
+  }
+
+  function getState(classOn, classOff) {
+    var stars = getStars();
+    var state = [];
+    for (var i = 0, n = stars.length; i &lt; n; i++) {
+      state.push( (stars.eq(i).hasClass(classOn || &#039;glyphicon-star&#039;) &amp;&amp; ! stars.eq(i).hasClass(classOff || &#039;glyphicon-star-empty&#039;)) );
+    }
+    return state;
+  }
+
+  function triggerKeyDown(keyCode) {
+    var e = $.Event(&#039;keydown&#039;);
+    e.which = keyCode;
+    element.trigger(e);
+  }
+
+  it(&#039;contains the default number of icons&#039;, function() {
+    expect(getStars().length).toBe(5);
+    expect(element.attr(&#039;aria-valuemax&#039;)).toBe(&#039;5&#039;);
+  });
+
+  it(&#039;initializes the default star icons as selected&#039;, function() {
+    expect(getState()).toEqual([true, true, true, false, false]);
+    expect(element.attr(&#039;aria-valuenow&#039;)).toBe(&#039;3&#039;);
+  });
+
+  it(&#039;handles correctly the click event&#039;, function() {
+    getStar(2).click();
+    $rootScope.$digest();
+    expect(getState()).toEqual([true, true, false, false, false]);
+    expect($rootScope.rate).toBe(2);
+    expect(element.attr(&#039;aria-valuenow&#039;)).toBe(&#039;2&#039;);
+
+    getStar(5).click();
+    $rootScope.$digest();
+    expect(getState()).toEqual([true, true, true, true, true]);
+    expect($rootScope.rate).toBe(5);
+    expect(element.attr(&#039;aria-valuenow&#039;)).toBe(&#039;5&#039;);
+  });
+
+  it(&#039;handles correctly the hover event&#039;, function() {
+    getStar(2).trigger(&#039;mouseover&#039;);
+    $rootScope.$digest();
+    expect(getState()).toEqual([true, true, false, false, false]);
+    expect($rootScope.rate).toBe(3);
+
+    getStar(5).trigger(&#039;mouseover&#039;);
+    $rootScope.$digest();
+    expect(getState()).toEqual([true, true, true, true, true]);
+    expect($rootScope.rate).toBe(3);
+
+    element.trigger(&#039;mouseout&#039;);
+    expect(getState()).toEqual([true, true, true, false, false]);
+    expect($rootScope.rate).toBe(3);
+  });
+
+  it(&#039;changes the number of selected icons when value changes&#039;, function() {
+    $rootScope.rate = 2;
+    $rootScope.$digest();
+
+    expect(getState()).toEqual([true, true, false, false, false]);
+    expect(element.attr(&#039;aria-valuenow&#039;)).toBe(&#039;2&#039;);
+  });
+
+  it(&#039;shows different number of icons when `max` attribute is set&#039;, function() {
+    element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; max=&quot;7&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+
+    expect(getStars().length).toBe(7);
+    expect(element.attr(&#039;aria-valuemax&#039;)).toBe(&#039;7&#039;);
+  });
+
+  it(&#039;shows different number of icons when `max` attribute is from scope variable&#039;, function() {
+    $rootScope.max = 15;
+    element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; max=&quot;max&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+    expect(getStars().length).toBe(15);
+    expect(element.attr(&#039;aria-valuemax&#039;)).toBe(&#039;15&#039;);
+  });
+
+  it(&#039;handles readonly attribute&#039;, function() {
+    $rootScope.isReadonly = true;
+    element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; readonly=&quot;isReadonly&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+
+    expect(getState()).toEqual([true, true, true, false, false]);
+
+    var star5 = getStar(5);
+    star5.trigger(&#039;mouseover&#039;);
+    $rootScope.$digest();
+    expect(getState()).toEqual([true, true, true, false, false]);
+
+    $rootScope.isReadonly = false;
+    $rootScope.$digest();
+
+    star5.trigger(&#039;mouseover&#039;);
+    $rootScope.$digest();
+    expect(getState()).toEqual([true, true, true, true, true]);
+  });
+
+  it(&#039;should fire onHover&#039;, function() {
+    $rootScope.hoveringOver = jasmine.createSpy(&#039;hoveringOver&#039;);
+    element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; on-hover=&quot;hoveringOver(value)&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+
+    getStar(3).trigger(&#039;mouseover&#039;);
+    $rootScope.$digest();
+    expect($rootScope.hoveringOver).toHaveBeenCalledWith(3);
+  });
+
+  it(&#039;should fire onLeave&#039;, function() {
+    $rootScope.leaving = jasmine.createSpy(&#039;leaving&#039;);
+    element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; on-leave=&quot;leaving()&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+    $rootScope.$digest();
+
+    element.trigger(&#039;mouseleave&#039;);
+    $rootScope.$digest();
+    expect($rootScope.leaving).toHaveBeenCalled();
+  });
+
+  describe(&#039;keyboard navigation&#039;, function() {
+    it(&#039;supports arrow keys&#039;, function() {
+      triggerKeyDown(38);
+      expect($rootScope.rate).toBe(4);
+
+      triggerKeyDown(37);
+      expect($rootScope.rate).toBe(3);
+      triggerKeyDown(40);
+      expect($rootScope.rate).toBe(2);
+
+      triggerKeyDown(39);
+      expect($rootScope.rate).toBe(3);
+    });
+
+    it(&#039;can get zero value but not negative&#039;, function() {
+      $rootScope.rate = 1;
+      $rootScope.$digest();
+
+      triggerKeyDown(37);
+      expect($rootScope.rate).toBe(0);
+
+      triggerKeyDown(37);
+      expect($rootScope.rate).toBe(0);
+    });
+
+    it(&#039;cannot get value above max&#039;, function() {
+      $rootScope.rate = 4;
+      $rootScope.$digest();
+
+      triggerKeyDown(38);
+      expect($rootScope.rate).toBe(5);
+
+      triggerKeyDown(38);
+      expect($rootScope.rate).toBe(5);
+    });
+  });
+
+  describe(&#039;custom states&#039;, function() {
+    beforeEach(inject(function() {
+      $rootScope.classOn = &#039;icon-ok-sign&#039;;
+      $rootScope.classOff = &#039;icon-ok-circle&#039;;
+      element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; state-on=&quot;classOn&quot; state-off=&quot;classOff&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;changes the default icons&#039;, function() {
+      expect(getState($rootScope.classOn, $rootScope.classOff)).toEqual([true, true, true, false, false]);
+    });
+  });
+
+  describe(&#039;`rating-states`&#039;, function() {
+    beforeEach(inject(function() {
+      $rootScope.states = [
+        {stateOn: &#039;sign&#039;, stateOff: &#039;circle&#039;},
+        {stateOn: &#039;heart&#039;, stateOff: &#039;ban&#039;},
+        {stateOn: &#039;heart&#039;},
+        {stateOff: &#039;off&#039;}
+      ];
+      element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot; rating-states=&quot;states&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;should define number of icon elements&#039;, function () {
+      expect(getStars().length).toBe(4);
+      expect(element.attr(&#039;aria-valuemax&#039;)).toBe(&#039;4&#039;);
+    });
+
+    it(&#039;handles each icon&#039;, function() {
+      var stars = getStars();
+
+      for (var i = 0; i &lt; stars.length; i++) {
+        var star = stars.eq(i);
+        var state = $rootScope.states[i];
+        var isOn = i &lt; $rootScope.rate;
+
+        expect(star.hasClass(state.stateOn)).toBe(isOn);
+        expect(star.hasClass(state.stateOff)).toBe(!isOn);
+      }
+    });
+  });
+
+  describe(&#039;setting ratingConfig&#039;, function() {
+    var originalConfig = {};
+    beforeEach(inject(function(ratingConfig) {
+      $rootScope.rate = 5;
+      angular.extend(originalConfig, ratingConfig);
+      ratingConfig.max = 10;
+      ratingConfig.stateOn = &#039;on&#039;;
+      ratingConfig.stateOff = &#039;off&#039;;
+      element = $compile(&#039;&lt;rating ng-model=&quot;rate&quot;&gt;&lt;/rating&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+    afterEach(inject(function(ratingConfig) {
+      // return it to the original state
+      angular.extend(ratingConfig, originalConfig);
+    }));
+
+    it(&#039;should change number of icon elements&#039;, function () {
+      expect(getStars().length).toBe(10);
+    });
+
+    it(&#039;should change icon states&#039;, function () {
+      expect(getState(&#039;on&#039;, &#039;off&#039;)).toEqual([true, true, true, true, true, false, false, false, false, false]);
+    });
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

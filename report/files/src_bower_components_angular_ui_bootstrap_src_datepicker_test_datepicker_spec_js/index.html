@@ -1,0 +1,1831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/src/datepicker/test/datepicker.spec.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/src/datepicker/test/datepicker.spec.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">76.38</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">1714</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">65.40</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">23.60</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">describe(&#039;datepicker directive&#039;, function () {
+  var $rootScope, $compile, element;
+  beforeEach(module(&#039;ui.bootstrap.datepicker&#039;));
+  beforeEach(module(&#039;template/datepicker/datepicker.html&#039;));
+  beforeEach(module(&#039;template/datepicker/day.html&#039;));
+  beforeEach(module(&#039;template/datepicker/month.html&#039;));
+  beforeEach(module(&#039;template/datepicker/year.html&#039;));
+  beforeEach(module(&#039;template/datepicker/popup.html&#039;));
+  beforeEach(inject(function(_$compile_, _$rootScope_) {
+    $compile = _$compile_;
+    $rootScope = _$rootScope_;
+    $rootScope.date = new Date(&#039;September 30, 2010 15:30:00&#039;);
+  }));
+
+  function getTitle() {
+    return element.find(&#039;th&#039;).eq(1).find(&#039;button&#039;).first().text();
+  }
+
+  function clickTitleButton() {
+    element.find(&#039;th&#039;).eq(1).find(&#039;button&#039;).first().click();
+  }
+
+  function clickPreviousButton(times) {
+    var el = element.find(&#039;th&#039;).eq(0).find(&#039;button&#039;).eq(0);
+    for (var i = 0, n = times || 1; i &lt; n; i++) {
+      el.click();
+    }
+  }
+
+  function clickNextButton() {
+    element.find(&#039;th&#039;).eq(2).find(&#039;button&#039;).eq(0).click();
+  }
+
+  function getLabelsRow() {
+    return element.find(&#039;thead&#039;).find(&#039;tr&#039;).eq(1);
+  }
+
+  function getLabels() {
+    var els = getLabelsRow().find(&#039;th&#039;),
+        labels = [];
+    for (var i = 1, n = els.length; i &lt; n; i++) {
+      labels.push( els.eq(i).text() );
+    }
+    return labels;
+  }
+
+  function getWeeks() {
+    var rows = element.find(&#039;tbody&#039;).find(&#039;tr&#039;),
+        weeks = [];
+    for (var i = 0, n = rows.length; i &lt; n; i++) {
+      weeks.push( rows.eq(i).find(&#039;td&#039;).eq(0).first().text() );
+    }
+    return weeks;
+  }
+
+  function getOptions( dayMode ) {
+    var tr = element.find(&#039;tbody&#039;).find(&#039;tr&#039;);
+    var rows = [];
+
+    for (var j = 0, numRows = tr.length; j &lt; numRows; j++) {
+      var cols = tr.eq(j).find(&#039;td&#039;), days = [];
+      for (var i = dayMode ? 1 : 0, n = cols.length; i &lt; n; i++) {
+        days.push( cols.eq(i).find(&#039;button&#039;).text() );
+      }
+      rows.push(days);
+    }
+    return rows;
+  }
+
+  function clickOption( index ) {
+    getAllOptionsEl().eq(index).click();
+  }
+
+  function getAllOptionsEl( dayMode ) {
+    return element.find(&#039;tbody&#039;).find(&#039;button&#039;);
+  }
+
+  function expectSelectedElement( index ) {
+    var buttons = getAllOptionsEl();
+    angular.forEach( buttons, function( button, idx ) {
+      expect(angular.element(button).hasClass(&#039;btn-info&#039;)).toBe( idx === index );
+    });
+  }
+
+  function triggerKeyDown(element, key, ctrl) {
+    var keyCodes = {
+      &#039;enter&#039;: 13,
+      &#039;space&#039;: 32,
+      &#039;pageup&#039;: 33,
+      &#039;pagedown&#039;: 34,
+      &#039;end&#039;: 35,
+      &#039;home&#039;: 36,
+      &#039;left&#039;: 37,
+      &#039;up&#039;: 38,
+      &#039;right&#039;: 39,
+      &#039;down&#039;: 40,
+      &#039;esc&#039;: 27
+    };
+    var e = $.Event(&#039;keydown&#039;);
+    e.which = keyCodes[key];
+    if (ctrl) {
+      e.ctrlKey = true;
+    }
+    element.trigger(e);
+  }
+
+  describe(&#039;&#039;, function () {
+    beforeEach(function() {
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;is has a `&lt;table&gt;` element&#039;, function() {
+      expect(element.find(&#039;table&#039;).length).toBe(1);
+    });
+
+    it(&#039;shows the correct title&#039;, function() {
+      expect(getTitle()).toBe(&#039;September 2010&#039;);
+    });
+
+    it(&#039;shows the label row &amp; the correct day labels&#039;, function() {
+      expect(getLabelsRow().css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+      expect(getLabels()).toEqual([&#039;Sun&#039;, &#039;Mon&#039;, &#039;Tue&#039;, &#039;Wed&#039;, &#039;Thu&#039;, &#039;Fri&#039;, &#039;Sat&#039;]);
+    });
+
+    it(&#039;renders the calendar days correctly&#039;, function() {
+      expect(getOptions(true)).toEqual([
+        [&#039;29&#039;, &#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;],
+        [&#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;],
+        [&#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;],
+        [&#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;],
+        [&#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;],
+        [&#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;]
+      ]);
+    });
+
+    it(&#039;renders the week numbers based on ISO 8601&#039;, function() {
+      expect(getWeeks()).toEqual([&#039;34&#039;, &#039;35&#039;, &#039;36&#039;, &#039;37&#039;, &#039;38&#039;, &#039;39&#039;]);
+    });
+
+    it(&#039;value is correct&#039;, function() {
+      expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+    });
+
+    it(&#039;has `selected` only the correct day&#039;, function() {
+      expectSelectedElement( 32 );
+    });
+
+    it(&#039;has no `selected` day when model is cleared&#039;, function() {
+      $rootScope.date = null;
+      $rootScope.$digest();
+
+      expect($rootScope.date).toBe(null);
+      expectSelectedElement( null );
+    });
+
+    it(&#039;does not change current view when model is cleared&#039;, function() {
+      $rootScope.date = null;
+      $rootScope.$digest();
+
+      expect($rootScope.date).toBe(null);
+      expect(getTitle()).toBe(&#039;September 2010&#039;);
+    });
+
+    it(&#039;`disables` visible dates from other months&#039;, function() {
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).find(&#039;span&#039;).hasClass(&#039;text-muted&#039;)).toBe( index &lt; 3 || index &gt; 32 );
+      });
+    });
+
+    it(&#039;updates the model when a day is clicked&#039;, function() {
+      clickOption( 17 );
+      expect($rootScope.date).toEqual(new Date(&#039;September 15, 2010 15:30:00&#039;));
+    });
+
+    it(&#039;moves to the previous month &amp; renders correctly when `previous` button is clicked&#039;, function() {
+      clickPreviousButton();
+
+      expect(getTitle()).toBe(&#039;August 2010&#039;);
+      expect(getLabels()).toEqual([&#039;Sun&#039;, &#039;Mon&#039;, &#039;Tue&#039;, &#039;Wed&#039;, &#039;Thu&#039;, &#039;Fri&#039;, &#039;Sat&#039;]);
+      expect(getOptions(true)).toEqual([
+        [&#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;],
+        [&#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;, &#039;12&#039;, &#039;13&#039;, &#039;14&#039;],
+        [&#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;, &#039;19&#039;, &#039;20&#039;, &#039;21&#039;],
+        [&#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;, &#039;26&#039;, &#039;27&#039;, &#039;28&#039;],
+        [&#039;29&#039;, &#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;],
+        [&#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;]
+      ]);
+
+      expectSelectedElement( null, null );
+    });
+
+    it(&#039;updates the model only when a day is clicked in the `previous` month&#039;, function() {
+      clickPreviousButton();
+      expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+
+      clickOption( 17 );
+      expect($rootScope.date).toEqual(new Date(&#039;August 18, 2010 15:30:00&#039;));
+    });
+
+    it(&#039;moves to the next month &amp; renders correctly when `next` button is clicked&#039;, function() {
+      clickNextButton();
+
+      expect(getTitle()).toBe(&#039;October 2010&#039;);
+      expect(getLabels()).toEqual([&#039;Sun&#039;, &#039;Mon&#039;, &#039;Tue&#039;, &#039;Wed&#039;, &#039;Thu&#039;, &#039;Fri&#039;, &#039;Sat&#039;]);
+      expect(getOptions(true)).toEqual([
+        [&#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;],
+        [&#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;],
+        [&#039;10&#039;, &#039;11&#039;, &#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;],
+        [&#039;17&#039;, &#039;18&#039;, &#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;],
+        [&#039;24&#039;, &#039;25&#039;, &#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;],
+        [&#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;]
+      ]);
+
+      expectSelectedElement( 4 );
+    });
+
+    it(&#039;updates the model only when a day is clicked in the `next` month&#039;, function() {
+      clickNextButton();
+      expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+
+      clickOption( 17 );
+      expect($rootScope.date).toEqual(new Date(&#039;October 13, 2010 15:30:00&#039;));
+    });
+
+    it(&#039;updates the calendar when a day of another month is selected&#039;, function() {
+      clickOption( 33 );
+      expect($rootScope.date).toEqual(new Date(&#039;October 01, 2010 15:30:00&#039;));
+      expect(getTitle()).toBe(&#039;October 2010&#039;);
+      expect(getLabels()).toEqual([&#039;Sun&#039;, &#039;Mon&#039;, &#039;Tue&#039;, &#039;Wed&#039;, &#039;Thu&#039;, &#039;Fri&#039;, &#039;Sat&#039;]);
+      expect(getOptions(true)).toEqual([
+        [&#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;],
+        [&#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;],
+        [&#039;10&#039;, &#039;11&#039;, &#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;],
+        [&#039;17&#039;, &#039;18&#039;, &#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;],
+        [&#039;24&#039;, &#039;25&#039;, &#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;],
+        [&#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;]
+      ]);
+
+      expectSelectedElement( 5 );
+    });
+
+    // issue #1697
+    it(&#039;should not &quot;jump&quot; months&#039;, function() {
+      $rootScope.date = new Date(&#039;January 30, 2014&#039;);
+      $rootScope.$digest();
+      clickNextButton();
+      expect(getTitle()).toBe(&#039;February 2014&#039;);
+      clickPreviousButton();
+      expect(getTitle()).toBe(&#039;January 2014&#039;);
+    });
+
+    describe(&#039;when `model` changes&#039;, function () {
+      function testCalendar() {
+        expect(getTitle()).toBe(&#039;November 2005&#039;);
+        expect(getOptions(true)).toEqual([
+          [&#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;],
+          [&#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;, &#039;12&#039;],
+          [&#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;, &#039;19&#039;],
+          [&#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;, &#039;26&#039;],
+          [&#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;],
+          [&#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;]
+        ]);
+
+        expectSelectedElement( 8 );
+      }
+
+      describe(&#039;to a Date object&#039;, function() {
+        it(&#039;updates&#039;, function() {
+          $rootScope.date = new Date(&#039;November 7, 2005 23:30:00&#039;);
+          $rootScope.$digest();
+          testCalendar();
+          expect(angular.isDate($rootScope.date)).toBe(true);
+        });
+
+        it(&#039;to a date that is invalid, it gets invalid&#039;, function() {
+          $rootScope.date = new Date(&#039;pizza&#039;);
+          $rootScope.$digest();
+          expect(element.hasClass(&#039;ng-invalid&#039;)).toBeTruthy();
+          expect(element.hasClass(&#039;ng-invalid-date&#039;)).toBeTruthy();
+          expect(angular.isDate($rootScope.date)).toBe(true);
+          expect(isNaN($rootScope.date)).toBe(true);
+        });
+      });
+
+      describe(&#039;not to a Date object&#039;, function() {
+
+        it(&#039;to a Number, it updates calendar&#039;, function() {
+          $rootScope.date = parseInt((new Date(&#039;November 7, 2005 23:30:00&#039;)).getTime(), 10);
+          $rootScope.$digest();
+          testCalendar();
+          expect(angular.isNumber($rootScope.date)).toBe(true);
+        });
+
+        it(&#039;to a string that can be parsed by Date, it updates calendar&#039;, function() {
+          $rootScope.date = &#039;November 7, 2005 23:30:00&#039;;
+          $rootScope.$digest();
+          testCalendar();
+          expect(angular.isString($rootScope.date)).toBe(true);
+        });
+
+        it(&#039;to a string that cannot be parsed by Date, it gets invalid&#039;, function() {
+          $rootScope.date = &#039;pizza&#039;;
+          $rootScope.$digest();
+          expect(element.hasClass(&#039;ng-invalid&#039;)).toBeTruthy();
+          expect(element.hasClass(&#039;ng-invalid-date&#039;)).toBeTruthy();
+          expect($rootScope.date).toBe(&#039;pizza&#039;);
+        });
+      });
+    });
+
+    it(&#039;does not loop between after max mode&#039;, function() {
+      expect(getTitle()).toBe(&#039;September 2010&#039;);
+
+      clickTitleButton();
+      expect(getTitle()).toBe(&#039;2010&#039;);
+
+      clickTitleButton();
+      expect(getTitle()).toBe(&#039;2001 - 2020&#039;);
+
+      clickTitleButton();
+      expect(getTitle()).toBe(&#039;2001 - 2020&#039;);
+    });
+
+    describe(&#039;month selection mode&#039;, function () {
+      beforeEach(function() {
+        clickTitleButton();
+      });
+
+      it(&#039;shows the year as title&#039;, function() {
+        expect(getTitle()).toBe(&#039;2010&#039;);
+      });
+
+      it(&#039;shows months as options&#039;, function() {
+        expect(getOptions()).toEqual([
+          [&#039;January&#039;, &#039;February&#039;, &#039;March&#039;],
+          [&#039;April&#039;, &#039;May&#039;, &#039;June&#039;],
+          [&#039;July&#039;, &#039;August&#039;, &#039;September&#039;],
+          [&#039;October&#039;, &#039;November&#039;, &#039;December&#039;]
+        ]);
+      });
+
+      it(&#039;does not change the model&#039;, function() {
+        expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+      });
+
+      it(&#039;has `selected` only the correct month&#039;, function() {
+        expectSelectedElement( 8 );
+      });
+
+      it(&#039;moves to the previous year when `previous` button is clicked&#039;, function() {
+        clickPreviousButton();
+
+        expect(getTitle()).toBe(&#039;2009&#039;);
+        expect(getOptions()).toEqual([
+          [&#039;January&#039;, &#039;February&#039;, &#039;March&#039;],
+          [&#039;April&#039;, &#039;May&#039;, &#039;June&#039;],
+          [&#039;July&#039;, &#039;August&#039;, &#039;September&#039;],
+          [&#039;October&#039;, &#039;November&#039;, &#039;December&#039;]
+        ]);
+
+        expectSelectedElement( null );
+      });
+
+      it(&#039;moves to the next year when `next` button is clicked&#039;, function() {
+        clickNextButton();
+
+        expect(getTitle()).toBe(&#039;2011&#039;);
+        expect(getOptions()).toEqual([
+          [&#039;January&#039;, &#039;February&#039;, &#039;March&#039;],
+          [&#039;April&#039;, &#039;May&#039;, &#039;June&#039;],
+          [&#039;July&#039;, &#039;August&#039;, &#039;September&#039;],
+          [&#039;October&#039;, &#039;November&#039;, &#039;December&#039;]
+        ]);
+
+        expectSelectedElement( null );
+      });
+
+      it(&#039;renders correctly when a month is clicked&#039;, function() {
+        clickPreviousButton(5);
+        expect(getTitle()).toBe(&#039;2005&#039;);
+
+        clickOption( 10 );
+        expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+        expect(getTitle()).toBe(&#039;November 2005&#039;);
+        expect(getOptions(true)).toEqual([
+          [&#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;],
+          [&#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;, &#039;12&#039;],
+          [&#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;, &#039;19&#039;],
+          [&#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;, &#039;26&#039;],
+          [&#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;],
+          [&#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;]
+        ]);
+
+        clickOption( 17 );
+        expect($rootScope.date).toEqual(new Date(&#039;November 16, 2005 15:30:00&#039;));
+      });
+    });
+
+    describe(&#039;year selection mode&#039;, function () {
+      beforeEach(function() {
+        clickTitleButton();
+        clickTitleButton();
+      });
+
+      it(&#039;shows the year range as title&#039;, function() {
+        expect(getTitle()).toBe(&#039;2001 - 2020&#039;);
+      });
+
+      it(&#039;shows years as options&#039;, function() {
+        expect(getOptions()).toEqual([
+          [&#039;2001&#039;, &#039;2002&#039;, &#039;2003&#039;, &#039;2004&#039;, &#039;2005&#039;],
+          [&#039;2006&#039;, &#039;2007&#039;, &#039;2008&#039;, &#039;2009&#039;, &#039;2010&#039;],
+          [&#039;2011&#039;, &#039;2012&#039;, &#039;2013&#039;, &#039;2014&#039;, &#039;2015&#039;],
+          [&#039;2016&#039;, &#039;2017&#039;, &#039;2018&#039;, &#039;2019&#039;, &#039;2020&#039;]
+        ]);
+      });
+
+      it(&#039;does not change the model&#039;, function() {
+        expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+      });
+
+      it(&#039;has `selected` only the selected year&#039;, function() {
+        expectSelectedElement( 9 );
+      });
+
+      it(&#039;moves to the previous year set when `previous` button is clicked&#039;, function() {
+        clickPreviousButton();
+
+        expect(getTitle()).toBe(&#039;1981 - 2000&#039;);
+        expect(getOptions()).toEqual([
+          [&#039;1981&#039;, &#039;1982&#039;, &#039;1983&#039;, &#039;1984&#039;, &#039;1985&#039;],
+          [&#039;1986&#039;, &#039;1987&#039;, &#039;1988&#039;, &#039;1989&#039;, &#039;1990&#039;],
+          [&#039;1991&#039;, &#039;1992&#039;, &#039;1993&#039;, &#039;1994&#039;, &#039;1995&#039;],
+          [&#039;1996&#039;, &#039;1997&#039;, &#039;1998&#039;, &#039;1999&#039;, &#039;2000&#039;]
+        ]);
+        expectSelectedElement( null );
+      });
+
+      it(&#039;moves to the next year set when `next` button is clicked&#039;, function() {
+        clickNextButton();
+
+        expect(getTitle()).toBe(&#039;2021 - 2040&#039;);
+        expect(getOptions()).toEqual([
+          [&#039;2021&#039;, &#039;2022&#039;, &#039;2023&#039;, &#039;2024&#039;, &#039;2025&#039;],
+          [&#039;2026&#039;, &#039;2027&#039;, &#039;2028&#039;, &#039;2029&#039;, &#039;2030&#039;],
+          [&#039;2031&#039;, &#039;2032&#039;, &#039;2033&#039;, &#039;2034&#039;, &#039;2035&#039;],
+          [&#039;2036&#039;, &#039;2037&#039;, &#039;2038&#039;, &#039;2039&#039;, &#039;2040&#039;]
+        ]);
+
+        expectSelectedElement( null );
+      });
+    });
+
+    describe(&#039;keyboard navigation&#039;, function() {
+      function getActiveLabel() {
+        return element.find(&#039;.active&#039;).eq(0).text();
+      }
+
+      describe(&#039;day mode&#039;, function() {
+        it(&#039;will be able to activate previous day&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;);
+          expect(getActiveLabel()).toBe(&#039;29&#039;);
+        });
+
+        it(&#039;will be able to select with enter&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;);
+          triggerKeyDown(element, &#039;enter&#039;);
+          expect($rootScope.date).toEqual(new Date(&#039;September 29, 2010 15:30:00&#039;));
+        });
+
+        it(&#039;will be able to select with space&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;);
+          triggerKeyDown(element, &#039;space&#039;);
+          expect($rootScope.date).toEqual(new Date(&#039;September 29, 2010 15:30:00&#039;));
+        });
+
+        it(&#039;will be able to activate next day&#039;, function() {
+          triggerKeyDown(element, &#039;right&#039;);
+          expect(getActiveLabel()).toBe(&#039;01&#039;);
+          expect(getTitle()).toBe(&#039;October 2010&#039;);
+        });
+
+        it(&#039;will be able to activate same day in previous week&#039;, function() {
+          triggerKeyDown(element, &#039;up&#039;);
+          expect(getActiveLabel()).toBe(&#039;23&#039;);
+        });
+
+        it(&#039;will be able to activate same day in next week&#039;, function() {
+          triggerKeyDown(element, &#039;down&#039;);
+          expect(getActiveLabel()).toBe(&#039;07&#039;);
+          expect(getTitle()).toBe(&#039;October 2010&#039;);
+        });
+
+        it(&#039;will be able to activate same date in previous month&#039;, function() {
+          triggerKeyDown(element, &#039;pageup&#039;);
+          expect(getActiveLabel()).toBe(&#039;30&#039;);
+          expect(getTitle()).toBe(&#039;August 2010&#039;);
+        });
+
+        it(&#039;will be able to activate same date in next month&#039;, function() {
+          triggerKeyDown(element, &#039;pagedown&#039;);
+          expect(getActiveLabel()).toBe(&#039;30&#039;);
+          expect(getTitle()).toBe(&#039;October 2010&#039;);
+        });
+
+        it(&#039;will be able to activate first day of the month&#039;, function() {
+          triggerKeyDown(element, &#039;home&#039;);
+          expect(getActiveLabel()).toBe(&#039;01&#039;);
+          expect(getTitle()).toBe(&#039;September 2010&#039;);
+        });
+
+        it(&#039;will be able to activate last day of the month&#039;, function() {
+          $rootScope.date = new Date(&#039;September 1, 2010 15:30:00&#039;);
+          $rootScope.$digest();
+
+          triggerKeyDown(element, &#039;end&#039;);
+          expect(getActiveLabel()).toBe(&#039;30&#039;);
+          expect(getTitle()).toBe(&#039;September 2010&#039;);
+        });
+
+        it(&#039;will be able to move to month mode&#039;, function() {
+          triggerKeyDown(element, &#039;up&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;September&#039;);
+          expect(getTitle()).toBe(&#039;2010&#039;);
+        });
+
+        it(&#039;will not respond when trying to move to lower mode&#039;, function() {
+          triggerKeyDown(element, &#039;down&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;30&#039;);
+          expect(getTitle()).toBe(&#039;September 2010&#039;);
+        });
+      });
+
+      describe(&#039;month mode&#039;, function() {
+        beforeEach(function() {
+          triggerKeyDown(element, &#039;up&#039;, true);
+        });
+
+        it(&#039;will be able to activate previous month&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;);
+          expect(getActiveLabel()).toBe(&#039;August&#039;);
+        });
+
+        it(&#039;will be able to activate next month&#039;, function() {
+          triggerKeyDown(element, &#039;right&#039;);
+          expect(getActiveLabel()).toBe(&#039;October&#039;);
+        });
+
+        it(&#039;will be able to activate same month in previous row&#039;, function() {
+          triggerKeyDown(element, &#039;up&#039;);
+          expect(getActiveLabel()).toBe(&#039;June&#039;);
+        });
+
+        it(&#039;will be able to activate same month in next row&#039;, function() {
+          triggerKeyDown(element, &#039;down&#039;);
+          expect(getActiveLabel()).toBe(&#039;December&#039;);
+        });
+
+        it(&#039;will be able to activate same date in previous year&#039;, function() {
+          triggerKeyDown(element, &#039;pageup&#039;);
+          expect(getActiveLabel()).toBe(&#039;September&#039;);
+          expect(getTitle()).toBe(&#039;2009&#039;);
+        });
+
+        it(&#039;will be able to activate same date in next year&#039;, function() {
+          triggerKeyDown(element, &#039;pagedown&#039;);
+          expect(getActiveLabel()).toBe(&#039;September&#039;);
+          expect(getTitle()).toBe(&#039;2011&#039;);
+        });
+
+        it(&#039;will be able to activate first month of the year&#039;, function() {
+          triggerKeyDown(element, &#039;home&#039;);
+          expect(getActiveLabel()).toBe(&#039;January&#039;);
+          expect(getTitle()).toBe(&#039;2010&#039;);
+        });
+
+        it(&#039;will be able to activate last month of the year&#039;, function() {
+          triggerKeyDown(element, &#039;end&#039;);
+          expect(getActiveLabel()).toBe(&#039;December&#039;);
+          expect(getTitle()).toBe(&#039;2010&#039;);
+        });
+
+        it(&#039;will be able to move to year mode&#039;, function() {
+          triggerKeyDown(element, &#039;up&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;2010&#039;);
+          expect(getTitle()).toBe(&#039;2001 - 2020&#039;);
+        });
+
+        it(&#039;will be able to move to day mode&#039;, function() {
+          triggerKeyDown(element, &#039;down&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;30&#039;);
+          expect(getTitle()).toBe(&#039;September 2010&#039;);
+        });
+
+        it(&#039;will move to day mode when selecting&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;, true);
+          triggerKeyDown(element, &#039;enter&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;30&#039;);
+          expect(getTitle()).toBe(&#039;August 2010&#039;);
+          expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+        });
+      });
+
+      describe(&#039;year mode&#039;, function() {
+        beforeEach(function() {
+          triggerKeyDown(element, &#039;up&#039;, true);
+          triggerKeyDown(element, &#039;up&#039;, true);
+        });
+
+        it(&#039;will be able to activate previous year&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;);
+          expect(getActiveLabel()).toBe(&#039;2009&#039;);
+        });
+
+        it(&#039;will be able to activate next year&#039;, function() {
+          triggerKeyDown(element, &#039;right&#039;);
+          expect(getActiveLabel()).toBe(&#039;2011&#039;);
+        });
+
+        it(&#039;will be able to activate same year in previous row&#039;, function() {
+          triggerKeyDown(element, &#039;up&#039;);
+          expect(getActiveLabel()).toBe(&#039;2005&#039;);
+        });
+
+        it(&#039;will be able to activate same year in next row&#039;, function() {
+          triggerKeyDown(element, &#039;down&#039;);
+          expect(getActiveLabel()).toBe(&#039;2015&#039;);
+        });
+
+        it(&#039;will be able to activate same date in previous view&#039;, function() {
+          triggerKeyDown(element, &#039;pageup&#039;);
+          expect(getActiveLabel()).toBe(&#039;1990&#039;);
+        });
+
+        it(&#039;will be able to activate same date in next view&#039;, function() {
+          triggerKeyDown(element, &#039;pagedown&#039;);
+          expect(getActiveLabel()).toBe(&#039;2030&#039;);
+        });
+
+        it(&#039;will be able to activate first year of the year&#039;, function() {
+          triggerKeyDown(element, &#039;home&#039;);
+          expect(getActiveLabel()).toBe(&#039;2001&#039;);
+        });
+
+        it(&#039;will be able to activate last year of the year&#039;, function() {
+          triggerKeyDown(element, &#039;end&#039;);
+          expect(getActiveLabel()).toBe(&#039;2020&#039;);
+        });
+
+        it(&#039;will not respond when trying to move to upper mode&#039;, function() {
+          triggerKeyDown(element, &#039;up&#039;, true);
+          expect(getTitle()).toBe(&#039;2001 - 2020&#039;);
+        });
+
+        it(&#039;will be able to move to month mode&#039;, function() {
+          triggerKeyDown(element, &#039;down&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;September&#039;);
+          expect(getTitle()).toBe(&#039;2010&#039;);
+        });
+
+        it(&#039;will move to month mode when selecting&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;, true);
+          triggerKeyDown(element, &#039;enter&#039;, true);
+          expect(getActiveLabel()).toBe(&#039;September&#039;);
+          expect(getTitle()).toBe(&#039;2009&#039;);
+          expect($rootScope.date).toEqual(new Date(&#039;September 30, 2010 15:30:00&#039;));
+        });
+      });
+
+      describe(&#039;`aria-activedescendant`&#039;, function() {
+        function checkActivedescendant() {
+          var activeId = element.find(&#039;table&#039;).attr(&#039;aria-activedescendant&#039;);
+          expect(element.find(&#039;#&#039; + activeId + &#039; &gt; button&#039;)).toHaveClass(&#039;active&#039;);
+        }
+
+        it(&#039;updates correctly&#039;, function() {
+          triggerKeyDown(element, &#039;left&#039;);
+          checkActivedescendant();
+
+          triggerKeyDown(element, &#039;down&#039;);
+          checkActivedescendant();
+
+          triggerKeyDown(element, &#039;up&#039;, true);
+          checkActivedescendant();
+
+          triggerKeyDown(element, &#039;up&#039;, true);
+          checkActivedescendant();
+        });
+      });
+
+    });
+
+  });
+
+  describe(&#039;attribute `starting-day`&#039;, function () {
+    beforeEach(function() {
+      $rootScope.startingDay = 1;
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; starting-day=&quot;startingDay&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;shows the day labels rotated&#039;, function() {
+      expect(getLabels()).toEqual([&#039;Mon&#039;, &#039;Tue&#039;, &#039;Wed&#039;, &#039;Thu&#039;, &#039;Fri&#039;, &#039;Sat&#039;, &#039;Sun&#039;]);
+    });
+
+    it(&#039;renders the calendar days correctly&#039;, function() {
+      expect(getOptions(true)).toEqual([
+        [&#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;],
+        [&#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;, &#039;12&#039;],
+        [&#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;, &#039;19&#039;],
+        [&#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;, &#039;26&#039;],
+        [&#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;],
+        [&#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;]
+      ]);
+    });
+
+    it(&#039;renders the week numbers correctly&#039;, function() {
+      expect(getWeeks()).toEqual([&#039;35&#039;, &#039;36&#039;, &#039;37&#039;, &#039;38&#039;, &#039;39&#039;, &#039;40&#039;]);
+    });
+  });
+
+  describe(&#039;attribute `show-weeks`&#039;, function () {
+    var weekHeader, weekElement;
+    beforeEach(function() {
+      $rootScope.showWeeks = false;
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; show-weeks=&quot;showWeeks&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+
+      weekHeader = getLabelsRow().find(&#039;th&#039;).eq(0);
+      weekElement = element.find(&#039;tbody&#039;).find(&#039;tr&#039;).eq(1).find(&#039;td&#039;).eq(0);
+    });
+
+    it(&#039;hides week numbers based on variable&#039;, function() {
+      expect(weekHeader.text()).toEqual(&#039;&#039;);
+      expect(weekHeader).toBeHidden();
+      expect(weekElement).toBeHidden();
+    });
+  });
+
+  describe(&#039;`min-date` attribute&#039;, function () {
+    beforeEach(function() {
+      $rootScope.mindate = new Date(&#039;September 12, 2010&#039;);
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; min-date=&quot;mindate&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;disables appropriate days in current month&#039;, function() {
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( index &lt; 14 );
+      });
+    });
+
+    it(&#039;disables appropriate days when min date changes&#039;, function() {
+      $rootScope.mindate = new Date(&#039;September 5, 2010&#039;);
+      $rootScope.$digest();
+
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( index &lt; 7 );
+      });
+    });
+
+    it(&#039;invalidates when model is a disabled date&#039;, function() {
+      $rootScope.mindate = new Date(&#039;September 5, 2010&#039;);
+      $rootScope.date = new Date(&#039;September 2, 2010&#039;);
+      $rootScope.$digest();
+      expect(element.hasClass(&#039;ng-invalid&#039;)).toBeTruthy();
+      expect(element.hasClass(&#039;ng-invalid-date-disabled&#039;)).toBeTruthy();
+    });
+
+    it(&#039;disables all days in previous month&#039;, function() {
+      clickPreviousButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( true );
+      });
+    });
+
+    it(&#039;disables no days in next month&#039;, function() {
+      clickNextButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( false );
+      });
+    });
+
+    it(&#039;disables appropriate months in current year&#039;, function() {
+      clickTitleButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( index &lt; 8 );
+      });
+    });
+
+    it(&#039;disables all months in previous year&#039;, function() {
+      clickTitleButton();
+      clickPreviousButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( true );
+      });
+    });
+
+    it(&#039;disables no months in next year&#039;, function() {
+      clickTitleButton();
+      clickNextButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( false );
+      });
+    });
+
+    it(&#039;enables everything before if it is cleared&#039;, function() {
+      $rootScope.mindate = null;
+      $rootScope.date = new Date(&#039;December 20, 1949&#039;);
+      $rootScope.$digest();
+
+      clickTitleButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( false );
+      });
+    });
+
+  });
+
+  describe(&#039;`max-date` attribute&#039;, function () {
+    beforeEach(function() {
+      $rootScope.maxdate = new Date(&#039;September 25, 2010&#039;);
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; max-date=&quot;maxdate&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;disables appropriate days in current month&#039;, function() {
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( index &gt; 27 );
+      });
+    });
+
+    it(&#039;disables appropriate days when max date changes&#039;, function() {
+      $rootScope.maxdate = new Date(&#039;September 18, 2010&#039;);
+      $rootScope.$digest();
+
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( index &gt; 20 );
+      });
+    });
+
+    it(&#039;invalidates when model is a disabled date&#039;, function() {
+      $rootScope.maxdate = new Date(&#039;September 18, 2010&#039;);
+      $rootScope.$digest();
+      expect(element.hasClass(&#039;ng-invalid&#039;)).toBeTruthy();
+      expect(element.hasClass(&#039;ng-invalid-date-disabled&#039;)).toBeTruthy();
+    });
+
+    it(&#039;disables no days in previous month&#039;, function() {
+      clickPreviousButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( false );
+      });
+    });
+
+    it(&#039;disables all days in next month&#039;, function() {
+      clickNextButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( true );
+      });
+    });
+
+    it(&#039;disables appropriate months in current year&#039;, function() {
+      clickTitleButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( index &gt; 8 );
+      });
+    });
+
+    it(&#039;disables no months in previous year&#039;, function() {
+      clickTitleButton();
+      clickPreviousButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( false );
+      });
+    });
+
+    it(&#039;disables all months in next year&#039;, function() {
+      clickTitleButton();
+      clickNextButton();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( true );
+      });
+    });
+
+    it(&#039;enables everything after if it is cleared&#039;, function() {
+      $rootScope.maxdate = null;
+      $rootScope.$digest();
+      var buttons = getAllOptionsEl();
+      angular.forEach(buttons, function( button, index ) {
+        expect(angular.element(button).prop(&#039;disabled&#039;)).toBe( false );
+      });
+    });
+  });
+
+  describe(&#039;date-disabled expression&#039;, function () {
+    beforeEach(function() {
+      $rootScope.dateDisabledHandler = jasmine.createSpy(&#039;dateDisabledHandler&#039;);
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; date-disabled=&quot;dateDisabledHandler(date, mode)&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;executes the dateDisabled expression for each visible day plus one for validation&#039;, function() {
+      expect($rootScope.dateDisabledHandler.calls.length).toEqual(42 + 1);
+    });
+
+    it(&#039;executes the dateDisabled expression for each visible month plus one for validation&#039;, function() {
+      $rootScope.dateDisabledHandler.reset();
+      clickTitleButton();
+      expect($rootScope.dateDisabledHandler.calls.length).toEqual(12 + 1);
+    });
+
+    it(&#039;executes the dateDisabled expression for each visible year plus one for validation&#039;, function() {
+      clickTitleButton();
+      $rootScope.dateDisabledHandler.reset();
+      clickTitleButton();
+      expect($rootScope.dateDisabledHandler.calls.length).toEqual(20 + 1);
+    });
+  });
+
+  describe(&#039;formatting&#039;, function () {
+    beforeEach(function() {
+      $rootScope.dayTitle = &#039;MMMM, yy&#039;;
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot;&#039; +
+        &#039;format-day=&quot;d&quot;&#039; +
+        &#039;format-day-header=&quot;EEEE&quot;&#039; +
+        &#039;format-day-title=&quot;{{dayTitle}}&quot;&#039; +
+        &#039;format-month=&quot;MMM&quot;&#039; +
+        &#039;format-month-title=&quot;yy&quot;&#039; +
+        &#039;format-year=&quot;yy&quot;&#039; +
+        &#039;year-range=&quot;10&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    });
+
+    it(&#039;changes the title format in `day` mode&#039;, function() {
+      expect(getTitle()).toBe(&#039;September, 10&#039;);
+    });
+
+    it(&#039;changes the title &amp; months format in `month` mode&#039;, function() {
+      clickTitleButton();
+
+      expect(getTitle()).toBe(&#039;10&#039;);
+      expect(getOptions()).toEqual([
+        [&#039;Jan&#039;, &#039;Feb&#039;, &#039;Mar&#039;],
+        [&#039;Apr&#039;, &#039;May&#039;, &#039;Jun&#039;],
+        [&#039;Jul&#039;, &#039;Aug&#039;, &#039;Sep&#039;],
+        [&#039;Oct&#039;, &#039;Nov&#039;, &#039;Dec&#039;]
+      ]);
+    });
+
+    it(&#039;changes the title, year format &amp; range in `year` mode&#039;, function() {
+      clickTitleButton();
+      clickTitleButton();
+
+      expect(getTitle()).toBe(&#039;01 - 10&#039;);
+      expect(getOptions()).toEqual([
+        [&#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;],
+        [&#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;]
+      ]);
+    });
+
+    it(&#039;shows day labels&#039;, function() {
+      expect(getLabels()).toEqual([&#039;Sunday&#039;, &#039;Monday&#039;, &#039;Tuesday&#039;, &#039;Wednesday&#039;, &#039;Thursday&#039;, &#039;Friday&#039;, &#039;Saturday&#039;]);
+    });
+
+    it(&#039;changes the day format&#039;, function() {
+      expect(getOptions(true)).toEqual([
+        [&#039;29&#039;, &#039;30&#039;, &#039;31&#039;, &#039;1&#039;, &#039;2&#039;, &#039;3&#039;, &#039;4&#039;],
+        [&#039;5&#039;, &#039;6&#039;, &#039;7&#039;, &#039;8&#039;, &#039;9&#039;, &#039;10&#039;, &#039;11&#039;],
+        [&#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;],
+        [&#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;],
+        [&#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;1&#039;, &#039;2&#039;],
+        [&#039;3&#039;, &#039;4&#039;, &#039;5&#039;, &#039;6&#039;, &#039;7&#039;, &#039;8&#039;, &#039;9&#039;]
+      ]);
+    });
+  });
+
+  describe(&#039;setting datepickerConfig&#039;, function() {
+    var originalConfig = {};
+    beforeEach(inject(function(datepickerConfig) {
+      angular.extend(originalConfig, datepickerConfig);
+      datepickerConfig.formatDay = &#039;d&#039;;
+      datepickerConfig.formatMonth = &#039;MMM&#039;;
+      datepickerConfig.formatYear = &#039;yy&#039;;
+      datepickerConfig.formatDayHeader = &#039;EEEE&#039;;
+      datepickerConfig.formatDayTitle = &#039;MMM, yy&#039;;
+      datepickerConfig.formatMonthTitle = &#039;yy&#039;;
+      datepickerConfig.showWeeks = false;
+      datepickerConfig.yearRange = 10;
+      datepickerConfig.startingDay = 6;
+
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+    afterEach(inject(function(datepickerConfig) {
+      // return it to the original state
+      angular.extend(datepickerConfig, originalConfig);
+    }));
+
+    it(&#039;changes the title format in `day` mode&#039;, function() {
+      expect(getTitle()).toBe(&#039;Sep, 10&#039;);
+    });
+
+    it(&#039;changes the title &amp; months format in `month` mode&#039;, function() {
+      clickTitleButton();
+
+      expect(getTitle()).toBe(&#039;10&#039;);
+      expect(getOptions()).toEqual([
+        [&#039;Jan&#039;, &#039;Feb&#039;, &#039;Mar&#039;],
+        [&#039;Apr&#039;, &#039;May&#039;, &#039;Jun&#039;],
+        [&#039;Jul&#039;, &#039;Aug&#039;, &#039;Sep&#039;],
+        [&#039;Oct&#039;, &#039;Nov&#039;, &#039;Dec&#039;]
+      ]);
+    });
+
+    it(&#039;changes the title, year format &amp; range in `year` mode&#039;, function() {
+      clickTitleButton();
+      clickTitleButton();
+
+      expect(getTitle()).toBe(&#039;01 - 10&#039;);
+      expect(getOptions()).toEqual([
+        [&#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;],
+        [&#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;]
+      ]);
+    });
+
+    it(&#039;changes the `starting-day` &amp; day headers &amp; format&#039;, function() {
+      expect(getLabels()).toEqual([&#039;Saturday&#039;, &#039;Sunday&#039;, &#039;Monday&#039;, &#039;Tuesday&#039;, &#039;Wednesday&#039;, &#039;Thursday&#039;, &#039;Friday&#039;]);
+      expect(getOptions(true)).toEqual([
+        [&#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;31&#039;, &#039;1&#039;, &#039;2&#039;, &#039;3&#039;],
+        [&#039;4&#039;, &#039;5&#039;, &#039;6&#039;, &#039;7&#039;, &#039;8&#039;, &#039;9&#039;, &#039;10&#039;],
+        [&#039;11&#039;, &#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;],
+        [&#039;18&#039;, &#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;],
+        [&#039;25&#039;, &#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;1&#039;],
+        [&#039;2&#039;, &#039;3&#039;, &#039;4&#039;, &#039;5&#039;, &#039;6&#039;, &#039;7&#039;, &#039;8&#039;]
+      ]);
+    });
+
+    it(&#039;changes initial visibility for weeks&#039;, function() {
+      expect(getLabelsRow().find(&#039;th&#039;).eq(0)).toBeHidden();
+      var tr = element.find(&#039;tbody&#039;).find(&#039;tr&#039;);
+      for (var i = 0; i &lt; 5; i++) {
+        expect(tr.eq(i).find(&#039;td&#039;).eq(0)).toBeHidden();
+      }
+    });
+
+  });
+
+  describe(&#039;setting datepickerPopupConfig&#039;, function() {
+    var originalConfig = {};
+    beforeEach(inject(function(datepickerPopupConfig) {
+      angular.extend(originalConfig, datepickerPopupConfig);
+      datepickerPopupConfig.datepickerPopup = &#039;MM-dd-yyyy&#039;;
+
+      element = $compile(&#039;&lt;input ng-model=&quot;date&quot; datepicker-popup&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+    afterEach(inject(function(datepickerPopupConfig) {
+      // return it to the original state
+      angular.extend(datepickerPopupConfig, originalConfig);
+    }));
+
+    it(&#039;changes date format&#039;, function() {
+      expect(element.val()).toEqual(&#039;09-30-2010&#039;);
+    });
+
+  });
+
+  describe(&#039;as popup&#039;, function () {
+    var inputEl, dropdownEl, $document, $sniffer;
+
+    function assignElements(wrapElement) {
+      inputEl = wrapElement.find(&#039;input&#039;);
+      dropdownEl = wrapElement.find(&#039;ul&#039;);
+      element = dropdownEl.find(&#039;table&#039;);
+    }
+
+    function changeInputValueTo(el, value) {
+      el.val(value);
+      el.trigger($sniffer.hasEvent(&#039;input&#039;) ? &#039;input&#039; : &#039;change&#039;);
+      $rootScope.$digest();
+    }
+
+    describe(&#039;initially&#039;, function () {
+      beforeEach(inject(function(_$document_, _$sniffer_) {
+        $document = _$document_;
+        $rootScope.isopen = true;
+        $rootScope.date = new Date(&#039;September 30, 2010 15:30:00&#039;);
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;does not to display datepicker initially&#039;, function() {
+        expect(dropdownEl).toBeHidden();
+      });
+
+      it(&#039;to display the correct value in input&#039;, function() {
+        expect(inputEl.val()).toBe(&#039;2010-09-30&#039;);
+      });
+    });
+
+    describe(&#039;initially opened&#039;, function () {
+      beforeEach(inject(function(_$document_, _$sniffer_) {
+        $document = _$document_;
+        $sniffer = _$sniffer_;
+        $rootScope.isopen = true;
+        $rootScope.date = new Date(&#039;September 30, 2010 15:30:00&#039;);
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup is-open=&quot;isopen&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;datepicker is displayed&#039;, function() {
+        expect(dropdownEl).not.toBeHidden();
+      });
+
+      it(&#039;renders the calendar correctly&#039;, function() {
+        expect(getLabelsRow().css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+        expect(getLabels()).toEqual([&#039;Sun&#039;, &#039;Mon&#039;, &#039;Tue&#039;, &#039;Wed&#039;, &#039;Thu&#039;, &#039;Fri&#039;, &#039;Sat&#039;]);
+        expect(getOptions(true)).toEqual([
+          [&#039;29&#039;, &#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;],
+          [&#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;, &#039;10&#039;, &#039;11&#039;],
+          [&#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;, &#039;16&#039;, &#039;17&#039;, &#039;18&#039;],
+          [&#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;, &#039;23&#039;, &#039;24&#039;, &#039;25&#039;],
+          [&#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;30&#039;, &#039;01&#039;, &#039;02&#039;],
+          [&#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;, &#039;09&#039;]
+        ]);
+      });
+
+      it(&#039;updates the input when a day is clicked&#039;, function() {
+        clickOption(17);
+        expect(inputEl.val()).toBe(&#039;2010-09-15&#039;);
+        expect($rootScope.date).toEqual(new Date(&#039;September 15, 2010 15:30:00&#039;));
+      });
+
+      it(&#039;should mark the input field dirty when a day is clicked&#039;, function() {
+        expect(inputEl).toHaveClass(&#039;ng-pristine&#039;);
+        clickOption(17);
+        expect(inputEl).toHaveClass(&#039;ng-dirty&#039;);
+      });
+
+      it(&#039;updates the input correctly when model changes&#039;, function() {
+        $rootScope.date = new Date(&#039;January 10, 1983 10:00:00&#039;);
+        $rootScope.$digest();
+        expect(inputEl.val()).toBe(&#039;1983-01-10&#039;);
+      });
+
+      it(&#039;closes the dropdown when a day is clicked&#039;, function() {
+        expect(dropdownEl.css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+
+        clickOption(17);
+        expect(dropdownEl.css(&#039;display&#039;)).toBe(&#039;none&#039;);
+      });
+
+      it(&#039;updates the model &amp; calendar when input value changes&#039;, function() {
+        changeInputValueTo(inputEl, &#039;March 5, 1980&#039;);
+
+        expect($rootScope.date.getFullYear()).toEqual(1980);
+        expect($rootScope.date.getMonth()).toEqual(2);
+        expect($rootScope.date.getDate()).toEqual(5);
+
+        expect(getOptions(true)).toEqual([
+          [&#039;24&#039;, &#039;25&#039;, &#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;, &#039;01&#039;],
+          [&#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;, &#039;06&#039;, &#039;07&#039;, &#039;08&#039;],
+          [&#039;09&#039;, &#039;10&#039;, &#039;11&#039;, &#039;12&#039;, &#039;13&#039;, &#039;14&#039;, &#039;15&#039;],
+          [&#039;16&#039;, &#039;17&#039;, &#039;18&#039;, &#039;19&#039;, &#039;20&#039;, &#039;21&#039;, &#039;22&#039;],
+          [&#039;23&#039;, &#039;24&#039;, &#039;25&#039;, &#039;26&#039;, &#039;27&#039;, &#039;28&#039;, &#039;29&#039;],
+          [&#039;30&#039;, &#039;31&#039;, &#039;01&#039;, &#039;02&#039;, &#039;03&#039;, &#039;04&#039;, &#039;05&#039;]
+        ]);
+        expectSelectedElement( 10 );
+      });
+
+      it(&#039;closes when click outside of calendar&#039;, function() {
+        expect(dropdownEl).not.toBeHidden();
+
+        $document.find(&#039;body&#039;).click();
+        expect(dropdownEl.css(&#039;display&#039;)).toBe(&#039;none&#039;);
+      });
+
+      it(&#039;sets `ng-invalid` for invalid input&#039;, function() {
+        changeInputValueTo(inputEl, &#039;pizza&#039;);
+
+        expect(inputEl).toHaveClass(&#039;ng-invalid&#039;);
+        expect(inputEl).toHaveClass(&#039;ng-invalid-date&#039;);
+        expect($rootScope.date).toBeUndefined();
+        expect(inputEl.val()).toBe(&#039;pizza&#039;);
+      });
+
+      it(&#039;unsets `ng-invalid` for valid input&#039;, function() {
+        changeInputValueTo(inputEl, &#039;pizza&#039;);
+        expect(inputEl).toHaveClass(&#039;ng-invalid-date&#039;);
+
+        $rootScope.date = new Date(&#039;August 11, 2013&#039;);
+        $rootScope.$digest();
+        expect(inputEl).not.toHaveClass(&#039;ng-invalid&#039;);
+        expect(inputEl).not.toHaveClass(&#039;ng-invalid-date&#039;);
+      });
+
+      describe(&#039;focus&#039;, function () {
+        beforeEach(function() {
+          var body = $document.find(&#039;body&#039;);
+          body.append(inputEl);
+          body.append(dropdownEl);
+        });
+
+        afterEach(function() {
+          inputEl.remove();
+          dropdownEl.remove();
+        });
+
+        it(&#039;returns to the input when ESC key is pressed in the popup and closes&#039;, function() {
+          expect(dropdownEl).not.toBeHidden();
+
+          dropdownEl.find(&#039;button&#039;).eq(0).focus();
+          expect(document.activeElement.tagName).toBe(&#039;BUTTON&#039;);
+
+          triggerKeyDown(dropdownEl, &#039;esc&#039;);
+          expect(dropdownEl).toBeHidden();
+          expect(document.activeElement.tagName).toBe(&#039;INPUT&#039;);
+        });
+
+        it(&#039;returns to the input when ESC key is pressed in the input and closes&#039;, function() {
+          expect(dropdownEl).not.toBeHidden();
+
+          dropdownEl.find(&#039;button&#039;).eq(0).focus();
+          expect(document.activeElement.tagName).toBe(&#039;BUTTON&#039;);
+
+          triggerKeyDown(inputEl, &#039;esc&#039;);
+          $rootScope.$digest();
+          expect(dropdownEl).toBeHidden();
+          expect(document.activeElement.tagName).toBe(&#039;INPUT&#039;);
+        });
+      });
+    });
+
+    describe(&#039;attribute `datepickerOptions`&#039;, function () {
+      var weekHeader, weekElement;
+      beforeEach(function() {
+        $rootScope.opts = {
+          &#039;show-weeks&#039;: false
+        };
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup datepicker-options=&quot;opts&quot; is-open=&quot;true&quot;&gt;&lt;/div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+
+        weekHeader = getLabelsRow().find(&#039;th&#039;).eq(0);
+        weekElement = element.find(&#039;tbody&#039;).find(&#039;tr&#039;).eq(1).find(&#039;td&#039;).eq(0);
+      });
+
+      it(&#039;hides week numbers based on variable&#039;, function() {
+        expect(weekHeader.text()).toEqual(&#039;&#039;);
+        expect(weekHeader).toBeHidden();
+        expect(weekElement).toBeHidden();
+      });
+    });
+
+    describe(&#039;toggles programatically by `open` attribute&#039;, function () {
+      beforeEach(inject(function() {
+        $rootScope.open = true;
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup is-open=&quot;open&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;to display initially&#039;, function() {
+        expect(dropdownEl.css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+      });
+
+      it(&#039;to close / open from scope variable&#039;, function() {
+        expect(dropdownEl.css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+        $rootScope.open = false;
+        $rootScope.$digest();
+        expect(dropdownEl.css(&#039;display&#039;)).toBe(&#039;none&#039;);
+
+        $rootScope.open = true;
+        $rootScope.$digest();
+        expect(dropdownEl.css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+      });
+    });
+
+    describe(&#039;custom format&#039;, function () {
+      beforeEach(inject(function() {
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup=&quot;dd-MMMM-yyyy&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;to display the correct value in input&#039;, function() {
+        expect(inputEl.val()).toBe(&#039;30-September-2010&#039;);
+      });
+
+      it(&#039;updates the input when a day is clicked&#039;, function() {
+        clickOption(17);
+        expect(inputEl.val()).toBe(&#039;15-September-2010&#039;);
+        expect($rootScope.date).toEqual(new Date(&#039;September 15, 2010 15:30:00&#039;));
+      });
+
+      it(&#039;updates the input correctly when model changes&#039;, function() {
+        $rootScope.date = new Date(&#039;January 10, 1983 10:00:00&#039;);
+        $rootScope.$digest();
+        expect(inputEl.val()).toBe(&#039;10-January-1983&#039;);
+      });
+    });
+
+    describe(&#039;dynamic custom format&#039;, function () {
+      beforeEach(inject(function() {
+        $rootScope.format = &#039;dd-MMMM-yyyy&#039;;
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup=&quot;{{format}}&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;to display the correct value in input&#039;, function() {
+        expect(inputEl.val()).toBe(&#039;30-September-2010&#039;);
+      });
+
+      it(&#039;updates the input when a day is clicked&#039;, function() {
+        clickOption(17);
+        expect(inputEl.val()).toBe(&#039;15-September-2010&#039;);
+        expect($rootScope.date).toEqual(new Date(&#039;September 15, 2010 15:30:00&#039;));
+      });
+
+      it(&#039;updates the input correctly when model changes&#039;, function() {
+        $rootScope.date = new Date(&#039;August 11, 2013 09:09:00&#039;);
+        $rootScope.$digest();
+        expect(inputEl.val()).toBe(&#039;11-August-2013&#039;);
+      });
+
+      it(&#039;updates the input correctly when format changes&#039;, function() {
+        $rootScope.format = &#039;dd/MM/yyyy&#039;;
+        $rootScope.$digest();
+        expect(inputEl.val()).toBe(&#039;30/09/2010&#039;);
+      });
+    });
+
+    describe(&#039;european format&#039;, function () {
+      it(&#039;dd.MM.yyyy&#039;, function() {
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup=&quot;dd.MM.yyyy&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+
+        changeInputValueTo(inputEl, &#039;11.08.2013&#039;);
+        expect($rootScope.date.getFullYear()).toEqual(2013);
+        expect($rootScope.date.getMonth()).toEqual(7);
+        expect($rootScope.date.getDate()).toEqual(11);
+      });
+    });
+
+    describe(&#039;`close-on-date-selection` attribute&#039;, function () {
+      beforeEach(inject(function() {
+        $rootScope.close = false;
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup close-on-date-selection=&quot;close&quot; is-open=&quot;true&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;does not close the dropdown when a day is clicked&#039;, function() {
+        clickOption(17);
+        expect(dropdownEl.css(&#039;display&#039;)).not.toBe(&#039;none&#039;);
+      });
+    });
+
+    describe(&#039;button bar&#039;, function() {
+      var buttons, buttonBarElement;
+
+      function assignButtonBar() {
+        buttonBarElement = dropdownEl.find(&#039;li&#039;).eq(-1);
+        buttons = buttonBarElement.find(&#039;button&#039;);
+      }
+
+      describe(&#039;&#039;, function () {
+        beforeEach(inject(function() {
+          $rootScope.isopen = true;
+          var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup is-open=&quot;isopen&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+          $rootScope.$digest();
+          assignElements(wrapElement);
+          assignButtonBar();
+        }));
+
+        it(&#039;should exist&#039;, function() {
+          expect(dropdownEl).not.toBeHidden();
+          expect(dropdownEl.find(&#039;li&#039;).length).toBe(2);
+        });
+
+        it(&#039;should have three buttons&#039;, function() {
+          expect(buttons.length).toBe(3);
+
+          expect(buttons.eq(0).text()).toBe(&#039;Today&#039;);
+          expect(buttons.eq(1).text()).toBe(&#039;Clear&#039;);
+          expect(buttons.eq(2).text()).toBe(&#039;Done&#039;);
+        });
+
+        it(&#039;should have a button to set today date without altering time part&#039;, function() {
+          var today = new Date();
+          buttons.eq(0).click();
+          expect($rootScope.date.getFullYear()).toBe(today.getFullYear());
+          expect($rootScope.date.getMonth()).toBe(today.getMonth());
+          expect($rootScope.date.getDate()).toBe(today.getDate());
+
+          expect($rootScope.date.getHours()).toBe(15);
+          expect($rootScope.date.getMinutes()).toBe(30);
+          expect($rootScope.date.getSeconds()).toBe(0);
+        });
+
+        it(&#039;should have a button to set today date if blank&#039;, function() {
+          $rootScope.date = null;
+          $rootScope.$digest();
+
+          var today = new Date();
+          buttons.eq(0).click();
+          expect($rootScope.date.getFullYear()).toBe(today.getFullYear());
+          expect($rootScope.date.getMonth()).toBe(today.getMonth());
+          expect($rootScope.date.getDate()).toBe(today.getDate());
+
+          expect($rootScope.date.getHours()).toBe(0);
+          expect($rootScope.date.getMinutes()).toBe(0);
+          expect($rootScope.date.getSeconds()).toBe(0);
+        });
+
+        it(&#039;should have a button to clear value&#039;, function() {
+          buttons.eq(1).click();
+          expect($rootScope.date).toBe(null);
+        });
+
+        it(&#039;should have a button to close calendar&#039;, function() {
+          buttons.eq(2).click();
+          expect(dropdownEl).toBeHidden();
+        });
+      });
+
+      describe(&#039;customization&#039;, function() {
+        it(&#039;should change text from attributes&#039;, function() {
+          $rootScope.clearText = &#039;Null it!&#039;;
+          $rootScope.close = &#039;Close&#039;;
+          var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup current-text=&quot;Now&quot; clear-text=&quot;{{clearText}}&quot; close-text=&quot;{{close}}ME&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+          $rootScope.$digest();
+          assignElements(wrapElement);
+          assignButtonBar();
+
+          expect(buttons.eq(0).text()).toBe(&#039;Now&#039;);
+          expect(buttons.eq(1).text()).toBe(&#039;Null it!&#039;);
+          expect(buttons.eq(2).text()).toBe(&#039;CloseME&#039;);
+        });
+
+        it(&#039;should remove bar&#039;, function() {
+          $rootScope.showBar = false;
+          var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup show-button-bar=&quot;showBar&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+          $rootScope.$digest();
+          assignElements(wrapElement);
+          expect(dropdownEl.find(&#039;li&#039;).length).toBe(1);
+        });
+      });
+
+      describe(&#039;`ng-change`&#039;, function() {
+        beforeEach(inject(function() {
+          $rootScope.changeHandler = jasmine.createSpy(&#039;changeHandler&#039;);
+          var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup ng-change=&quot;changeHandler()&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+          $rootScope.$digest();
+          assignElements(wrapElement);
+          assignButtonBar();
+        }));
+
+        it(&#039;should be called when `today` is clicked&#039;, function() {
+          buttons.eq(0).click();
+          expect($rootScope.changeHandler).toHaveBeenCalled();
+        });
+
+        it(&#039;should be called when `clear` is clicked&#039;, function() {
+          buttons.eq(1).click();
+          expect($rootScope.changeHandler).toHaveBeenCalled();
+        });
+
+        it(&#039;should not be called when `close` is clicked&#039;, function() {
+          buttons.eq(2).click();
+          expect($rootScope.changeHandler).not.toHaveBeenCalled();
+        });
+      });
+    });
+
+    describe(&#039;use with `ng-required` directive&#039;, function() {
+      beforeEach(inject(function() {
+        $rootScope.date = &#039;&#039;;
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup ng-required=&quot;true&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;should be invalid initially&#039;, function() {
+        expect(inputEl.hasClass(&#039;ng-invalid&#039;)).toBeTruthy();
+      });
+      it(&#039;should be valid if model has been specified&#039;, function() {
+        $rootScope.date = new Date();
+        $rootScope.$digest();
+        expect(inputEl.hasClass(&#039;ng-valid&#039;)).toBeTruthy();
+      });
+    });
+
+    describe(&#039;use with `ng-change` directive&#039;, function() {
+      beforeEach(inject(function() {
+        $rootScope.changeHandler = jasmine.createSpy(&#039;changeHandler&#039;);
+        $rootScope.date = new Date();
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup ng-required=&quot;true&quot; ng-change=&quot;changeHandler()&quot;&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;should not be called initially&#039;, function() {
+        expect($rootScope.changeHandler).not.toHaveBeenCalled();
+      });
+
+      it(&#039;should be called when a day is clicked&#039;, function() {
+        clickOption(17);
+        expect($rootScope.changeHandler).toHaveBeenCalled();
+      });
+
+      it(&#039;should not be called when model changes programatically&#039;, function() {
+        $rootScope.date = new Date();
+        $rootScope.$digest();
+        expect($rootScope.changeHandler).not.toHaveBeenCalled();
+      });
+    });
+
+    describe(&#039;with an append-to-body attribute&#039;, function() {
+      beforeEach(function() {
+        $rootScope.date = new Date();
+      });
+
+      afterEach(function () {
+        $document.find(&#039;body&#039;).find(&#039;.dropdown-menu&#039;).remove();
+      });
+
+      it(&#039;should append to the body&#039;, function() {
+        var $body = $document.find(&#039;body&#039;),
+            bodyLength = $body.children().length,
+            elm = angular.element(
+              &#039;&lt;div&gt;&lt;input datepicker-popup ng-model=&quot;date&quot; datepicker-append-to-body=&quot;true&quot;&gt;&lt;/input&gt;&lt;/div&gt;&#039;
+            );
+        $compile(elm)($rootScope);
+        $rootScope.$digest();
+
+        expect($body.children().length).toEqual(bodyLength + 1);
+        expect(elm.children().length).toEqual(1);
+      });
+      it(&#039;should be removed on scope destroy&#039;, function() {
+        var $body = $document.find(&#039;body&#039;),
+            bodyLength = $body.children().length,
+            isolatedScope = $rootScope.$new(),
+            elm = angular.element(
+              &#039;&lt;input datepicker-popup ng-model=&quot;date&quot; datepicker-append-to-body=&quot;true&quot;&gt;&lt;/input&gt;&#039;
+            );
+        $compile(elm)(isolatedScope);
+        isolatedScope.$digest();
+        expect($body.children().length).toEqual(bodyLength + 1);
+        isolatedScope.$destroy();
+        expect($body.children().length).toEqual(bodyLength);
+      });
+    });
+
+    describe(&#039;with setting datepickerConfig.showWeeks to false&#039;, function() {
+      var originalConfig = {};
+      beforeEach(inject(function(datepickerConfig) {
+        angular.extend(originalConfig, datepickerConfig);
+        datepickerConfig.showWeeks = false;
+
+        var wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup&gt;&lt;div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+      afterEach(inject(function(datepickerConfig) {
+        // return it to the original state
+        angular.extend(datepickerConfig, originalConfig);
+      }));
+
+      it(&#039;changes initial visibility for weeks&#039;, function() {
+        expect(getLabelsRow().find(&#039;th&#039;).eq(0)).toBeHidden();
+        var tr = element.find(&#039;tbody&#039;).find(&#039;tr&#039;);
+        for (var i = 0; i &lt; 5; i++) {
+          expect(tr.eq(i).find(&#039;td&#039;).eq(0)).toBeHidden();
+        }
+      });
+    });
+
+    describe(&#039;`datepicker-mode`&#039;, function () {
+      beforeEach(inject(function() {
+        $rootScope.date = new Date(&#039;August 11, 2013&#039;);
+        $rootScope.mode = &#039;month&#039;;
+        wrapElement = $compile(&#039;&lt;div&gt;&lt;input ng-model=&quot;date&quot; datepicker-popup datepicker-mode=&quot;mode&quot;&gt;&lt;/div&gt;&#039;)($rootScope);
+        $rootScope.$digest();
+        assignElements(wrapElement);
+      }));
+
+      it(&#039;shows the correct title&#039;, function() {
+        expect(getTitle()).toBe(&#039;2013&#039;);
+      });
+
+      it(&#039;updates binding&#039;, function() {
+        clickTitleButton();
+        expect($rootScope.mode).toBe(&#039;year&#039;);
+      });
+    });
+  });
+
+  describe(&#039;with empty initial state&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.date = null;
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;is has a `&lt;table&gt;` element&#039;, function() {
+      expect(element.find(&#039;table&#039;).length).toBe(1);
+    });
+
+    it(&#039;is shows rows with days&#039;, function() {
+      expect(element.find(&#039;tbody&#039;).find(&#039;tr&#039;).length).toBeGreaterThan(3);
+    });
+
+    it(&#039;sets default 00:00:00 time for selected date&#039;, function() {
+      $rootScope.date = new Date(&#039;August 1, 2013&#039;);
+      $rootScope.$digest();
+      $rootScope.date = null;
+      $rootScope.$digest();
+
+      clickOption(14);
+      expect($rootScope.date).toEqual(new Date(&#039;August 11, 2013 00:00:00&#039;));
+    });
+  });
+
+  describe(&#039;`init-date`&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.date = null;
+      $rootScope.initDate = new Date(&#039;November 9, 1980&#039;);
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; init-date=&quot;initDate&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;does not alter the model&#039;, function() {
+      expect($rootScope.date).toBe(null);
+    });
+
+    it(&#039;shows the correct title&#039;, function() {
+      expect(getTitle()).toBe(&#039;November 1980&#039;);
+    });
+  });
+
+  describe(&#039;`datepicker-mode`&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.date = new Date(&#039;August 11, 2013&#039;);
+      $rootScope.mode = &#039;month&#039;;
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; datepicker-mode=&quot;mode&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;shows the correct title&#039;, function() {
+      expect(getTitle()).toBe(&#039;2013&#039;);
+    });
+
+    it(&#039;updates binding&#039;, function() {
+      clickTitleButton();
+      expect($rootScope.mode).toBe(&#039;year&#039;);
+    });
+  });
+
+  describe(&#039;`min-mode`&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.date = new Date(&#039;August 11, 2013&#039;);
+      $rootScope.mode = &#039;month&#039;;
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; min-mode=&quot;month&quot; datepicker-mode=&quot;mode&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;does not move below it&#039;, function() {
+      expect(getTitle()).toBe(&#039;2013&#039;);
+      clickOption( 5 );
+      expect(getTitle()).toBe(&#039;2013&#039;);
+      clickTitleButton();
+      expect(getTitle()).toBe(&#039;2001 - 2020&#039;);
+    });
+  });
+
+  describe(&#039;`max-mode`&#039;, function () {
+    beforeEach(inject(function() {
+      $rootScope.date = new Date(&#039;August 11, 2013&#039;);
+      element = $compile(&#039;&lt;datepicker ng-model=&quot;date&quot; max-mode=&quot;month&quot;&gt;&lt;/datepicker&gt;&#039;)($rootScope);
+      $rootScope.$digest();
+    }));
+
+    it(&#039;does not move above it&#039;, function() {
+      expect(getTitle()).toBe(&#039;August 2013&#039;);
+      clickTitleButton();
+      expect(getTitle()).toBe(&#039;2013&#039;);
+      clickTitleButton();
+      expect(getTitle()).toBe(&#039;2013&#039;);
+    });
+  });
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

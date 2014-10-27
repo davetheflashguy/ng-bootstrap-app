@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/misc/validate-commit-msg.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/misc/validate-commit-msg.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">70.86</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">96</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">13.90</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.56</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">//#!/usr/bin/env node
+
+/**
+ * Git COMMIT-MSG hook for validating commit message
+ * See https://docs.google.com/document/d/1rk04jEuGfk9kYzfqCuOlPTSJw3hEDZJTBN5E5f1SALo/edit
+ *
+ * Installation:
+ * &gt;&gt; cd &lt;angular-repo&gt;
+ * &gt;&gt; ln -s validate-commit-msg.js .git/hooks/commit-msg
+ */
+var fs = require(&#039;fs&#039;);
+var util = require(&#039;util&#039;);
+
+
+var MAX_LENGTH = 70;
+var PATTERN = /^(?:fixup!\s*)?(\w*)(\((\w+)\))?\: (.*)$/;
+var IGNORED = /^WIP\:/;
+var TYPES = {
+  chore: true,
+  demo: true,
+  docs: true,
+  feat: true,
+  fix: true,
+  refactor: true,
+  revert: true,
+  style: true,
+  test: true
+};
+
+
+var error = function() {
+  // gitx does not display it
+  // http://gitx.lighthouseapp.com/projects/17830/tickets/294-feature-display-hook-error-message-when-hook-fails
+  // https://groups.google.com/group/gitx/browse_thread/thread/a03bcab60844b812
+  console.error(&#039;INVALID COMMIT MSG: &#039; + util.format.apply(null, arguments));
+};
+
+
+var validateMessage = function(message) {
+  var isValid = true;
+
+  if (IGNORED.test(message)) {
+    console.log(&#039;Commit message validation ignored.&#039;);
+    return true;
+  }
+
+  if (message.length &gt; MAX_LENGTH) {
+    error(&#039;is longer than %d characters !&#039;, MAX_LENGTH);
+    isValid = false;
+  }
+
+  var match = PATTERN.exec(message);
+
+  if (!match) {
+    error(&#039;does not match &quot;&lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;&quot; ! was: &quot;&#039; + message + &#039;&quot;\nNote: &lt;scope&gt; must be only letters.&#039;);
+    return false;
+  }
+
+  var type = match[1];
+  var scope = match[3];
+  var subject = match[4];
+
+  if (!TYPES.hasOwnProperty(type)) {
+    error(&#039;&quot;%s&quot; is not allowed type !&#039;, type);
+    return false;
+  }
+
+  // Some more ideas, do want anything like this ?
+  // - allow only specific scopes (eg. fix(docs) should not be allowed ?
+  // - auto correct the type to lower case ?
+  // - auto correct first letter of the subject to lower case ?
+  // - auto add empty line after subject ?
+  // - auto remove empty () ?
+  // - auto correct typos in type ?
+  // - store incorrect messages, so that we can learn
+
+  return isValid;
+};
+
+
+var firstLineFromBuffer = function(buffer) {
+  return buffer.toString().split(&#039;\n&#039;).shift();
+};
+
+
+
+// publish for testing
+exports.validateMessage = validateMessage;
+
+// hacky start if not run by jasmine :-D
+if (process.argv.join(&#039;&#039;).indexOf(&#039;jasmine-node&#039;) === -1) {
+  var commitMsgFile = process.argv[2];
+  var incorrectLogFile = commitMsgFile.replace(&#039;COMMIT_EDITMSG&#039;, &#039;logs/incorrect-commit-msgs&#039;);
+
+  fs.readFile(commitMsgFile, function(err, buffer) {
+    var msg = firstLineFromBuffer(buffer);
+
+    if (!validateMessage(msg)) {
+      fs.appendFile(incorrectLogFile, msg + &#039;\n&#039;, function() {
+        process.exit(1);
+      });
+    } else {
+      process.exit(0);
+    }
+  });
+}</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>

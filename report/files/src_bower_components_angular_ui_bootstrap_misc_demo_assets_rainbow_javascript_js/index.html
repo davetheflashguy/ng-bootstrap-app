@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - src/bower_components/angular-ui-bootstrap/misc/demo/assets/rainbow-javascript.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>src/bower_components/angular-ui-bootstrap/misc/demo/assets/rainbow-javascript.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">47.37</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">104</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">6.13</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">0.30</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">/**
+ * Javascript patterns
+ *
+ * @author Craig Campbell
+ * @version 1.0.7
+ */
+Rainbow.extend(&#039;javascript&#039;, [
+
+    /**
+     * matches $. or $(
+     */
+    {
+        &#039;name&#039;: &#039;selector&#039;,
+        &#039;pattern&#039;: /(\s|^)\$(?=\.|\()/g
+    },
+    {
+        &#039;name&#039;: &#039;support&#039;,
+        &#039;pattern&#039;: /\b(window|document)\b/g
+    },
+    {
+        &#039;matches&#039;: {
+            1: &#039;support.property&#039;
+        },
+        &#039;pattern&#039;: /\.(length|node(Name|Value))\b/g
+    },
+    {
+        &#039;matches&#039;: {
+            1: &#039;support.function&#039;
+        },
+        &#039;pattern&#039;: /(setTimeout|setInterval)(?=\()/g
+
+    },
+    {
+        &#039;matches&#039;: {
+            1: &#039;support.method&#039;
+        },
+        &#039;pattern&#039;: /\.(getAttribute|push|getElementById|getElementsByClassName|log|setTimeout|setInterval)(?=\()/g
+    },
+    {
+        &#039;matches&#039;: {
+            1: &#039;support.tag.script&#039;,
+            2: [
+                {
+                    &#039;name&#039;: &#039;string&#039;,
+                    &#039;pattern&#039;: /(&#039;|&quot;)(.*?)(\1)/g
+                },
+                {
+                    &#039;name&#039;: &#039;entity.tag.script&#039;,
+                    &#039;pattern&#039;: /(\w+)/g
+                }
+            ],
+            3: &#039;support.tag.script&#039;
+        },
+        &#039;pattern&#039;: /(&amp;lt;\/?)(script.*?)(&amp;gt;)/g
+    },
+
+    /**
+     * matches any escaped characters inside of a js regex pattern
+     *
+     * @see https://github.com/ccampbell/rainbow/issues/22
+     *
+     * this was causing single line comments to fail so it now makes sure
+     * the opening / is not directly followed by a *
+     *
+     * @todo check that there is valid regex in match group 1
+     */
+    {
+        &#039;name&#039;: &#039;string.regexp&#039;,
+        &#039;matches&#039;: {
+            1: &#039;string.regexp.open&#039;,
+            2: {
+                &#039;name&#039;: &#039;constant.regexp.escape&#039;,
+                &#039;pattern&#039;: /\\(.){1}/g
+            },
+            3: &#039;string.regexp.cclose&#039;,
+            4: &#039;string.regexp.modifier&#039;
+        },
+        &#039;pattern&#039;: /(\/)(?!\*)(.+)(\/)([igm]{0,3})/g
+    },
+
+    /**
+     * matches runtime function declarations
+     */
+    {
+        &#039;matches&#039;: {
+            1: &#039;storage&#039;,
+            3: &#039;entity.function&#039;
+        },
+        &#039;pattern&#039;: /(var)?(\s|^)(.*)(?=\s?=\s?function\()/g
+    },
+
+    /**
+     * matches constructor call
+     */
+    {
+        &#039;matches&#039;: {
+            1: &#039;keyword&#039;,
+            2: &#039;entity.function&#039;
+        },
+        &#039;pattern&#039;: /(new)\s+(.*)(?=\()/g
+    },
+
+    /**
+     * matches any function call in the style functionName: function()
+     */
+    {
+        &#039;name&#039;: &#039;entity.function&#039;,
+        &#039;pattern&#039;: /(\w+)(?=:\s{0,}function)/g
+    }
+]);</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
