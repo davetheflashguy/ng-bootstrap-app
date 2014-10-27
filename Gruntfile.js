@@ -30,12 +30,6 @@ module.exports = function(grunt) {
       options: {
         csslintrc: '.csslintrc'
       },
-      strict: {
-        options: {
-          import: 2
-        },
-        src: ['src/css/**/*.css']
-      },
       lax: {
         options: {
           import: false
