@@ -24,6 +24,14 @@ module.exports = function(grunt) {
         }
       }
     }
+    ,
+    /* Copy */
+    copy: {
+      main: {
+        src: 'src/bower_components/angular/angular.min.js',
+        dest: 'build/js/vendor/angular/angular.min.js',
+      },
+    }
     , 
     /* CSS Lint */
     csslint: {
@@ -38,6 +46,7 @@ module.exports = function(grunt) {
       }
     }
   });
+  
 
   // Load the plugin that provides the "uglify" task.
   grunt.loadNpmTasks('grunt-contrib-uglify');
@@ -48,7 +57,10 @@ module.exports = function(grunt) {
   // load the css linter 
   grunt.loadNpmTasks('grunt-contrib-csslint');
 
+  // load the file copier
+  grunt.loadNpmTasks('grunt-contrib-copy');
+
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'csslint', 'cssmin']);
+  grunt.registerTask('default', ['uglify', 'csslint', 'cssmin', 'copy']);
 
 };
