@@ -28,8 +28,20 @@ module.exports = function(grunt) {
     /* Copy */
     copy: {
       main: {
-        src: 'src/bower_components/angular/angular.min.js',
-        dest: 'build/js/vendor/angular/angular.min.js',
+        files: [
+          // angular
+          {src: 'src/bower_components/angular/angular.min.js', dest: 'build/vendor/angular/angular.min.js'},
+          // angular touch
+          {src: 'src/bower_components/angular-touch/angular-touch.min.js', dest: 'build/vendor/angular-touch/angular-touch.min.js'},
+          // angular ui bootstrap
+          {src: 'src/bower_components/angular-ui-bootstrap/dist/ui-bootstrap-tpls-0.11.2.min.js', dest: 'build/vendor/angular-ui-bootstrap/ui-bootstrap-tpls-0.11.2.min.js'},
+          // bootstrap
+          {expand: true, flatten:true, src: ['src/bower_components/bootstrap/dist/**'], dest: 'build/vendor/bootstrap/', filter: 'isFile'},
+          // fastclick
+          {src: 'src/bower_components/fastclick/lib/fastclick.js', dest: 'build/vendor/fastclick/fastclick.js'},
+          // jquery
+          {expand: true, flatten:true, src: ['src/bower_components/jquery/dist/**'], dest: 'build/vendor/jquery/', filter: 'isFile'},
+        ],
       },
     }
     , 
