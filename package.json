@@ -8,6 +8,7 @@
     "grunt-contrib-csslint": "~0.3.1",
     "plato": "*",
     "bootstrap": "*",
-    "grunt-contrib-copy": "~0.7.0"
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-clean": "~0.6.0"
   }
 }

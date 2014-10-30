@@ -44,6 +44,9 @@ module.exports = function(grunt) {
         ],
       },
     }
+    ,
+    /* Clean */
+    clean: ["build"]
     , 
     /* CSS Lint */
     csslint: {
@@ -72,7 +75,10 @@ module.exports = function(grunt) {
   // load the file copier
   grunt.loadNpmTasks('grunt-contrib-copy');
 
+  // load the clean pluging
+  grunt.loadNpmTasks('grunt-contrib-clean');
+
   // Default task(s).
-  grunt.registerTask('default', ['uglify', 'csslint', 'cssmin', 'copy']);
+  grunt.registerTask('default', ['clean', 'uglify', 'csslint', 'cssmin', 'copy']);
 
 };
