@@ -1,6 +1,5 @@
 module.exports = function(grunt) {
-
-  // Project configuration.
+  require('time-grunt')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     uglify: {
@@ -45,6 +44,17 @@ module.exports = function(grunt) {
       },
     }
     ,
+    connect: {
+      server: {
+        options: {
+          hostname: 'localhost',
+          keepalive: true,
+          port: 8080,
+          base: 'build'
+        }
+      }
+    }
+    ,
     /* Clean */
     clean: ["build"]
     , 
@@ -78,7 +88,10 @@ module.exports = function(grunt) {
   // load the clean pluging
   grunt.loadNpmTasks('grunt-contrib-clean');
 
+  // node server
+  grunt.loadNpmTasks('grunt-contrib-connect');
+
   // Default task(s).
-  grunt.registerTask('default', ['clean', 'uglify', 'csslint', 'cssmin', 'copy']);
+  grunt.registerTask('default', ['clean', 'uglify', 'csslint', 'cssmin', 'copy', 'connect']);
 
 };
