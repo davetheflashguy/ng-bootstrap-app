@@ -8,7 +8,7 @@ module.exports = function(grunt) {
       },
       build: {
         src: 'src/js/<%= pkg.name %>.js',
-        dest: 'build/js/<%= pkg.name %>.min.js'
+        dest: 'build/js/<%= pkg.name %>.js'
       }
     }
     ,
@@ -28,21 +28,104 @@ module.exports = function(grunt) {
     copy: {
       main: {
         files: [
+          /**
+           * Bower components
+           */
           // angular
-          {src: 'src/bower_components/angular/angular.min.js', dest: 'build/vendor/angular/angular.min.js'},
+          {
+            src: 'src/bower_components/angular/angular.min.js', dest: 'build/bower_components/angular/angular.min.js'
+          },
+          {
+            cwd : 'src/bower_components/angular/',
+            expand: true,
+            src: [
+              '*.js',
+              '*.map',
+            ], 
+            dest: 'build/bower_components/angular/', 
+          },
           // angular touch
-          {src: 'src/bower_components/angular-touch/angular-touch.min.js', dest: 'build/vendor/angular-touch/angular-touch.min.js'},
+          {
+            cwd : 'src/bower_components/angular-touch/',
+            expand: true,
+            src: [
+              '*.js',
+              '*.map',
+            ], 
+            dest: 'build/bower_components/angular-touch/', 
+          },
           // angular ui bootstrap
-          {src: 'src/bower_components/angular-ui-bootstrap/dist/ui-bootstrap-tpls-0.11.2.min.js', dest: 'build/vendor/angular-ui-bootstrap/ui-bootstrap-tpls-0.11.2.min.js'},
-          // bootstrap
-          {expand: true, flatten:true, src: ['src/bower_components/bootstrap/dist/**'], dest: 'build/vendor/bootstrap/', filter: 'isFile'},
+          {
+            cwd : 'src/bower_components/angular-ui-bootstrap/dist',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/angular-ui-bootstrap/dist', 
+          },
+          // bootstrap JS
+          {
+            cwd : 'src/bower_components/bootstrap/dist/js/',
+            expand: true,
+            src: [
+              '*.js'
+            ], 
+            dest: 'build/bower_components/bootstrap/dist/js', 
+          },
+          // bootstrap CSS
+          {
+            cwd : 'src/bower_components/bootstrap/dist/css/',
+            expand: true,
+            src: [
+              '*.css'
+            ], 
+            dest: 'build/bower_components/bootstrap/dist/css', 
+          },
+          // bootstrap Fonts
+          {
+            cwd : 'src/bower_components/bootstrap/dist/fonts/',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/bootstrap/dist/fonts', 
+          },
           // fastclick
-          {src: 'src/bower_components/fastclick/lib/fastclick.js', dest: 'build/vendor/fastclick/fastclick.js'},
+          {
+            src: 'src/bower_components/fastclick/lib/fastclick.js', 
+            dest: 'build/bower_components/fastclick/fastclick.js'
+          },
           // jquery
-          {expand: true, flatten:true, src: ['src/bower_components/jquery/dist/**'], dest: 'build/vendor/jquery/', filter: 'isFile'},
+          {
+            cwd : 'src/bower_components/jquery/dist/',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/jquery/dist/', 
+          },
+          /**
+           * JavaScript Files
+           */
+          {
+            cwd : 'src/bower_components/js/',
+            expand: true,
+            src: [
+              '*.js'
+            ], 
+            dest: 'build/js/',
+          },
+          /**
+           * Index.html
+           */
+          {
+            src: 'src/index.html', 
+            dest: 'build/index.html'
+          }
         ],
       },
     }
+    /* Node  */
     ,
     connect: {
       server: {
