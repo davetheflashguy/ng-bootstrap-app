@@ -12,9 +12,9 @@ Each and every time I build something, regardless if its an example of a simple 
 
 ## Installation
 
-*git clone https://github.com/davetheflashguy/ng-bootstrap-app.git
-*bower install
-*npm install
-*grunt
+* git clone https://github.com/davetheflashguy/ng-bootstrap-app.git
+* bower install
+* npm install
+* grunt
 
 
