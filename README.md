@@ -20,4 +20,14 @@ Basic installation outputs: http://davecollier.io/projects/ng-bootstrap-app/
 * npm install
 * grunt
 
+## Grunt Tasks
+
+* uglify - Minify files with UglifyJS
+* cssmin - Minify CSS
+* csslint - Lint CSS files with csslint
+* copy - Copy files
+* clean - Clean files and folders
+* connect - Start a connect web server
+* default - Alias for "clean", "uglify", "csslint", "cssmin", "copy", "connect" tasks.
+
 
