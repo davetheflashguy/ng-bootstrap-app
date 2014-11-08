@@ -177,4 +177,10 @@ module.exports = function(grunt) {
   // Default task(s).
   grunt.registerTask('default', ['clean', 'uglify', 'csslint', 'cssmin', 'copy', 'connect']);
 
+  // Build
+  grunt.registerTask('build', ['clean', 'uglify', 'csslint', 'cssmin', 'copy']);
+
+  // Start Server
+  grunt.registerTask('server', ['connect']);
+
 };
