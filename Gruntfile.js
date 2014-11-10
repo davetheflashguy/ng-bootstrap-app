@@ -63,6 +63,46 @@ module.exports = function(grunt) {
             ], 
             dest: 'build/bower_components/angular-ui-bootstrap/dist', 
           },
+          // angular animate
+          {
+            cwd : 'src/bower_components/angular-animate',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/angular-animate', 
+          }
+          ,
+          // angular aria
+          {
+            cwd : 'src/bower_components/angular-aria',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/angular-aria', 
+          }
+          ,
+          // angular material
+          {
+            cwd : 'src/bower_components/angular-material',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/angular-material', 
+          }
+          ,
+          // hammerjs
+          {
+            cwd : 'src/bower_components/hammerjs',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/hammerjs', 
+          }
+          ,
           // bootstrap JS
           {
             cwd : 'src/bower_components/bootstrap/dist/js/',
