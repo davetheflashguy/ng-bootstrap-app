@@ -11,7 +11,6 @@
     "grunt-contrib-cssmin": "~0.10.0",
     "grunt-contrib-uglify": "~0.5.0",
     "plato": "*",
-    "time-grunt": "^1.0.0",
-    "angular-material": "*"
+    "time-grunt": "^1.0.0"
   }
 }
