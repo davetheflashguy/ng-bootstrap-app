@@ -148,12 +148,34 @@ module.exports = function(grunt) {
            * JavaScript Files
            */
           {
-            cwd : 'src/bower_components/js/',
+            cwd : 'src/js/',
             expand: true,
             src: [
               '*.js'
             ], 
             dest: 'build/js/',
+          },
+          /**
+           * Angular Controllers
+           */
+          {
+            cwd : 'src/js/controllers/',
+            expand: true,
+            src: [
+              '*.js'
+            ], 
+            dest: 'build/js/controllers/',
+          },
+          /**
+           * Assets
+           */
+          {
+            cwd : 'src/img/',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/img/', 
           },
           /**
            * Index.html

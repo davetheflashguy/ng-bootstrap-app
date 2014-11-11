@@ -1,109 +1,80 @@
 <!doctype html>
 <html ng-app="ngBootstrapApp">
 	<head>
-	<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
-	<link rel="stylesheet" type="text/css" href="./bower_components/angular-material/angular-material.css">
-	<script src="./js/demo-build.js"></script>
-	<!--
-    <script src="./bower_components/angular/angular.min.js"></script>
-    <script src="./bower_components/angular-ui-bootstrap/dist/ui-bootstrap-tpls-0.11.2.min.js"></script>
-    -->
+		
+		<!-- CSS
+  	============================================================================== -->
+  	<!-- Base dependencies -->
+		
+		<link rel="stylesheet" type="text/css" href="./bower_components/bootstrap/dist/css/bootstrap.min.css">
+		<link rel="stylesheet" type="text/css" href="./bower_components/angular-material/angular-material.css">
+		<link rel="stylesheet" type="text/css" href="./bower_components/angular-material/themes/indigo-theme.css">
+
+		<style>
+		.face {
+			border-radius: 30px;
+		  border: 1px solid #ddd;
+		  width: 48px;
+		 	margin: 16px; 
+	 	}
+	  </style>
+
+		<!-- JavaScript
+  	============================================================================== -->
+  	<!-- Base dependencies -->
+		<script src="./bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="./bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="./bower_components/hammerjs/hammer.min.js"></script>
     <script src="./bower_components/angular/angular.min.js"></script>
     <script src="./bower_components/angular-material/angular-material.min.js"></script>
-	<script src="./bower_components/angular-animate/angular-animate.min.js"></script>
-	<script src="./bower_components/angular-aria/angular-aria.min.js"></script>
-    <script>
-    angular.module('ngBootstrapApp', ['ngMaterial'])
-    .controller('AppCtrl', function($scope) {
-	  $scope.title1 = 'Button';
-	  $scope.title4 = 'Warn';
-	  $scope.isDisabled = true;
+		<script src="./bower_components/angular-animate/angular-animate.min.js"></script>
+		<script src="./bower_components/angular-aria/angular-aria.min.js"></script>
+		<script src="./bower_components/angular-ui-bootstrap/dist/ui-bootstrap-tpls-0.11.2.min.js"></script>
 
-	  $scope.googleUrl = 'http://google.com';
+		<!-- Base JavaScript File -->
+    <script src="./js/demo-build.js"></script>
 
-	});
-    </script>
-    <style>
-	.buttondemoBasicUsage {
-  /** From vulcanized demo **/ }
-  .buttondemoBasicUsage section {
-    background: #f7f7f7;
-    border-radius: 3px;
-    text-align: center;
-    margin: 1em;
-    position: relative !important;
-    padding-bottom: 10px; }
-  .buttondemoBasicUsage md-content {
-    margin-right: 7px; }
-  .buttondemoBasicUsage section .md-button:not(.md-fab) {
-    width: 10em; }
-  .buttondemoBasicUsage section .md-button {
-    display: block;
-    margin: 1em;
-    line-height: 25px; }
-  .buttondemoBasicUsage .label {
-    position: absolute;
-    bottom: 5px;
-    left: 7px;
-    color: #ccc;
-    font-size: 14px; }
-    </style>
-    </head>
+    <!-- Controllers -->
+    <script src="./js/controllers/appCtrl.js"></script>
+
+	</head>
+
   <body>
-	<div ng-controller="AppCtrl">
-	  <md-content>
+  	<div class="container" ng-controller="AppCtrl">
+  		<section>
+				<md-toolbar md-theme="indigo">
+					<div class="md-toolbar-tools">
+						<span class="md-flex">Demo Application: Using Indigo Theme</span>
+					</div>
+				</md-toolbar>
+			</section>
+			<section layout="vertical" layout-sm="horizontal" layout-fill>
+	      <md-button class="dlc-menu-item">Menu Item 1</md-button>
+	      <md-button class="dlc-menu-item">Menu Item 2</md-button>
+	      <md-button class="dlc-menu-item">Menu Item 3</md-button>
+	      <md-button class="dlc-menu-item">Menu Item 4</md-button>
+		  </section>
+			<section>
+			  <md-content>
+			    <md-list>
+			      <md-item ng-repeat="item in todos">
+			        <md-item-content>
+			          <div class="md-tile-left">
+			              <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
+			          </div>
+			          <div class="md-tile-content">
+			            <h3>{{item.what}}</h3>
+			            <h4>{{item.who}}</h4>
+			            <p>
+			              {{item.notes}}
+			            </p>
+			          </div>
+			        </md-item-content>
+			      </md-item>
+			    </md-list>
+			  </md-content>
+			</section>
+		</div> <!-- container -->
 
-	    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-	      <md-button>{{title1}}</md-button>
-	      <md-button noink class="md-primary">Primary (noink)</md-button>
-	      <md-button ng-disabled="isDisabled" class="md-primary">Disabled</md-button>
-	      <md-button class="md-warn" ng-click="isDisabled = !isDisabled">{{title4}}</md-button>
-	      <div class="label">flat</div>
-	    </section>
-
-	    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-	      <md-button class="md-raised">Button</md-button>
-	      <md-button class="md-raised md-primary">Primary</md-button>
-	      <md-button disabled class="md-raised md-primary">Disabled</md-button>
-	      <md-button class="md-raised md-warn">Warn</md-button>
-	      <div class="label">raised</div>
-	    </section>
-
-	    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-	        <md-button class="md-fab" aria-label="Time">
-	            <md-icon icon="/img/icons/ic_access_time_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-	        </md-button>
-
-	      <md-button class="md-fab" aria-label="New document">
-	        <md-icon icon="/img/icons/ic_insert_drive_file_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-	      </md-button>
-
-	        <md-button class="md-fab" disabled aria-label="Comment">
-	            <md-icon icon="/img/icons/ic_comment_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-	        </md-button>
-
-	        <md-button class="md-fab md-primary" md-theme="cyan" aria-label="Profile">
-	            <md-icon icon="/img/icons/ic_people_24px.svg" style="width: 24px; height: 24px;"></md-icon>
-	        </md-button>
-	      <div class="label">FAB</div>
-	    </section>
-
-	    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-	        <md-button ng-href="{{googleUrl}}" target="_blank">Go to Google</md-button>
-	        <md-button>RSVP</md-button>
-	      <div class="label">Button Group</div>
-	    </section>
-
-	    <section layout="vertical" layout-sm="horizontal" layout-align="center center">
-	      <md-button class="md-primary" md-theme="green">Button</md-button>
-	      <md-button class="md-primary md-raised" md-theme="indigo">Button</md-button>
-	      <md-button class="md-primary md-raised" md-theme="orange">Button</md-button>
-	      <md-button class="md-primary" md-theme="cyan">Button</md-button>
-	      <div class="label">Themed</div>
-	    </section>
-
-	  </md-content>
-	</div>
   </body>
 </html>
