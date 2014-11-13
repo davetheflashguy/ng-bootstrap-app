@@ -2,7 +2,7 @@
 <html ng-app="ngBootstrapApp">
 	<head>
 		
-		<!-- CSS
+	<!-- CSS
   	============================================================================== -->
   	<!-- Base dependencies -->
 		
@@ -39,42 +39,73 @@
 
 	</head>
 
-  <body>
-  	<div class="container" ng-controller="AppCtrl">
-  		<section>
-				<md-toolbar md-theme="indigo">
-					<div class="md-toolbar-tools">
-						<span class="md-flex">Demo Application: Using Indigo Theme</span>
-					</div>
-				</md-toolbar>
-			</section>
-			<section layout="vertical" layout-sm="horizontal" layout-fill>
-	      <md-button class="dlc-menu-item">Menu Item 1</md-button>
-	      <md-button class="dlc-menu-item">Menu Item 2</md-button>
-	      <md-button class="dlc-menu-item">Menu Item 3</md-button>
-	      <md-button class="dlc-menu-item">Menu Item 4</md-button>
-		  </section>
-			<section>
-			  <md-content>
-			    <md-list>
-			      <md-item ng-repeat="item in todos">
-			        <md-item-content>
-			          <div class="md-tile-left">
-			              <img ng-src="{{item.face}}" class="face" alt="{{item.who}}">
-			          </div>
-			          <div class="md-tile-content">
-			            <h3>{{item.what}}</h3>
-			            <h4>{{item.who}}</h4>
-			            <p>
-			              {{item.notes}}
-			            </p>
-			          </div>
-			        </md-item-content>
-			      </md-item>
-			    </md-list>
-			  </md-content>
-			</section>
-		</div> <!-- container -->
+<body layout="vertical" layout-fill class="layout-demo full-layout-demo" ng-controller="AppCtrl">
+  <header>
+  	<md-toolbar scroll-shrink md-theme="indigo">
+  		<div class="md-toolbar-tools">
+			    <div flex="85">
+		      	<h3>
+			        <span>Sample Application</span>
+			      </h3>
+			    </div>
 
-  </body>
+			    <div flex="" hide-md>
+						<md-button ng-click="open()" class="md-primary" hide-md>
+		          Open Menu
+		        </md-button>
+			    </div>
+			  </div>
+	  </md-toolbar>
+  </header>
+
+  <div flex layout="vertical" layout-sm="horizontal">
+    
+		<md-sidenav class="md-sidenav-left md-whiteframe-z2" component-id="left" is-locked-open="$media('md')">
+
+      <md-toolbar class="md-theme-indigo">
+        <h1 class="md-toolbar-tools">Sidenav Left</h1>
+      </md-toolbar>
+      
+      <md-content class="md-padding" ng-controller="LeftCtrl">
+
+        <p hide show-md>
+        	<ul>
+	        	<li>Menu Item</li>
+	        	<li>Menu Item</li>
+	        	<li>Menu Item</li>
+	        	<li>Menu Item</li>
+        	</ul>
+        </p>
+      
+      </md-content>
+
+    </md-sidenav>    
+
+    <main flex>
+      <div ng-controller="BottomSheetExample">
+        <p style="padding-left: 20px;">
+          Bottom sheet can be dismissed with the service or a swipe down.
+        </p>
+        <div class="bottom-sheet-demo inset" layout="vertical" layout-sm="horizontal" layout-align="center">
+          <md-button class="md-primary" ng-click="showListBottomSheet($event)">
+            Contact Me!
+          </md-button>
+          <div style="width:50px;"></div>
+          <md-button class="md-primary" ng-click="showGridBottomSheet($event)">
+            Show as Grid
+          </md-button>
+        </div>
+      </div>
+      <b layout="horizontal" layout-align="center center" layout-padding>
+	    	{{alert}}
+	  	</b>
+    </main>
+
+  </div>
+
+  <footer>
+    
+  </footer>
+
+</body>
 </html>

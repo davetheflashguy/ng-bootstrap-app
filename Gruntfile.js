@@ -178,6 +178,17 @@ module.exports = function(grunt) {
             dest: 'build/img/', 
           },
           /**
+           * Templates
+           */
+          {
+            cwd : 'src/templates/',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/templates/', 
+          },
+          /**
            * Index.html
            */
           {
