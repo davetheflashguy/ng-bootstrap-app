@@ -144,6 +144,24 @@ module.exports = function(grunt) {
             ], 
             dest: 'build/bower_components/jquery/dist/', 
           },
+          // Font Awesome CSS
+          {
+            cwd : 'src/bower_components/components-font-awesome/css/',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/components-font-awesome/css/', 
+          },
+          // Font Awesome Fonts
+          {
+            cwd : 'src/bower_components/components-font-awesome/fonts/',
+            expand: true,
+            src: [
+              '**'
+            ], 
+            dest: 'build/bower_components/components-font-awesome/fonts/', 
+          },
           /**
            * JavaScript Files
            */
