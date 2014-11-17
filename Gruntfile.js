@@ -103,47 +103,6 @@ module.exports = function(grunt) {
             dest: 'build/bower_components/hammerjs', 
           }
           ,
-          // bootstrap JS
-          {
-            cwd : 'src/bower_components/bootstrap/dist/js/',
-            expand: true,
-            src: [
-              '*.js'
-            ], 
-            dest: 'build/bower_components/bootstrap/dist/js', 
-          },
-          // bootstrap CSS
-          {
-            cwd : 'src/bower_components/bootstrap/dist/css/',
-            expand: true,
-            src: [
-              '*.css'
-            ], 
-            dest: 'build/bower_components/bootstrap/dist/css', 
-          },
-          // bootstrap Fonts
-          {
-            cwd : 'src/bower_components/bootstrap/dist/fonts/',
-            expand: true,
-            src: [
-              '**'
-            ], 
-            dest: 'build/bower_components/bootstrap/dist/fonts', 
-          },
-          // fastclick
-          {
-            src: 'src/bower_components/fastclick/lib/fastclick.js', 
-            dest: 'build/bower_components/fastclick/fastclick.js'
-          },
-          // jquery
-          {
-            cwd : 'src/bower_components/jquery/dist/',
-            expand: true,
-            src: [
-              '**'
-            ], 
-            dest: 'build/bower_components/jquery/dist/', 
-          },
           // Font Awesome CSS
           {
             cwd : 'src/bower_components/components-font-awesome/css/',
