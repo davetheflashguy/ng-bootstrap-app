@@ -1,6 +1,6 @@
 {
   "name": "blackhawk-build",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/davetheflashguy/build-demo",
   "authors": [
     "Dave Collier <davetheflashguy@gmail.com>"
@@ -10,9 +10,7 @@
     "angular": "1.3.0",
     "angular-touch": "latest",
     "angular-ui-bootstrap": "latest",
-    "bootstrap": "latest",
     "fastclick": "latest",
-    "jquery": "latest",
     "angular-animate": "1.3.0",
     "angular-aria": "1.3.0",
     "hammerjs": "~2.0.2",
