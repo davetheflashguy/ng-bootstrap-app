@@ -10,7 +10,6 @@
     "angular": "1.3.0",
     "angular-touch": "latest",
     "angular-ui-bootstrap": "latest",
-    "fastclick": "latest",
     "angular-animate": "1.3.0",
     "angular-aria": "1.3.0",
     "hammerjs": "~2.0.2",
