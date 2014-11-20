@@ -9,6 +9,8 @@
   	<link rel="stylesheet" type="text/css" href="./bower_components/angular-material/angular-material.css">
   	<link rel="stylesheet" type="text/css" href="./bower_components/angular-material/themes/indigo-theme.css">
   	<link rel="stylesheet" type="text/css" href="./bower_components/components-font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="https://material.angularjs.org/docs.css">
+
 
   	<!-- JavaScript
   	============================================================================== -->
@@ -27,7 +29,7 @@
 
 	</head>
 
-<body layout="vertical" layout-fill class="layout-demo full-layout-demo" ng-controller="AppCtrl">
+<body layout="vertical" layout-fill class="layout-demo demo-padding" ng-controller="AppCtrl">
 
   <!-- Header -->
   <header>
@@ -66,23 +68,23 @@
     </md-sidenav>    
 
     <main flex>
-      <div ng-controller="BottomSheetExample">
-        <p style="padding-left: 20px;">
-          Bottom sheet can be dismissed with the service or a swipe down.
-        </p>
-        <div class="bottom-sheet-demo inset" layout="vertical" layout-sm="horizontal" layout-align="center">
-          <md-button class="md-primary" ng-click="showListBottomSheet($event)">
-            Contact Me!
-          </md-button>
-          <div style="width:50px;"></div>
-          <md-button class="md-primary" ng-click="showGridBottomSheet($event)">
-            Show as Grid
-          </md-button>
+
+        <div layout="row" layout-tablet-landscape="column" layout-phone="column" layout-padding>
+
+          <div flex flex-tablet="33">
+            <div>Column 1</div>
+          </div>
+
+          <div flex flex-tablet="33">
+            <div>Column 2</div>
+          </div>
+
+          <div flex flex-tablet="33">
+            <div>Column 3</div>
+          </div>
+
         </div>
-      </div>
-      <b layout="horizontal" layout-align="center center" layout-padding>
-	    	{{alert}}
-	  	</b>
+
     </main>
 
   </div>
