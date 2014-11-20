@@ -29,7 +29,7 @@
 
 	</head>
 
-<body layout="vertical" layout-fill class="layout-demo demo-padding" ng-controller="AppCtrl">
+<body layout="vertical" layout-fill class="" ng-controller="AppCtrl">
 
   <!-- Header -->
   <header>
@@ -49,6 +49,7 @@
 
   <!-- Main Content Area -->
   <div flex layout="vertical" layout-sm="horizontal">
+    
     <!-- Side Nav -->
     <md-sidenav class="md-sidenav-left md-whiteframe-z2" component-id="left" is-locked-open="$media('md')">
       <md-toolbar class="md-theme-indigo">
@@ -66,25 +67,52 @@
         </p>
       </md-content>
     </md-sidenav>    
+    <!-- Main Content -->
+    <main flex layout="row">
+        <md-content>
+          <div layout="row" layout-tablet-landscape="column" layout-phone="column" layout-padding>
 
-    <main flex>
+            <div flex flex-tablet="33">
+              <div>
+                <md-card>
+                  <img src="/img/washedout.png" class="md-card-image" alt="Washed Out" />
+                  <h2>Paracosm</h2>
+                  <p>
+                    The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+                    two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+                  </p>
+                </md-card>
+              </div>
+            </div>
 
-        <div layout="row" layout-tablet-landscape="column" layout-phone="column" layout-padding>
+            <div flex flex-tablet="33">
+              <div>
+                <md-card>
+                  <img src="/img/washedout.png" class="md-card-image" alt="Washed Out" />
+                  <h2>Paracosm</h2>
+                  <p>
+                    The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+                    two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+                  </p>
+                </md-card>
+              </div>
+            </div>
 
-          <div flex flex-tablet="33">
-            <div>Column 1</div>
+            <div flex flex-tablet="33">
+              <div>
+                <md-card>
+                  <img src="/img/washedout.png" class="md-card-image" alt="Washed Out" />
+                  <h2>Paracosm</h2>
+                  <p>
+                    The titles of Washed Out's breakthrough song and the first single from Paracosm share the
+                    two most important words in Ernest Greene's musical language: feel it. It's a simple request, as well...
+                  </p>
+                </md-card>
+              </div>
+            </div>
+
           </div>
-
-          <div flex flex-tablet="33">
-            <div>Column 2</div>
-          </div>
-
-          <div flex flex-tablet="33">
-            <div>Column 3</div>
-          </div>
-
-        </div>
-
+        </md-content>
     </main>
 
   </div>
