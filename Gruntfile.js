@@ -182,7 +182,7 @@ module.exports = function(grunt) {
         options: {
           hostname: 'localhost',
           keepalive: true,
-          port: 8080,
+          port: 35729,
           base: 'build'
         }
       }
@@ -191,6 +191,16 @@ module.exports = function(grunt) {
     /* Clean */
     clean: ["build"]
     , 
+    watch: {
+      scripts: {
+        files: ['src/js/*.js','src/css/*.css',],
+        tasks: ['clean', 'uglify', 'csslint', 'cssmin', 'copy'],
+        options: {
+          spawn: true,
+          livereload: true,
+        },
+      },
+    },
     /* CSS Lint */
     csslint: {
       options: {
@@ -223,6 +233,9 @@ module.exports = function(grunt) {
 
   // node server
   grunt.loadNpmTasks('grunt-contrib-connect');
+
+  // grunt contribute watch
+  grunt.loadNpmTasks('grunt-contrib-watch');
 
   // Default task(s).
   grunt.registerTask('default', ['clean', 'uglify', 'csslint', 'cssmin', 'copy', 'connect']);
