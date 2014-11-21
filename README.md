@@ -35,6 +35,9 @@ Basic installation outputs: http://davecollier.io/projects/ng-bootstrap-app/
 * copy - Copy files
 * clean - Clean files and folders
 * connect - Start a connect web server
+* watch - Run predefined tasks whenever watched files change.
 * default - Alias for "clean", "uglify", "csslint", "cssmin", "copy", "connect" tasks.
+* build - Alias for "clean", "uglify", "csslint", "cssmin", "copy" tasks.
+* server - Alias for "connect" task.
 
 
