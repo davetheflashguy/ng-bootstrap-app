@@ -1,46 +1,26 @@
 angular.module('ngBootstrapApp', ['ngMaterial'])
-/*
-.controller('AppCtrl', function($scope) {
-    $scope.todos = [
-      {
-        face : '/img/list/60.jpeg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : '/img/list/60.jpeg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : '/img/list/60.jpeg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : '/img/list/60.jpeg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-      {
-        face : '/img/list/60.jpeg',
-        what: 'Brunch this weekend?',
-        who: 'Min Li Chan',
-        when: '3:08PM',
-        notes: " I'll be in your neighborhood doing errands"
-      },
-    ]
-});
-*/
 .controller('AppCtrl', function($scope, $timeout, $mdSidenav) {
+  $scope.projects = [
+      {
+        logo : '/img/logos/reuters.png',
+        organization: 'Thomson Reuters',
+        position: 'Senior UI Developer',
+        description: 'Working on a central user experience team, I assist in building and maintaining advanced Angular directives for a community of internal software developers.',
+        start: "September 2014",
+        end: "",
+        accomplishments : [
+          {
+            label: 'Responsible for platform upgrades (Angular Bootstrap, Bootstrap, Wijmo)',
+          },
+          {
+            label: 'Prototype components using various JavaScript libraries',
+          },
+          {
+            label: 'Work very closely with UX and visual designers to create pixel perfect cross browser experiences',
+          },
+        ]
+      },
+  ]
   $scope.toggleLeft = function() {
     $mdSidenav('left').toggle();
   };
