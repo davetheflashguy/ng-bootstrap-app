@@ -68,10 +68,13 @@
       </md-content>
     </md-sidenav>    
     <!-- Main Content -->
+
     <main flex layout="row">
         <md-content ng-controller="AppCtrl">
+          
           <div layout="row" layout-tablet-landscape="column" layout-phone="column" layout-padding>
-            <div flex flex-tablet="33" ng-repeat="project in projects">
+          
+            <div flex-pc="50" ng-repeat="project in projects">
               <div>
                 <md-card>
                     <md-list>
@@ -108,7 +111,9 @@
                     </md-list>
                 </md-card>
               </div>
+            
             </div>
+            
           </div>
         </md-content>
     </main>
