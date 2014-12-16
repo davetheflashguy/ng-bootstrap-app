@@ -10,6 +10,7 @@
   	<link rel="stylesheet" type="text/css" href="./bower_components/angular-material/themes/indigo-theme.css">
   	<link rel="stylesheet" type="text/css" href="./bower_components/components-font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="https://material.angularjs.org/docs.css">
+    <link rel="stylesheet" type="text/css" href="css/demo-build.css">
 
 
   	<!-- JavaScript
@@ -72,13 +73,47 @@
     <main flex layout="row">
         <md-content ng-controller="AppCtrl">
           
-          <div layout="row" layout-tablet-landscape="column" layout-phone="column" layout-padding>
+              <div layout="row" class="projects">
+                <div flex-gt-lg="33" flex-lg="65" flex-md="50" flex-sm="100" style="height:200px;background-color:pink;" ng-repeat="project in projects">
+                  <md-content>
+                    <md-card>
+                      <md-list>
+                        <img src="{{project.logo}}" class="md-card-image" alt="{{project.organization}}" />
+                      </md-list>
+                    </md-card>
+                  </md-content>
+                </div>
+                <!--
+                <div flex-gt-lg="33" flex-lg="65" flex-md="50" flex-sm="100" style="height:200px;background-color:blue;">
+                  <md-content>
+                    <md-card>
+                      <md-list>
+                        I'm below on mobile, and to the right on larger devices.
+                      </md-list>
+                    </md-card>
+                  </md-content>
+                 </div>
+                
+                <div flex-gt-lg="33" flex-lg="65" flex-md="50" flex-sm="100" style="height:200px;background-color:green;">
+                  <md-content>
+                    <md-card>
+                      <md-list>
+                        I'm below on mobile, and to the right on larger devices.
+                      </md-list>
+                    </md-card>
+                  </md-content>
+                </div>
+                -->
+              </div>
+            
+          <!--
+          <div layout="column" layout-tablet-landscape="column" layout-phone="column" layout-padding>
           
-            <div flex-pc="50" ng-repeat="project in projects">
+            <div>
               <div>
                 <md-card>
                     <md-list>
-                      <md-item>
+                      <md-item ng-repeat="project in projects" flex="33">
                         <md-item-content>
                           <div layout="column">
                             <div>
@@ -115,6 +150,7 @@
             </div>
             
           </div>
+          -->
         </md-content>
     </main>
 
