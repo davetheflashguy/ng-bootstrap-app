@@ -2,13 +2,14 @@ module.exports = function(grunt) {
   require('time-grunt')(grunt);
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
-    uglify: {
-      options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+    uglify : {
+      my_target: {
+         options: {
+        beautify: true
       },
-      build: {
-        src: 'src/js/<%= pkg.name %>.js',
-        dest: 'build/js/<%= pkg.name %>.js'
+        files: {
+          'build/js/<%= pkg.name %>.min.js': ['src/js/controllers/*.js']
+        }
       }
     }
     ,
@@ -193,7 +194,7 @@ module.exports = function(grunt) {
     , 
     watch: {
       scripts: {
-        files: ['src/js/*.js','src/css/*.css',],
+        files: ['src/js/*.js','src/css/*.css', 'src/*.html'],
         tasks: ['clean', 'uglify', 'csslint', 'cssmin', 'copy'],
         options: {
           spawn: true,

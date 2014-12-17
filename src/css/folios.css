@@ -1,0 +1,19 @@
+.folios {
+	flex-wrap: wrap;
+}
+
+.folio-logo {
+	height: 100px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.folio-logo img {
+	max-height:100%;
+    width:auto;
+}
+.folio-content {
+	height: 200px;
+	max-height: 200px;
+	overflow: scroll;
+}

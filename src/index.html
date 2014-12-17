@@ -23,26 +23,23 @@
   	<script src="./bower_components/angular-aria/angular-aria.min.js"></script>
 
   	<!-- Base JavaScript File -->
-    <script src="./js/demo-build.js"></script>
-
-    <!-- Controllers -->
-    <script src="./js/controllers/appCtrl.js"></script>
+    <script src="./js/demo-build.min.js"></script>
 
 	</head>
 
-<body layout="vertical" layout-fill class="" ng-controller="AppCtrl">
+<body layout="vertical" layout-fill>
 
   <!-- Header -->
   <header>
-  	<md-toolbar scroll-shrink md-theme="indigo">
+  	<md-toolbar scroll-shrink md-theme="indigo" ng-controller="MenuCtrl">
   		<div class="md-toolbar-tools">
         <div flex="85">
           <h3>
             <span>Sample Application</span>
           </h3>
         </div>
-        <div flex="" hide-md>
-          <i class="fa fa-bars fa-2x" ng-click="open()" hide-md></i>
+        <div flex="" hide-lg>
+          <i class="fa fa-bars fa-2x" ng-click="open()" hide-lg></i>
         </div>
       </div>
 	  </md-toolbar>
@@ -57,7 +54,7 @@
         <h1 class="md-toolbar-tools">Sidenav Left</h1>
       </md-toolbar>
       
-      <md-content class="md-padding" ng-controller="LeftCtrl">
+      <md-content class="md-padding" ng-controller="MenuCtrl">
         <p hide show-md>
           <ul>
             <li>Menu Item</li>
@@ -71,86 +68,37 @@
     <!-- Main Content -->
 
     <main flex layout="row">
-        <md-content ng-controller="AppCtrl">
-          
-              <div layout="row" class="projects">
-                <div flex-gt-lg="33" flex-lg="65" flex-md="50" flex-sm="100" style="height:200px;background-color:pink;" ng-repeat="project in projects">
-                  <md-content>
-                    <md-card>
-                      <md-list>
-                        <img src="{{project.logo}}" class="md-card-image" alt="{{project.organization}}" />
-                      </md-list>
-                    </md-card>
-                  </md-content>
-                </div>
-                <!--
-                <div flex-gt-lg="33" flex-lg="65" flex-md="50" flex-sm="100" style="height:200px;background-color:blue;">
-                  <md-content>
-                    <md-card>
-                      <md-list>
-                        I'm below on mobile, and to the right on larger devices.
-                      </md-list>
-                    </md-card>
-                  </md-content>
-                 </div>
-                
-                <div flex-gt-lg="33" flex-lg="65" flex-md="50" flex-sm="100" style="height:200px;background-color:green;">
-                  <md-content>
-                    <md-card>
-                      <md-list>
-                        I'm below on mobile, and to the right on larger devices.
-                      </md-list>
-                    </md-card>
-                  </md-content>
-                </div>
-                -->
-              </div>
-            
-          <!--
-          <div layout="column" layout-tablet-landscape="column" layout-phone="column" layout-padding>
-          
-            <div>
-              <div>
+        <md-content ng-controller="FolioCtrl">
+          <div layout="row" class="folios">
+            <div class="folio" flex-gt-lg="30" flex-lg="65" flex-md="50" flex-sm="100" ng-repeat="folio in folios">
                 <md-card>
-                    <md-list>
-                      <md-item ng-repeat="project in projects" flex="33">
-                        <md-item-content>
-                          <div layout="column">
-                            <div>
-                              <img src="{{project.logo}}" class="md-card-image" alt="{{project.organization}}" />
-                            </div>
-                            <div>
-                              <md-content>
-                                <div class="md-tile-content">
-                                  <h3>{{project.organization}}</h3>
-                                  <h4>{{project.position}}</h4>
-                                  <p>
-                                    {{project.description}}
-                                  </p>
-                                  <div class="md-tile-content accomplishments">
-                                  <h4>Accomplishments</h4>
-                                    <md-list>
-                                      <md-item ng-repeat="accomplishment in project.accomplishments">
-                                        <md-item-content>
-                                          <p>{{accomplishment.label}}</p>
-                                        </md-item-content>
-                                      </md-item>
-                                    </md-list>
-                                  </div>
-                                </div>
-                              </div>
-                            </md-content>
-                          </div>
-                        </md-item-content>
-                      </md-item>
-                    </md-list>
+                  <div layout="column">
+                    <div class="folio-logo">
+                      <img src="{{folio.logo}}" class="md-card-image" alt="{{folio.organization}}" />
+                    </div>
+                    <div class="folio-content">
+                      <md-content>
+                        <h3>{{folio.organization}}</h3>
+                        <h4>{{folio.position}}</h4>
+                        <p>
+                          {{folio.description}}
+                        </p>
+                        <h4>Accomplishments</h4>
+                        <md-list>
+                          <md-item ng-repeat="accomplishment in folio.accomplishments">
+                            <md-item-content>
+                              <p>{{accomplishment.label}}</p>
+                            </md-item-content>
+                          </md-item>
+                        </md-list>
+                      </md-content>
+                    </div>
+                  </div>
                 </md-card>
-              </div>
-            
-            </div>
+              </md-content>
+             </div>
             
           </div>
-          -->
         </md-content>
     </main>
 
