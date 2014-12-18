@@ -49,28 +49,15 @@
   <div flex layout="vertical" layout-sm="horizontal">
     
     <!-- Side Nav -->
-    <md-sidenav class="md-sidenav-left md-whiteframe-z2" component-id="left" is-locked-open="$media('md')">
-      <md-toolbar class="md-theme-indigo">
-        <h1 class="md-toolbar-tools">Sidenav Left</h1>
-      </md-toolbar>
-      
-      <md-content class="md-padding" ng-controller="MenuCtrl">
-        <p hide show-md>
-          <ul>
-            <li>Menu Item</li>
-            <li>Menu Item</li>
-            <li>Menu Item</li>
-            <li>Menu Item</li>
-          </ul>
-        </p>
-      </md-content>
-    </md-sidenav>    
+    
+    <md-sidenav ng-include src="'templates/side-nav.html'" class="md-sidenav-left md-whiteframe-z2" component-id="left" is-locked-open="$media('md')">
+    </md-sidenav>
     <!-- Main Content -->
 
     <main flex layout="row">
         <md-content ng-controller="FolioCtrl">
           <div layout="row" class="folios">
-            <div class="folio" flex-gt-lg="30" flex-lg="65" flex-md="50" flex-sm="100" ng-repeat="folio in folios">
+            <div class="folio" flex-gt-lg="30" flex-lg="50" flex-md="50" flex-sm="100" ng-repeat="folio in folios">
                 <md-card>
                   <div layout="column">
                     <div class="folio-logo">
@@ -96,8 +83,7 @@
                   </div>
                 </md-card>
               </md-content>
-             </div>
-            
+             </div>      
           </div>
         </md-content>
     </main>
