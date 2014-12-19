@@ -161,7 +161,8 @@ module.exports = function(grunt) {
         options: {
           hostname: 'localhost',
           keepalive: true,
-          port: 8080,
+          livereload: true,
+          port: 35729,
           base: 'build'
         }
       }
@@ -171,7 +172,12 @@ module.exports = function(grunt) {
     clean: ["build"]
     , 
     watch: {
-      scripts: {
+      all: {
+        options: {
+          spawn: true,
+          livereload: true,
+          port: 35729,
+        },
         files: [
                 'src/js/*.js',
                 'src/js/controllers/*.js',
@@ -186,10 +192,6 @@ module.exports = function(grunt) {
                 'cssmin', 
                 'copy'
               ],
-        options: {
-          spawn: true,
-          livereload: true,
-        },
       },
     },
     /* CSS Lint */
