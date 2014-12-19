@@ -194,7 +194,7 @@ module.exports = function(grunt) {
     , 
     watch: {
       scripts: {
-        files: ['src/js/*.js','src/css/*.css', 'src/*.html', 'src/templates/*.html'],
+        files: ['src/js/*.js','src/js/controllers/*.js','src/css/*.css', 'src/*.html', 'src/templates/*.html'],
         tasks: ['clean', 'uglify', 'csslint', 'cssmin', 'copy'],
         options: {
           spawn: true,
