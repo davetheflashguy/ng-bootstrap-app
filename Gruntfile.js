@@ -8,7 +8,7 @@ module.exports = function(grunt) {
         beautify: true
       },
         files: {
-          'build/js/<%= pkg.name %>.min.js': ['src/js/controllers/*.js']
+          'build/js/app.min.js': ['src/js/*.js', 'src/js/controllers/*.js']
         }
       }
     }
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
           banner: '/* My minified css file */'
         },
         files: {
-          'build/css/<%= pkg.name %>.css': ['src/css/**/*.css']
+          'build/css/app.min.css': ['src/css/**/*.css']
         }
       }
     }
@@ -123,28 +123,6 @@ module.exports = function(grunt) {
             dest: 'build/bower_components/components-font-awesome/fonts/', 
           },
           /**
-           * JavaScript Files
-           */
-          {
-            cwd : 'src/js/',
-            expand: true,
-            src: [
-              '*.js'
-            ], 
-            dest: 'build/js/',
-          },
-          /**
-           * Angular Controllers
-           */
-          {
-            cwd : 'src/js/controllers/',
-            expand: true,
-            src: [
-              '*.js'
-            ], 
-            dest: 'build/js/controllers/',
-          },
-          /**
            * Assets
            */
           {
@@ -194,8 +172,20 @@ module.exports = function(grunt) {
     , 
     watch: {
       scripts: {
-        files: ['src/js/*.js','src/js/controllers/*.js','src/css/*.css', 'src/*.html', 'src/templates/*.html'],
-        tasks: ['clean', 'uglify', 'csslint', 'cssmin', 'copy'],
+        files: [
+                'src/js/*.js',
+                'src/js/controllers/*.js',
+                'src/css/*.css', 
+                'src/*.html', 
+                'src/templates/*.html'
+              ],
+        tasks: [
+                'clean', 
+                'uglify', 
+                'csslint', 
+                'cssmin', 
+                'copy'
+              ],
         options: {
           spawn: true,
           livereload: true,
